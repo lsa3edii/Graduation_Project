@@ -34,8 +34,8 @@ class _ChatPageState extends State<ChatPage> {
   @override
   void initState() {
     super.initState();
-    email = widget
-        .messageId; // Assign the widget's email to the variable in initState
+    // Assign the widget's email to the variable in initState
+    email = widget.messageId;
   }
 
   @override
@@ -103,13 +103,10 @@ class _ChatPageState extends State<ChatPage> {
                     text = data.trim();
                     if (text!.isNotEmpty) {
                       messages.add({
-                        // kCounter: snapshot.data!.docs[snapshot.data!.docs.length]
-                        //                 [kCounter] + 1,
                         kMessageId: email,
                         kText: text,
                         kCreatedAt: DateTime.now(),
                       });
-                      text = '';
                     }
                     controllerChat.clear();
                     _scrollDown();
@@ -120,8 +117,9 @@ class _ChatPageState extends State<ChatPage> {
                         kMessageId: email,
                         kText: text,
                         kCreatedAt: DateTime.now(),
+                        // kCounter: snapshot.data!.docs[snapshot.data!.docs.length]
+                        //                 [kCounter] + 1,
                       });
-                      text = '';
                     }
                     controllerChat.clear(); // controller.text = '';
                     _scrollDown();

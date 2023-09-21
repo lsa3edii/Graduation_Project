@@ -44,40 +44,38 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyAr5CqnvmZbNVVPoktUFL39Dbwlj15I1F0',
-    appId: '1:430987198672:web:ffb4eb44c8394d2b515ed5',
-    messagingSenderId: '430987198672',
-    projectId: 'chat-app-219b0',
-    authDomain: 'chat-app-219b0.firebaseapp.com',
-    storageBucket: 'chat-app-219b0.appspot.com',
-    measurementId: 'G-W7NPZ4334Q',
+    apiKey: 'AIzaSyBbZY3zVLgBsidvGWMBwYa2olyewwC4nr8',
+    appId: '1:407375604191:web:e38144156c98ef5bc0fc6a',
+    messagingSenderId: '407375604191',
+    projectId: 'medical-diagnosis-system-5ac77',
+    authDomain: 'medical-diagnosis-system-5ac77.firebaseapp.com',
+    storageBucket: 'medical-diagnosis-system-5ac77.appspot.com',
+    measurementId: 'G-LRX2W6JZ8C',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyBK0eZ6PiXIMrK5zesTtI0gcq51xdxC--o',
-    appId: '1:430987198672:android:6944f770692db2b3515ed5',
-    messagingSenderId: '430987198672',
-    projectId: 'chat-app-219b0',
-    storageBucket: 'chat-app-219b0.appspot.com',
+    apiKey: 'AIzaSyBHtCgBxVGgFT8t5Wdr1KCyTgEyHNpu8VA',
+    appId: '1:407375604191:android:e0c11cff6a0ff2e1c0fc6a',
+    messagingSenderId: '407375604191',
+    projectId: 'medical-diagnosis-system-5ac77',
+    storageBucket: 'medical-diagnosis-system-5ac77.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyATHlXdyTpI3tIYQVJaGiymQN3W_sQNV-A',
-    appId: '1:430987198672:ios:8150d2945a0c8298515ed5',
-    messagingSenderId: '430987198672',
-    projectId: 'chat-app-219b0',
-    storageBucket: 'chat-app-219b0.appspot.com',
-    iosClientId: '430987198672-kr3doppff7dah8hq5n9ropn0e1qnko68.apps.googleusercontent.com',
+    apiKey: 'AIzaSyBYKFlwlGoU_LvTjatzuGOB4bhS2hJm9vg',
+    appId: '1:407375604191:ios:afe7d4235b883851c0fc6a',
+    messagingSenderId: '407375604191',
+    projectId: 'medical-diagnosis-system-5ac77',
+    storageBucket: 'medical-diagnosis-system-5ac77.appspot.com',
     iosBundleId: 'com.example.medicalDiagnosisSystem',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyATHlXdyTpI3tIYQVJaGiymQN3W_sQNV-A',
-    appId: '1:430987198672:ios:4804420eb7aff1c2515ed5',
-    messagingSenderId: '430987198672',
-    projectId: 'chat-app-219b0',
-    storageBucket: 'chat-app-219b0.appspot.com',
-    iosClientId: '430987198672-81s989t9vm6409uod60gek7qiqrkogc5.apps.googleusercontent.com',
+    apiKey: 'AIzaSyBYKFlwlGoU_LvTjatzuGOB4bhS2hJm9vg',
+    appId: '1:407375604191:ios:9fd4d57cace450b0c0fc6a',
+    messagingSenderId: '407375604191',
+    projectId: 'medical-diagnosis-system-5ac77',
+    storageBucket: 'medical-diagnosis-system-5ac77.appspot.com',
     iosBundleId: 'com.example.medicalDiagnosisSystem.RunnerTests',
   );
 }

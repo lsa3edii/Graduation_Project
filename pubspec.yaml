@@ -30,9 +30,11 @@ environment:
 dependencies:
   firebase_core: ^2.15.0
   firebase_auth: ^4.7.2
-  provider: ^6.0.5
+  # provider: ^6.0.5
   modal_progress_hud_nsn: ^0.4.0
   curved_navigation_bar: ^1.0.3
+  device_preview: ^1.1.0
+  flutter_image_slideshow: ^0.1.6
 
   flutter:
     sdk: flutter

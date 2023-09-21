@@ -128,6 +128,7 @@ class _LoginPageState extends State<LoginPage> {
                                       MaterialPageRoute(builder: (context) {
                                     return const SignupUserPage();
                                   }));
+                                  unFocus(context);
                                 },
                                 child: const Text(
                                   'Sign Up',
