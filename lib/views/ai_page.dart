@@ -26,6 +26,24 @@ class AIPage extends StatelessWidget {
           ],
         ),
       ),
+      floatingActionButton: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          FloatingActionButton(
+            backgroundColor: kPrimaryColor,
+            tooltip: 'Gallery',
+            onPressed: () {},
+            child: const Icon(Icons.image),
+          ),
+          const SizedBox(height: 7),
+          FloatingActionButton(
+            backgroundColor: kPrimaryColor,
+            tooltip: 'Camera',
+            onPressed: () {},
+            child: const Icon(Icons.camera_alt),
+          ),
+        ],
+      ),
       // body: ,
     );
   }

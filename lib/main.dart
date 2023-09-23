@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:medical_diagnosis_system/constants.dart';
 import 'package:medical_diagnosis_system/views/login_page.dart';
+import 'package:medical_diagnosis_system/views/splash_screen.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -27,7 +28,12 @@ class MedicalDiagnosisSystem extends StatelessWidget {
       //   theme: ThemeData(
       //     brightness: Brightness.dark),
       debugShowCheckedModeBanner: false,
-      home: LoginPage(),
+      home: SplashScreen(
+        page: LoginPage(),
+        animation: 'assets/animations/Animation - start.json',
+        seconds: 3,
+        flag: 1,
+      ),
     );
   }
 }

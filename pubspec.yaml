@@ -35,6 +35,8 @@ dependencies:
   curved_navigation_bar: ^1.0.3
   device_preview: ^1.1.0
   flutter_image_slideshow: ^0.1.6
+  lottie: ^2.6.0
+  audioplayers: ^5.1.0
 
   flutter:
     sdk: flutter
@@ -71,6 +73,8 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
+    - assets/animations/
+    - assets/sounds/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

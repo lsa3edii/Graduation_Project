@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:medical_diagnosis_system/Chat/widgets/chat_items.dart';
 import 'package:medical_diagnosis_system/views/ai_page.dart';
 import 'package:medical_diagnosis_system/views/signup_user_page.dart';
+import 'package:medical_diagnosis_system/views/splash_screen.dart';
 import 'package:medical_diagnosis_system/widgets/custom_button.dart';
 import 'package:medical_diagnosis_system/widgets/custom_circle_avatar.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
@@ -27,11 +28,11 @@ class _HomePageState extends State<HomePage> {
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        const SizedBox(width: 2),
+        const SizedBox(width: 3),
         const SizedBox(
           width: 155,
           child: Text(
-            'Enter your brain cancer MRI (magnetic resonance imaging) image and our AI system will help you to detect if you have disease or are healthy. Click on Get Started now !',
+            'Enter your brain MRI (magnetic resonance imaging) image and our AI system will help you to detect if you have disease or are healthy. Click on Get Started now !',
             style: TextStyle(
                 fontSize: 19,
                 color: kPrimaryColor,
@@ -159,7 +160,6 @@ class _HomePageState extends State<HomePage> {
                                       fontSize: 25, fontFamily: 'Pacifico'),
                                 ),
                               ),
-                              SizedBox(height: 550),
                             ],
                           ),
                         ),
@@ -181,14 +181,19 @@ class _HomePageState extends State<HomePage> {
                                 indicatorColor: kPrimaryColor,
                                 children: images,
                               ),
-                              const SizedBox(height: 25),
+                              const SizedBox(height: 57),
                               GetStartedButton(
                                   buttonText: 'Get Started',
                                   onPressed: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => AIPage()));
+                                    Navigator.push(context, MaterialPageRoute(
+                                      builder: (context) {
+                                        return const SplashScreen(
+                                          page: AIPage(),
+                                          animation:
+                                              'assets/animations/Animation - 1695398860329.json',
+                                        );
+                                      },
+                                    ));
                                   }),
                               const SizedBox(height: 50),
                             ],
@@ -256,7 +261,11 @@ class _HomePageState extends State<HomePage> {
                                 onPressed: () {
                                   Navigator.push(context, MaterialPageRoute(
                                     builder: (context) {
-                                      return ChatPage(messageId: messageId!);
+                                      return SplashScreen(
+                                        page: ChatPage(messageId: messageId!),
+                                        animation:
+                                            'assets/animations/Animation - 1695399264640.json',
+                                      );
                                     },
                                   ));
                                 },

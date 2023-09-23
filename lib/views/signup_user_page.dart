@@ -124,6 +124,7 @@ class _SignupUserPageState extends State<SignupUserPage> {
                         isLoading = true;
                       });
                       await registerUser();
+                      // ignore: use_build_context_synchronously
                       unFocus(context);
 
                       // ignore: use_build_context_synchronously

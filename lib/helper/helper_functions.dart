@@ -8,7 +8,7 @@ void showSnackBar(BuildContext context,
     SnackBar(
       content: Text(message,
           style: const TextStyle(
-              fontSize: 17, fontFamily: 'Pacifico', color: kPrimaryColor)),
+              fontSize: 17, fontWeight: FontWeight.bold, color: kPrimaryColor)),
       backgroundColor: color ?? Colors.grey[200],
     ),
   );

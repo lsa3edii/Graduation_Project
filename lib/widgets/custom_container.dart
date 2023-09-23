@@ -34,7 +34,7 @@ class CustomContainer extends StatelessWidget {
                     Container(
                       height: 75,
                       alignment: Alignment.bottomCenter,
-                      child: Text('Muhammed',
+                      child: const Text('Muhammed',
                           style: TextStyle(
                             fontSize: 25,
                             color: Colors.white,
