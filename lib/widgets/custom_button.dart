@@ -25,11 +25,11 @@ class CustomButton extends StatelessWidget {
   }
 }
 
-class GetStartedButton extends StatelessWidget {
+class CustomButton2 extends StatelessWidget {
   final String buttonText;
   final VoidCallback? onPressed;
 
-  const GetStartedButton(
+  const CustomButton2(
       {super.key, required this.buttonText, required this.onPressed});
 
   @override

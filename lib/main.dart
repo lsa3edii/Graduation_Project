@@ -1,4 +1,5 @@
 // import 'package:device_preview/device_preview.dart';
+import 'dart:io';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -13,6 +14,8 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  HttpOverrides.global = MyHttpOverrides();
   runApp(const MedicalDiagnosisSystem());
   // runApp(DevicePreview(builder: (context) => const MedicalDiagnosisSystem()));
 }
@@ -35,5 +38,14 @@ class MedicalDiagnosisSystem extends StatelessWidget {
         flag: 1,
       ),
     );
+  }
+}
+
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
   }
 }

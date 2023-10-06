@@ -168,10 +168,19 @@ class _ChatPageState extends State<ChatPage> {
               ),
             ),
             body: const Center(
-              child: Text(
-                'Loading...',
-                style: TextStyle(
-                    color: kPrimaryColor, fontSize: 25, fontFamily: 'Pacifico'),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'Loading... ',
+                    style: TextStyle(
+                        color: kPrimaryColor,
+                        fontSize: 25,
+                        fontFamily: 'Pacifico'),
+                  ),
+                  CircularProgressIndicator(
+                      color: kPrimaryColor, backgroundColor: Colors.grey)
+                ],
               ),
             ),
           );

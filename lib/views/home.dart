@@ -182,7 +182,7 @@ class _HomePageState extends State<HomePage> {
                                 children: images,
                               ),
                               const SizedBox(height: 57),
-                              GetStartedButton(
+                              CustomButton2(
                                   buttonText: 'Get Started',
                                   onPressed: () {
                                     Navigator.push(context, MaterialPageRoute(

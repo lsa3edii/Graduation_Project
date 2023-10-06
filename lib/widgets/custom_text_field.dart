@@ -11,19 +11,22 @@ TextEditingController controllerDoctorPassowrd = TextEditingController();
 TextEditingController controllerChat = TextEditingController();
 
 class CustomTextField extends StatelessWidget {
-  final String hintLabel;
+  final String? hintLabel;
   final dynamic icon;
   final Function(String data)? onChanged;
   final TextEditingController? controller;
-
+  final int? maxLines;
+  final int? maxLength;
   final bool obscureText;
 
   const CustomTextField({
     super.key,
-    required this.hintLabel,
     required this.icon,
     required this.onChanged,
     this.controller,
+    this.hintLabel,
+    this.maxLines,
+    this.maxLength,
     this.obscureText = false,
   });
 
@@ -42,6 +45,8 @@ class CustomTextField extends StatelessWidget {
         // onSubmitted: (data) {},
         controller: controller ?? TextEditingController(),
         onChanged: onChanged,
+        maxLines: maxLines ?? 1,
+        maxLength: maxLength,
         obscureText: obscureText,
         decoration: InputDecoration(
           contentPadding:
@@ -49,9 +54,9 @@ class CustomTextField extends StatelessWidget {
           border: const OutlineInputBorder(),
           focusedBorder: const OutlineInputBorder(
               borderSide: BorderSide(color: kPrimaryColor)),
-          hintText: hintLabel,
+          hintText: hintLabel ?? 'Enter a text',
           label: Text(
-            hintLabel,
+            hintLabel ?? '',
             style: const TextStyle(color: kPrimaryColor),
           ),
           suffix: Icon(icon),
