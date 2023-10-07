@@ -84,8 +84,10 @@ class _LoginPageState extends State<LoginPage> {
                         Padding(
                           padding: const EdgeInsets.only(top: 20),
                           child: Image.asset(
-                              'assets/icons/Medical Diagnosis System.png',
-                              height: 200),
+                            'assets/icons/Medical Diagnosis System.png',
+                            height: 200,
+                            cacheHeight: 200,
+                          ),
                         ),
                         const Padding(
                           padding: EdgeInsets.only(top: 10, left: 10),
@@ -228,8 +230,10 @@ class _LoginPageState extends State<LoginPage> {
                         Padding(
                           padding: const EdgeInsets.only(top: 20),
                           child: Image.asset(
-                              'assets/icons/Medical Diagnosis System.png',
-                              height: 200),
+                            'assets/icons/Medical Diagnosis System.png',
+                            height: 200,
+                            cacheHeight: 200,
+                          ),
                         ),
                         const Padding(
                           padding: EdgeInsets.only(top: 10, left: 10),

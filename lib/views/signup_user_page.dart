@@ -45,8 +45,11 @@ class _SignupUserPageState extends State<SignupUserPage> {
             children: [
               Padding(
                 padding: const EdgeInsets.only(top: 20),
-                child: Image.asset('assets/icons/Medical Diagnosis System.png',
-                    height: 200),
+                child: Image.asset(
+                  'assets/icons/Medical Diagnosis System.png',
+                  height: 200,
+                  cacheHeight: 200,
+                ),
               ),
               const Padding(
                 padding: EdgeInsets.only(top: 10, left: 10),

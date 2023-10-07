@@ -39,11 +39,11 @@ class _HomePageState extends State<HomePage> {
                 fontWeight: FontWeight.bold),
           ),
         ),
-        Image.asset('assets/images/neurology2.jpg'),
+        Image.asset('assets/images/neurology2.jpg', cacheHeight: 300),
       ],
     ),
-    Image.asset('assets/images/neurology.jpg'),
-    Image.asset('assets/images/neurology1.jpg'),
+    Image.asset('assets/images/neurology.jpg', cacheHeight: 300),
+    Image.asset('assets/images/neurology1.jpg', cacheHeight: 300),
   ];
 
   // GlobalKey<CurvedNavigationBarState> _bottomNavigationKey = GlobalKey();
@@ -179,6 +179,7 @@ class _HomePageState extends State<HomePage> {
                                 height: 315,
                                 indicatorRadius: 5,
                                 indicatorColor: kPrimaryColor,
+                                isLoop: true,
                                 children: images,
                               ),
                               const SizedBox(height: 57),

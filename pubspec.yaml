@@ -39,6 +39,7 @@ dependencies:
   audioplayers: ^5.1.0
   image_picker: ^1.0.4
   font_awesome_flutter: ^10.5.0
+  # tflite: ^1.1.2
 
   flutter:
     sdk: flutter

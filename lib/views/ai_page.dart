@@ -188,8 +188,10 @@ class _AIPageState extends State<AIPage> {
                             elevation: 10,
                             child: img == null
                                 ? Image.asset(
-                                    'assets/icons/Medical Diagnosis System.png')
-                                : Image.file(img!),
+                                    'assets/icons/Medical Diagnosis System.png',
+                                    cacheHeight: 300,
+                                  )
+                                : Image.file(img!, cacheHeight: 300),
                           ),
                         ),
                       ),

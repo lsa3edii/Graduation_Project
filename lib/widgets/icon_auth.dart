@@ -13,9 +13,7 @@ class IconAuth extends StatelessWidget {
       width: 75,
       child: IconButton(
         onPressed: onPressed,
-        icon: Image.asset(
-          image,
-        ),
+        icon: Image.asset(image, cacheHeight: 75, cacheWidth: 75),
       ),
     );
   }

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:medical_diagnosis_system/views/signup_user_page.dart';
 import 'package:medical_diagnosis_system/widgets/custom_circle_avatar.dart';
 import '../../constants.dart';
 import '../../widgets/custom_text_field.dart';
@@ -17,7 +18,7 @@ class ChatPage extends StatefulWidget {
 
 class _ChatPageState extends State<ChatPage> {
   CollectionReference messages =
-      FirebaseFirestore.instance.collection(kMessagesCollections);
+      FirebaseFirestore.instance.collection('${messageId}_Chat');
 
   String? text;
   late String email;
