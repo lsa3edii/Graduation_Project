@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:medical_diagnosis_system/Chat/widgets/chat_items.dart';
 import 'package:medical_diagnosis_system/services/auth_services.dart';
 import 'package:medical_diagnosis_system/views/ai_page.dart';
+import 'package:medical_diagnosis_system/views/login_page.dart';
 import 'package:medical_diagnosis_system/views/signup_user_page.dart';
 import 'package:medical_diagnosis_system/views/splash_screen.dart';
 import 'package:medical_diagnosis_system/widgets/custom_button.dart';
@@ -91,7 +92,15 @@ class _HomePageState extends State<HomePage> {
                         clearDoctorData();
                         unFocus(context);
                         showSnackBar(context, message: 'LogOut!');
-                        Navigator.pop(context);
+                        if (Navigator.canPop(context)) {
+                          Navigator.pop(context);
+                        } else {
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const LoginPage(),
+                              ));
+                        }
                       },
                       icon: const Icon(Icons.logout),
                     ),

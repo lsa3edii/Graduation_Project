@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:medical_diagnosis_system/constants.dart';
 import '../widgets/custom_text_field.dart';
@@ -13,7 +14,6 @@ void showSnackBar(BuildContext context, {required String message}) {
   );
 }
 
-//Colors.grey[200]
 void clearUserData() {
   controllerUserEmail.clear();
   controllerUserPassowrd.clear();
@@ -26,4 +26,13 @@ void clearDoctorData() {
 
 void unFocus(BuildContext context) {
   FocusScope.of(context).unfocus();
+}
+
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+  }
 }
