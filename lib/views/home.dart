@@ -1,6 +1,7 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:medical_diagnosis_system/Chat/widgets/chat_items.dart';
+import 'package:medical_diagnosis_system/services/auth_services.dart';
 import 'package:medical_diagnosis_system/views/ai_page.dart';
 import 'package:medical_diagnosis_system/views/signup_user_page.dart';
 import 'package:medical_diagnosis_system/views/splash_screen.dart';
@@ -85,9 +86,11 @@ class _HomePageState extends State<HomePage> {
                     width: 50,
                     child: IconButton(
                       onPressed: () {
+                        AuthServices.logout();
+                        clearUserData();
+                        clearDoctorData();
                         unFocus(context);
-                        showSnackBar(context,
-                            message: 'LogOut!', color: Colors.white);
+                        showSnackBar(context, message: 'LogOut!');
                         Navigator.pop(context);
                       },
                       icon: const Icon(Icons.logout),

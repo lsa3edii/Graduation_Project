@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import '../constants.dart';
 import '../views/signup_user_page.dart';
 
-TextEditingController controllerUserEmail = TextEditingController();
-TextEditingController controllerUserPassowrd = TextEditingController();
+final TextEditingController controllerUserEmail = TextEditingController();
+final TextEditingController controllerUserPassowrd = TextEditingController();
 
-TextEditingController controllerDoctorEmail = TextEditingController();
-TextEditingController controllerDoctorPassowrd = TextEditingController();
+final TextEditingController controllerDoctorEmail = TextEditingController();
+final TextEditingController controllerDoctorPassowrd = TextEditingController();
 
-TextEditingController controllerChat = TextEditingController();
+final TextEditingController controllerChat = TextEditingController();
 
 class CustomTextField extends StatelessWidget {
   final String? hintLabel;
@@ -36,13 +36,13 @@ class CustomTextField extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: TextFormField(
         // autofocus: true,
+        // onSubmitted: (data) {},
         validator: (data) {
           if (data!.isEmpty) {
             return 'Field is required';
           }
           return null;
         },
-        // onSubmitted: (data) {},
         controller: controller ?? TextEditingController(),
         onChanged: onChanged,
         maxLines: maxLines ?? 1,
@@ -66,10 +66,61 @@ class CustomTextField extends StatelessWidget {
   }
 }
 
+class CustomTextField2 extends StatelessWidget {
+  final String? hintLabel;
+  final dynamic icon;
+  final Function(String data)? onChanged;
+  final TextEditingController? controller;
+  final bool obscureText;
+
+  const CustomTextField2({
+    super.key,
+    required this.icon,
+    required this.onChanged,
+    this.controller,
+    this.hintLabel,
+    this.obscureText = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: TextFormField(
+        // autofocus: true,
+        // onSubmitted: (data) {},
+        validator: (data) {
+          if (data!.isEmpty) {
+            return 'Field is required';
+          }
+          return null;
+        },
+        controller: controller ?? TextEditingController(),
+        onChanged: onChanged,
+        obscureText: obscureText,
+        decoration: InputDecoration(
+          contentPadding:
+              const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+          border: const OutlineInputBorder(),
+          focusedBorder: const OutlineInputBorder(
+              borderSide: BorderSide(color: kPrimaryColor)),
+          hintText: hintLabel ?? 'Enter a text',
+          label: Text(
+            hintLabel ?? '',
+            style: const TextStyle(color: kPrimaryColor),
+          ),
+          suffix: Icon(icon),
+        ),
+      ),
+    );
+  }
+}
+
 class CustomTextFieldForCheckPassword extends StatelessWidget {
   final String hintLabel;
   final dynamic icon;
   final Function(String data)? onChanged;
+  final TextEditingController? controller;
   final bool obscureText;
 
   const CustomTextFieldForCheckPassword(
@@ -77,6 +128,7 @@ class CustomTextFieldForCheckPassword extends StatelessWidget {
       required this.hintLabel,
       required this.icon,
       required this.onChanged,
+      this.controller,
       this.obscureText = false});
 
   @override
@@ -95,6 +147,7 @@ class CustomTextFieldForCheckPassword extends StatelessWidget {
           return null;
         },
         // onSubmitted: (data) {},
+        controller: controller ?? TextEditingController(),
         onChanged: onChanged,
         obscureText: obscureText,
         decoration: InputDecoration(

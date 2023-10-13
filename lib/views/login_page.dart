@@ -1,6 +1,7 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:medical_diagnosis_system/services/auth_services.dart';
 import 'package:medical_diagnosis_system/views/home.dart';
 import 'package:medical_diagnosis_system/views/signup_user_page.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
@@ -150,13 +151,13 @@ class _LoginPageState extends State<LoginPage> {
                                 setState(() {
                                   isLoading = true;
                                 });
-                                await loginUser();
-                                clearUserData();
-
+                                await AuthServices.signInWithEmailAndPassword(
+                                  email!,
+                                  password!,
+                                );
                                 // ignore: use_build_context_synchronously
                                 showSnackBar(context,
-                                    message: 'Sucsseed Login!',
-                                    color: Colors.white);
+                                    message: 'Login Succeeded!');
 
                                 // ignore: use_build_context_synchronously
                                 Navigator.push(
@@ -168,27 +169,21 @@ class _LoginPageState extends State<LoginPage> {
                               } on FirebaseAuthException catch (e) {
                                 if (e.code == 'user-not-found') {
                                   showSnackBar(context,
-                                      message: 'User not found!',
-                                      color: Colors.white);
+                                      message: 'User not found!');
                                 } else if (e.code == 'wrong-password') {
                                   showSnackBar(context,
-                                      message: 'Wrong password!',
-                                      color: Colors.white);
+                                      message: 'Wrong password!');
                                 } else {
-                                  showSnackBar(context,
-                                      message: e.toString(),
-                                      color: Colors.white);
+                                  showSnackBar(context, message: e.toString());
                                 }
                               } catch (e) {
-                                showSnackBar(context,
-                                    message: e.toString(), color: Colors.white);
+                                showSnackBar(context, message: e.toString());
                               }
                               setState(() {
                                 isLoading = false;
                               });
                             } else {
-                              showSnackBar(context,
-                                  message: 'Error!', color: Colors.white);
+                              showSnackBar(context, message: 'Login Failed!');
                             }
                           },
                         ),
@@ -212,12 +207,56 @@ class _LoginPageState extends State<LoginPage> {
                           children: [
                             IconAuth(
                               image: 'assets/icons/google.png',
-                              onPressed: () {},
+                              onPressed: () async {
+                                try {
+                                  final UserCredential credential =
+                                      await AuthServices.signInWithGoogle();
+                                  messageId = credential.user!.email;
+                                  // ignore: use_build_context_synchronously
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => const HomePage(),
+                                      ));
+                                  // ignore: use_build_context_synchronously
+                                  showSnackBar(
+                                    context,
+                                    message: 'Google Login Succeeded!',
+                                  );
+                                } on Exception {
+                                  showSnackBar(
+                                    context,
+                                    message: 'Google Login Failed!',
+                                  );
+                                }
+                              },
                             ),
                             const SizedBox(width: 15),
                             IconAuth(
                               image: 'assets/icons/facebook.png',
-                              onPressed: () {},
+                              onPressed: () async {
+                                try {
+                                  final UserCredential credential =
+                                      await AuthServices.signInWithFacebook();
+                                  messageId = credential.user!.email;
+                                  // ignore: use_build_context_synchronously
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => const HomePage(),
+                                      ));
+                                  // ignore: use_build_context_synchronously
+                                  showSnackBar(
+                                    context,
+                                    message: 'Facebook Login Succeeded!',
+                                  );
+                                } on Exception {
+                                  showSnackBar(
+                                    context,
+                                    message: 'Facebook Login Failed!',
+                                  );
+                                }
+                              },
                             ),
                           ],
                         ),
@@ -246,7 +285,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         Padding(
                           padding: const EdgeInsets.only(top: 7, bottom: 12),
-                          child: CustomTextField(
+                          child: CustomTextField2(
                             hintLabel: 'Email',
                             icon: Icons.email,
                             controller: controllerDoctorEmail,
@@ -255,7 +294,7 @@ class _LoginPageState extends State<LoginPage> {
                             },
                           ),
                         ),
-                        CustomTextField(
+                        CustomTextField2(
                           hintLabel: 'Password',
                           icon: Icons.password,
                           controller: controllerDoctorPassowrd,
@@ -273,12 +312,14 @@ class _LoginPageState extends State<LoginPage> {
                                 setState(() {
                                   isLoading = true;
                                 });
-                                // await loginUser();
-                                // clearDoctorData();
+                                // await AuthServices.signInWithEmailAndPassword(
+                                //   email!,
+                                //   password!,
+                                // );
 
                                 // // ignore: use_build_context_synchronously
                                 // showSnackBar(context,
-                                //     message: 'Sucsseed Login!',
+                                //     message: 'Login succeeded!',
                                 //     color: Colors.white);
 
                                 // // ignore: use_build_context_synchronously
@@ -291,27 +332,21 @@ class _LoginPageState extends State<LoginPage> {
                               } on FirebaseAuthException catch (e) {
                                 if (e.code == 'user-not-found') {
                                   showSnackBar(context,
-                                      message: 'User not found!',
-                                      color: Colors.white);
+                                      message: 'User not found!');
                                 } else if (e.code == 'wrong-password') {
                                   showSnackBar(context,
-                                      message: 'Wrong password!',
-                                      color: Colors.white);
+                                      message: 'Wrong password!');
                                 } else {
-                                  showSnackBar(context,
-                                      message: e.toString(),
-                                      color: Colors.white);
+                                  showSnackBar(context, message: e.toString());
                                 }
                               } catch (e) {
-                                showSnackBar(context,
-                                    message: e.toString(), color: Colors.white);
+                                showSnackBar(context, message: e.toString());
                               }
                               setState(() {
                                 isLoading = false;
                               });
                             } else {
-                              showSnackBar(context,
-                                  message: 'Error!', color: Colors.white);
+                              showSnackBar(context, message: 'Login Failed!');
                             }
                           },
                         ),
@@ -323,13 +358,8 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Future<void> loginUser() async {
-    await FirebaseAuth.instance
-        .signInWithEmailAndPassword(email: email!, password: password!);
-  }
-
-  Future<void> loginDoctor() async {
-    await FirebaseAuth.instance
-        .signInWithEmailAndPassword(email: email!, password: password!);
-  }
+  // Future<void> loginDoctor() async {
+  //   await FirebaseAuth.instance
+  //       .signInWithEmailAndPassword(email: email!, password: password!);
+  // }
 }
