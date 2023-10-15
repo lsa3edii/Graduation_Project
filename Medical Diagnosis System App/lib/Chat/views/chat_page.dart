@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:medical_diagnosis_system/views/signup_user_page.dart';
 import 'package:medical_diagnosis_system/widgets/custom_circle_avatar.dart';
 import '../../constants.dart';
+import '../../views/signup_user_page.dart';
 import '../../widgets/custom_text_field.dart';
 import '../models/messages.dart';
 import '../widgets/chat_bubbles.dart';
@@ -17,9 +17,6 @@ class ChatPage extends StatefulWidget {
 }
 
 class _ChatPageState extends State<ChatPage> {
-  CollectionReference messages =
-      FirebaseFirestore.instance.collection('${messageId}_Chat');
-
   String? text;
   late String email;
   final ScrollController _controller = ScrollController();
@@ -41,6 +38,9 @@ class _ChatPageState extends State<ChatPage> {
 
   @override
   Widget build(BuildContext context) {
+    CollectionReference messages =
+        chats.doc(messageId).collection('$messageId-Chat');
+
     return StreamBuilder<QuerySnapshot>(
       stream: messages.orderBy(kCreatedAt, descending: true).snapshots(),
       builder: (context, snapshot) {
@@ -50,7 +50,7 @@ class _ChatPageState extends State<ChatPage> {
           for (int i = 0; i < snapshot.data!.docs.length; i++) {
             texts.add(Message.fromJson(snapshot.data!.docs[i]));
           }
-          // print(texts);
+          // print(texts[0].text);
           return Scaffold(
             backgroundColor: Colors.white,
             appBar: AppBar(
@@ -62,7 +62,7 @@ class _ChatPageState extends State<ChatPage> {
                 // mainAxisSize: MainAxisSize.min,
                 children: [
                   CustomCircleAvatar(
-                    image: 'assets/icons/Medical Diagnosis System.png',
+                    image: kDoctorImage,
                     r1: 25,
                     r2: 23,
                     borderColor: kSecondaryColor,
@@ -111,6 +111,7 @@ class _ChatPageState extends State<ChatPage> {
                     }
                     controllerChat.clear();
                     _scrollDown();
+                    text = '';
                   },
                   onPressed: () {
                     if (text!.isNotEmpty) {
@@ -124,6 +125,7 @@ class _ChatPageState extends State<ChatPage> {
                     }
                     controllerChat.clear(); // controller.text = '';
                     _scrollDown();
+                    text = '';
                   },
                 ),
               ],

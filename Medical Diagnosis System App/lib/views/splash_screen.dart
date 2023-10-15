@@ -8,13 +8,12 @@ class SplashScreen extends StatefulWidget {
   final String animation;
   final int seconds;
   final int flag;
-
   const SplashScreen({
     super.key,
     required this.page,
     required this.animation,
+    required this.flag,
     this.seconds = 3,
-    this.flag = 0,
   });
 
   @override
@@ -24,7 +23,14 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   void playSound() {
     final player = AudioPlayer();
-    player.play(AssetSource('sounds/hospital-sound.mp3'));
+
+    if (widget.flag == 0) {
+      player.play(AssetSource('sounds/hospital-sound.mp3'));
+    } else if (widget.flag == 1) {
+      player.play(AssetSource('sounds/ai-sound.mp3'));
+    } else {
+      player.play(AssetSource('sounds/message-sound.mp3'));
+    }
   }
 
   void start() {
@@ -40,9 +46,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     start();
-    if (widget.flag == 1) {
-      playSound();
-    }
+    playSound();
   }
 
   @override

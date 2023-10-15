@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:medical_diagnosis_system/services/auth_services.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import '../helper/helper_functions.dart';
 import '../constants.dart';
@@ -12,6 +14,7 @@ String? email;
 String? password;
 String? messageId;
 String? confirmPassword;
+CollectionReference chats = FirebaseFirestore.instance.collection(kChatId);
 // int? page;
 
 class SignupUserPage extends StatefulWidget {
@@ -46,7 +49,7 @@ class _SignupUserPageState extends State<SignupUserPage> {
               Padding(
                 padding: const EdgeInsets.only(top: 20),
                 child: Image.asset(
-                  'assets/icons/Medical Diagnosis System.png',
+                  kDefaultImage,
                   height: 200,
                   cacheHeight: 200,
                 ),
@@ -64,6 +67,7 @@ class _SignupUserPageState extends State<SignupUserPage> {
                 padding: const EdgeInsets.only(top: 7, bottom: 12),
                 child: CustomTextField(
                   hintLabel: 'Username',
+                  maxLength: 12,
                   icon: Icons.person,
                   onChanged: (data) {
                     username = data;
@@ -107,6 +111,7 @@ class _SignupUserPageState extends State<SignupUserPage> {
                     const Text("already have an account?  "),
                     GestureDetector(
                       onTap: () {
+                        Feedback.forTap(context);
                         Navigator.pop(context);
                       },
                       child: const Text(
@@ -126,12 +131,18 @@ class _SignupUserPageState extends State<SignupUserPage> {
                       setState(() {
                         isLoading = true;
                       });
-                      await registerUser();
+
+                      await AuthServices.registerWithEmailAndPassword(
+                        email: email!,
+                        password: password!,
+                        username: username!,
+                      );
                       // ignore: use_build_context_synchronously
                       unFocus(context);
 
                       // ignore: use_build_context_synchronously
-                      showSnackBar(context, message: 'Sucsseed.. go to login!');
+                      showSnackBar(context,
+                          message: 'Succeeded.. Go to login!');
                       // ignore: use_build_context_synchronously
                       Navigator.pop(context);
                     } on FirebaseAuthException catch (e) {
@@ -160,10 +171,5 @@ class _SignupUserPageState extends State<SignupUserPage> {
         ),
       ),
     );
-  }
-
-  Future<void> registerUser() async {
-    await FirebaseAuth.instance
-        .createUserWithEmailAndPassword(email: email!, password: password!);
   }
 }

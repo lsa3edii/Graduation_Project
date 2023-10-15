@@ -1,11 +1,12 @@
 // import 'package:device_preview/device_preview.dart';
+// import 'package:medical_diagnosis_system/views/home_user.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
+
 import 'dart:io';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:medical_diagnosis_system/constants.dart';
-import 'package:medical_diagnosis_system/views/home.dart';
 import 'package:medical_diagnosis_system/views/login_page.dart';
 import 'package:medical_diagnosis_system/views/splash_screen.dart';
 import 'firebase_options.dart';
@@ -29,47 +30,49 @@ class MedicalDiagnosisSystem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     precacheImage(const AssetImage('assets/images/neurology2.jpg'), context);
-    return MaterialApp(
+    return const MaterialApp(
       title: 'Medical Diagnosis System',
       color: kPrimaryColor,
       //   theme: ThemeData(
       //     brightness: Brightness.dark),
       debugShowCheckedModeBanner: false,
       home: SplashScreen(
-        page: StreamBuilder<User?>(
-          stream: FirebaseAuth.instance.authStateChanges(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.active) {
-              if (snapshot.hasData) {
-                return const HomePage();
-              } else {
-                return const LoginPage();
-              }
-            } else {
-              return const Center(
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      'Please Wait... ',
-                      style: TextStyle(
-                          fontSize: 30,
-                          color: kPrimaryColor,
-                          fontFamily: 'Pacifico'),
-                    ),
-                    CircularProgressIndicator(
-                      color: kPrimaryColor,
-                      backgroundColor: Colors.grey,
-                    ),
-                  ],
-                ),
-              );
-            }
-          },
-        ),
+        page: LoginPage(),
+        // StreamBuilder<User?>(
+        //   stream: FirebaseAuth.instance.authStateChanges(),
+        //   builder: (context, snapshot) {
+        //     if (snapshot.connectionState == ConnectionState.active) {
+        //       if (snapshot.hasData) {
+        //         return const UserHomePage();
+        //       } else {
+        //         return const LoginPage();
+        //       }
+        //     } else {
+        //       return const Center(
+        //         child: Row(
+        //           mainAxisSize: MainAxisSize.min,
+        //           children: [
+        //             Text(
+        //               'Please Wait...',
+        //               style: TextStyle(
+        //                 fontSize: 30,
+        //                 color: kPrimaryColor,
+        //                 fontFamily: 'Pacifico',
+        //               ),
+        //             ),
+        //             CircularProgressIndicator(
+        //               color: kPrimaryColor,
+        //               backgroundColor: Colors.grey,
+        //             ),
+        //           ],
+        //         ),
+        //       );
+        //     }
+        //   },
+        // ),
         animation: 'assets/animations/Animation - start.json',
         seconds: 3,
-        flag: 1,
+        flag: 0,
       ),
     );
   }

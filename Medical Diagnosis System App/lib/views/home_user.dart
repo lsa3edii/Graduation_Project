@@ -10,18 +10,21 @@ import 'package:medical_diagnosis_system/widgets/custom_button.dart';
 import 'package:medical_diagnosis_system/widgets/custom_circle_avatar.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 import 'package:medical_diagnosis_system/widgets/custom_container.dart';
+import 'package:medical_diagnosis_system/widgets/custom_text_field.dart';
+import 'package:medical_diagnosis_system/widgets/icon_auth.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../constants.dart';
 import '../Chat/views/chat_page.dart';
 import '../helper/helper_functions.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class UserHomePage extends StatefulWidget {
+  const UserHomePage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<UserHomePage> createState() => _UserHomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _UserHomePageState extends State<UserHomePage> {
   int _page = 1;
   bool isLoading = false;
 
@@ -163,15 +166,111 @@ class _HomePageState extends State<HomePage> {
                         child: Scrollbar(
                           child: ListView(
                             physics: const BouncingScrollPhysics(),
-                            children: const [
-                              SizedBox(height: 150),
-                              Center(
+                            children: [
+                              const Center(
                                 child: Text(
-                                  'Settings',
+                                  'Username',
                                   style: TextStyle(
-                                      fontSize: 25, fontFamily: 'Pacifico'),
+                                      fontSize: 20, fontFamily: 'Pacifico'),
                                 ),
                               ),
+                              SizedBox(
+                                height: 65,
+                                child: CustomTextField(
+                                  icon: Icons.person,
+                                  maxLength: 12,
+                                  hintLabel: 'Username',
+                                  onChanged: (data) {},
+                                ),
+                              ),
+                              const Center(
+                                child: Text(
+                                  'Email',
+                                  style: TextStyle(
+                                      fontSize: 20, fontFamily: 'Pacifico'),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 45,
+                                child: CustomTextField(
+                                  icon: Icons.email,
+                                  hintLabel: 'Email',
+                                  onChanged: (data) {},
+                                ),
+                              ),
+                              const SizedBox(height: 5),
+                              const Center(
+                                child: Text(
+                                  'Password',
+                                  style: TextStyle(
+                                      fontSize: 20, fontFamily: 'Pacifico'),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 45,
+                                child: CustomTextField(
+                                  icon: Icons.password,
+                                  hintLabel: 'Password',
+                                  obscureText: true,
+                                  onChanged: (data) {},
+                                ),
+                              ),
+                              const SizedBox(height: 30),
+                              CustomButton(
+                                buttonText: 'Update',
+                                onPressed: () {},
+                              ),
+                              const SizedBox(height: 50),
+                              const Center(
+                                child: Text(
+                                  'Contact The Developer :',
+                                  style: TextStyle(
+                                      fontSize: 27,
+                                      color: kPrimaryColor,
+                                      fontFamily: 'Pacifico'),
+                                ),
+                              ),
+                              Center(
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    IconAuth(
+                                      image: 'assets/icons/facebook.png',
+                                      onPressed: () async {
+                                        await launchUrl(
+                                          Uri.parse(
+                                              'https://www.facebook.com/MuhammedAbdulrahim0'),
+                                        );
+                                      },
+                                    ),
+                                    IconAuth(
+                                      image: 'assets/icons/linkedin.png',
+                                      onPressed: () async {
+                                        await launchUrl(Uri.parse(
+                                            'https://www.linkedin.com/in/muhammedabdulrahim'));
+                                      },
+                                    ),
+                                    IconAuth(
+                                      image: 'assets/icons/whatsapp.png',
+                                      onPressed: () async {
+                                        await launchUrl(
+                                            Uri.parse(
+                                                'https://wa.me/+2001098867501'),
+                                            mode:
+                                                LaunchMode.externalApplication);
+                                      },
+                                    ),
+                                    IconAuth(
+                                      image: 'assets/icons/github.png',
+                                      onPressed: () async {
+                                        await launchUrl(Uri.parse(
+                                            'https://github.com/lsa3edii'));
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(height: 50),
                             ],
                           ),
                         ),
@@ -203,7 +302,8 @@ class _HomePageState extends State<HomePage> {
                                         return const SplashScreen(
                                           page: AIPage(),
                                           animation:
-                                              'assets/animations/Animation - 1695398860329.json',
+                                              'assets/animations/Animation - ai.json',
+                                          flag: 1,
                                         );
                                       },
                                     ));
@@ -269,15 +369,17 @@ class _HomePageState extends State<HomePage> {
                                 ),
                               ),
                               const SizedBox(height: 25),
-                              ChatItem(
+                              ChatItem1(
                                 buttonText: 'Dr. lSa3edii',
+                                image: kDoctorImage,
                                 onPressed: () {
                                   Navigator.push(context, MaterialPageRoute(
                                     builder: (context) {
                                       return SplashScreen(
                                         page: ChatPage(messageId: messageId!),
                                         animation:
-                                            'assets/animations/Animation - 1695399264640.json',
+                                            'assets/animations/Animation - chat.json',
+                                        flag: 2,
                                       );
                                     },
                                   ));

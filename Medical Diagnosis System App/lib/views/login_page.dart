@@ -2,7 +2,8 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:medical_diagnosis_system/services/auth_services.dart';
-import 'package:medical_diagnosis_system/views/home.dart';
+import 'package:medical_diagnosis_system/views/home_doctor.dart';
+import 'package:medical_diagnosis_system/views/home_user.dart';
 import 'package:medical_diagnosis_system/views/signup_user_page.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import '../helper/helper_functions.dart';
@@ -85,7 +86,7 @@ class _LoginPageState extends State<LoginPage> {
                         Padding(
                           padding: const EdgeInsets.only(top: 20),
                           child: Image.asset(
-                            'assets/icons/Medical Diagnosis System.png',
+                            kDefaultImage,
                             height: 200,
                             cacheHeight: 200,
                           ),
@@ -127,6 +128,7 @@ class _LoginPageState extends State<LoginPage> {
                               const Text("don't have an account?  "),
                               GestureDetector(
                                 onTap: () {
+                                  Feedback.forTap(context);
                                   Navigator.push(context,
                                       MaterialPageRoute(builder: (context) {
                                     return const SignupUserPage();
@@ -152,8 +154,8 @@ class _LoginPageState extends State<LoginPage> {
                                   isLoading = true;
                                 });
                                 await AuthServices.signInWithEmailAndPassword(
-                                  email!,
-                                  password!,
+                                  email: email!,
+                                  password: password!,
                                 );
                                 // ignore: use_build_context_synchronously
                                 showSnackBar(context,
@@ -163,7 +165,7 @@ class _LoginPageState extends State<LoginPage> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(builder: (context) {
-                                    return const HomePage();
+                                    return const UserHomePage();
                                   }),
                                 );
                               } on FirebaseAuthException catch (e) {
@@ -216,7 +218,8 @@ class _LoginPageState extends State<LoginPage> {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => const HomePage(),
+                                        builder: (context) =>
+                                            const UserHomePage(),
                                       ));
                                   // ignore: use_build_context_synchronously
                                   showSnackBar(
@@ -243,7 +246,8 @@ class _LoginPageState extends State<LoginPage> {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => const HomePage(),
+                                        builder: (context) =>
+                                            const UserHomePage(),
                                       ));
                                   // ignore: use_build_context_synchronously
                                   showSnackBar(
@@ -269,7 +273,7 @@ class _LoginPageState extends State<LoginPage> {
                         Padding(
                           padding: const EdgeInsets.only(top: 20),
                           child: Image.asset(
-                            'assets/icons/Medical Diagnosis System.png',
+                            kDefaultImage,
                             height: 200,
                             cacheHeight: 200,
                           ),
@@ -307,6 +311,12 @@ class _LoginPageState extends State<LoginPage> {
                         CustomButton(
                           buttonText: 'Login',
                           onPressed: () async {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) {
+                                return const DoctorHomePage();
+                              }),
+                            );
                             if (formKey.currentState!.validate()) {
                               try {
                                 setState(() {
@@ -326,7 +336,7 @@ class _LoginPageState extends State<LoginPage> {
                                 // Navigator.push(
                                 //   context,
                                 //   MaterialPageRoute(builder: (context) {
-                                //     return HomePage();
+                                //     return const DoctorHomePage();
                                 //   }),
                                 // );
                               } on FirebaseAuthException catch (e) {
