@@ -28,9 +28,16 @@ class CustomButton extends StatelessWidget {
 class CustomButton2 extends StatelessWidget {
   final String buttonText;
   final VoidCallback? onPressed;
+  final Color? color;
+  final String? fontFamily;
 
-  const CustomButton2(
-      {super.key, required this.buttonText, required this.onPressed});
+  const CustomButton2({
+    super.key,
+    required this.buttonText,
+    required this.onPressed,
+    this.color,
+    this.fontFamily,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -48,8 +55,10 @@ class CustomButton2 extends StatelessWidget {
         onPressed: onPressed,
         child: Text(
           buttonText,
-          style: const TextStyle(
-              fontSize: 20, fontFamily: 'Pacifico', color: kSecondaryColor),
+          style: TextStyle(
+              fontSize: 20,
+              color: color ?? kSecondaryColor,
+              fontFamily: fontFamily ?? 'Pacifico'),
         ),
       ),
     );

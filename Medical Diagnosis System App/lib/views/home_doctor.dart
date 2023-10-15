@@ -182,8 +182,10 @@ class _DoctorHomePageState extends State<DoctorHomePage> {
                                 ),
                               ),
                               const SizedBox(height: 30),
-                              CustomButton(
+                              CustomButton2(
                                 buttonText: 'Update',
+                                color: Colors.white,
+                                fontFamily: '',
                                 onPressed: () {},
                               ),
                               const SizedBox(height: 50),

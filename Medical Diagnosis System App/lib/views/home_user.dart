@@ -216,8 +216,10 @@ class _UserHomePageState extends State<UserHomePage> {
                                 ),
                               ),
                               const SizedBox(height: 30),
-                              CustomButton(
+                              CustomButton2(
                                 buttonText: 'Update',
+                                color: Colors.white,
+                                fontFamily: '',
                                 onPressed: () {},
                               ),
                               const SizedBox(height: 50),
