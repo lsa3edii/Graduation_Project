@@ -146,17 +146,30 @@ class _UserHomePageState extends State<UserHomePage> {
                   maxScale: 2,
                   child: Column(
                     children: [
-                      const Stack(
+                      Stack(
                         clipBehavior: Clip.none,
                         children: [
-                          CustomContainer(),
+                          const CustomContainer(),
                           Padding(
-                            padding: EdgeInsets.only(top: 40, bottom: 5),
+                            padding: const EdgeInsets.only(top: 40, bottom: 5),
                             child: Center(
-                              child: CustomCircleAvatar(
-                                image: 'assets/images/sa3edii.jpg',
-                                r1: 72,
-                                r2: 70,
+                              child: CustomButton3(
+                                widget: const CustomCircleAvatar(
+                                  borderColor: Colors.white,
+                                  image: 'assets/images/sa3edii.jpg',
+                                  r1: 72,
+                                  r2: 70,
+                                ),
+                                onPressed: () {
+                                  showSheet(
+                                    context: context,
+                                    choices: [
+                                      'See Profile Picture',
+                                      'Update Profile Picture',
+                                    ],
+                                    onTap: () {},
+                                  );
+                                },
                               ),
                             ),
                           )
@@ -185,22 +198,6 @@ class _UserHomePageState extends State<UserHomePage> {
                               ),
                               const Center(
                                 child: Text(
-                                  'Email',
-                                  style: TextStyle(
-                                      fontSize: 20, fontFamily: 'Pacifico'),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 45,
-                                child: CustomTextField(
-                                  icon: Icons.email,
-                                  hintLabel: 'Email',
-                                  onChanged: (data) {},
-                                ),
-                              ),
-                              const SizedBox(height: 5),
-                              const Center(
-                                child: Text(
                                   'Password',
                                   style: TextStyle(
                                       fontSize: 20, fontFamily: 'Pacifico'),
@@ -218,11 +215,19 @@ class _UserHomePageState extends State<UserHomePage> {
                               const SizedBox(height: 30),
                               CustomButton2(
                                 buttonText: 'Update',
-                                color: Colors.white,
                                 fontFamily: '',
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
                                 onPressed: () {},
                               ),
-                              const SizedBox(height: 50),
+                              const SizedBox(height: 35),
+                              const Divider(
+                                indent: 25,
+                                endIndent: 25,
+                                thickness: 1,
+                                color: Colors.grey,
+                              ),
+                              const SizedBox(height: 5),
                               const Center(
                                 child: Text(
                                   'Contact The Developer :',
@@ -240,16 +245,20 @@ class _UserHomePageState extends State<UserHomePage> {
                                       image: 'assets/icons/facebook.png',
                                       onPressed: () async {
                                         await launchUrl(
-                                          Uri.parse(
-                                              'https://www.facebook.com/MuhammedAbdulrahim0'),
-                                        );
+                                            Uri.parse(
+                                                'https://www.facebook.com/MuhammedAbdulrahim0'),
+                                            mode:
+                                                LaunchMode.externalApplication);
                                       },
                                     ),
                                     IconAuth(
                                       image: 'assets/icons/linkedin.png',
                                       onPressed: () async {
-                                        await launchUrl(Uri.parse(
-                                            'https://www.linkedin.com/in/muhammedabdulrahim'));
+                                        await launchUrl(
+                                            Uri.parse(
+                                                'https://www.linkedin.com/in/muhammedabdulrahim'),
+                                            mode:
+                                                LaunchMode.externalApplication);
                                       },
                                     ),
                                     IconAuth(
@@ -378,7 +387,9 @@ class _UserHomePageState extends State<UserHomePage> {
                                   Navigator.push(context, MaterialPageRoute(
                                     builder: (context) {
                                       return SplashScreen(
-                                        page: ChatPage(messageId: messageId!),
+                                        page: ChatPage(
+                                            image: kDoctorImage,
+                                            messageId: chatId!),
                                         animation:
                                             'assets/animations/Animation - chat.json',
                                         flag: 2,

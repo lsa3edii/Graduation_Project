@@ -112,17 +112,30 @@ class _DoctorHomePageState extends State<DoctorHomePage> {
                   maxScale: 2,
                   child: Column(
                     children: [
-                      const Stack(
+                      Stack(
                         clipBehavior: Clip.none,
                         children: [
-                          CustomContainer(),
+                          const CustomContainer(),
                           Padding(
-                            padding: EdgeInsets.only(top: 40, bottom: 5),
+                            padding: const EdgeInsets.only(top: 40, bottom: 5),
                             child: Center(
-                              child: CustomCircleAvatar(
-                                image: kDoctorImage,
-                                r1: 72,
-                                r2: 70,
+                              child: CustomButton3(
+                                widget: const CustomCircleAvatar(
+                                  // borderColor: Colors.white,
+                                  image: kDoctorImage,
+                                  r1: 72,
+                                  r2: 70,
+                                ),
+                                onPressed: () {
+                                  showSheet(
+                                    context: context,
+                                    choices: [
+                                      'See Profile Picture',
+                                      'Update Profile Picture',
+                                    ],
+                                    onTap: () {},
+                                  );
+                                },
                               ),
                             ),
                           )
@@ -151,22 +164,6 @@ class _DoctorHomePageState extends State<DoctorHomePage> {
                               ),
                               const Center(
                                 child: Text(
-                                  'Email',
-                                  style: TextStyle(
-                                      fontSize: 20, fontFamily: 'Pacifico'),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 45,
-                                child: CustomTextField(
-                                  icon: Icons.email,
-                                  hintLabel: 'Email',
-                                  onChanged: (data) {},
-                                ),
-                              ),
-                              const SizedBox(height: 5),
-                              const Center(
-                                child: Text(
                                   'Password',
                                   style: TextStyle(
                                       fontSize: 20, fontFamily: 'Pacifico'),
@@ -184,11 +181,19 @@ class _DoctorHomePageState extends State<DoctorHomePage> {
                               const SizedBox(height: 30),
                               CustomButton2(
                                 buttonText: 'Update',
-                                color: Colors.white,
                                 fontFamily: '',
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
                                 onPressed: () {},
                               ),
-                              const SizedBox(height: 50),
+                              const SizedBox(height: 35),
+                              const Divider(
+                                indent: 25,
+                                endIndent: 25,
+                                thickness: 1,
+                                color: Colors.grey,
+                              ),
+                              const SizedBox(height: 5),
                               const Center(
                                 child: Text(
                                   'Contact The Developer :',
@@ -206,16 +211,20 @@ class _DoctorHomePageState extends State<DoctorHomePage> {
                                       image: 'assets/icons/facebook.png',
                                       onPressed: () async {
                                         await launchUrl(
-                                          Uri.parse(
-                                              'https://www.facebook.com/MuhammedAbdulrahim0'),
-                                        );
+                                            Uri.parse(
+                                                'https://www.facebook.com/MuhammedAbdulrahim0'),
+                                            mode:
+                                                LaunchMode.externalApplication);
                                       },
                                     ),
                                     IconAuth(
                                       image: 'assets/icons/linkedin.png',
                                       onPressed: () async {
-                                        await launchUrl(Uri.parse(
-                                            'https://www.linkedin.com/in/muhammedabdulrahim'));
+                                        await launchUrl(
+                                            Uri.parse(
+                                                'https://www.linkedin.com/in/muhammedabdulrahim'),
+                                            mode:
+                                                LaunchMode.externalApplication);
                                       },
                                     ),
                                     IconAuth(
@@ -250,43 +259,64 @@ class _DoctorHomePageState extends State<DoctorHomePage> {
                   stream:
                       FirebaseFirestore.instance.collection(kUsers).snapshots(),
                   builder: (context, snapshot) {
-                    List<UserModel> users = [];
-
                     if (snapshot.hasData) {
+                      List<UserModel> users = [];
+
                       for (int i = 0; i < snapshot.data!.docs.length; i++) {
                         users.add(UserModel.fromJson(snapshot.data!.docs[i]));
                         // print(users[i].email);
                       }
-                      return Scrollbar(
-                        child: ListView.builder(
-                          physics: const BouncingScrollPhysics(),
-                          itemCount: users.length,
-                          itemBuilder: (context, i) {
-                            return ChatItem2(
-                              buttonText: users[i].email.split('@')[0],
-                              onPressed: () async {
-                                chats
-                                    .doc(users[i].email)
-                                    .collection('${users[i].email}-Chat');
-                                Navigator.push(context,
-                                    MaterialPageRoute(builder: (context) {
-                                  return ChatPage(
-                                      messageId: '${users[i].email}-doctor');
-                                }));
-                              },
-                            );
-                          },
-                        ),
-                      );
+                      if (users.isEmpty) {
+                        return const Center(
+                          child: Text(
+                            'Chats List is Empty...',
+                            style: TextStyle(
+                              color: kPrimaryColor,
+                              fontSize: 25,
+                              fontFamily: 'Pacifico',
+                            ),
+                          ),
+                        );
+                      } else {
+                        return Scrollbar(
+                          child: ListView.builder(
+                            physics: const BouncingScrollPhysics(),
+                            itemCount: users.length,
+                            itemBuilder: (context, i) {
+                              chatId = users[i].email;
+                              return ChatItem2(
+                                  buttonText: chatId!.split('@')[0],
+                                  onPressed: () async {
+                                    Navigator.push(context, MaterialPageRoute(
+                                      builder: (context) {
+                                        return ChatPage(
+                                            appBarText: chatId!.split('@')[0],
+                                            image: kDefaultImage,
+                                            messageId: '$chatId-doctor');
+                                      },
+                                    ));
+                                  });
+                            },
+                          ),
+                        );
+                      }
                     } else {
                       return const Center(
-                        child: Text(
-                          'Chat List is Empty...',
-                          style: TextStyle(
-                            color: kPrimaryColor,
-                            fontSize: 25,
-                            fontFamily: 'Pacifico',
-                          ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              'Please Wait... ',
+                              style: TextStyle(
+                                color: kPrimaryColor,
+                                fontSize: 25,
+                                fontFamily: 'Pacifico',
+                              ),
+                            ),
+                            CircularProgressIndicator(
+                                color: kPrimaryColor,
+                                backgroundColor: Colors.grey)
+                          ],
                         ),
                       );
                     }

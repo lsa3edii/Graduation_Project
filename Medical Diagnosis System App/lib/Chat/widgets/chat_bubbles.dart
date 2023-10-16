@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../models/messages.dart';
+import '../models/chats.dart';
 
 class ChatBubble1 extends StatelessWidget {
-  final Message message;
+  final Chat message;
 
   const ChatBubble1({super.key, required this.message});
 
@@ -30,7 +30,7 @@ class ChatBubble1 extends StatelessWidget {
 }
 
 class ChatBubble2 extends StatelessWidget {
-  final Message message;
+  final Chat message;
 
   const ChatBubble2({super.key, required this.message});
 

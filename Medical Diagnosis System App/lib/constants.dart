@@ -7,9 +7,9 @@ const String kDefaultImage = 'assets/icons/Medical Diagnosis System.png';
 const String kDoctorImage = 'assets/images/doctorImage.jpg';
 
 // const String kMessagesCollections = 'messages';
+// const String kCounter = 'counter';
 const String kUsers = 'users';
-const String kChatId = 'chats';
-const String kCounter = 'counter';
+const String kChatCollection = 'chats';
 const String kText = 'text';
-const String kMessageId = 'message_id';
+const String kChatId = 'chat_id';
 const String kCreatedAt = 'createdAt';

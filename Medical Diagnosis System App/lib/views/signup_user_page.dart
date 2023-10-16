@@ -12,9 +12,10 @@ import '../widgets/custom_text_field.dart';
 String? username;
 String? email;
 String? password;
-String? messageId;
+String? chatId;
 String? confirmPassword;
-CollectionReference chats = FirebaseFirestore.instance.collection(kChatId);
+CollectionReference chats =
+    FirebaseFirestore.instance.collection(kChatCollection);
 // int? page;
 
 class SignupUserPage extends StatefulWidget {
@@ -141,8 +142,7 @@ class _SignupUserPageState extends State<SignupUserPage> {
                       unFocus(context);
 
                       // ignore: use_build_context_synchronously
-                      showSnackBar(context,
-                          message: 'Succeeded.. Go to login!');
+                      showSnackBar(context, message: 'Succeed.. Go to login!');
                       // ignore: use_build_context_synchronously
                       Navigator.pop(context);
                     } on FirebaseAuthException catch (e) {

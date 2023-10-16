@@ -2,6 +2,7 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:medical_diagnosis_system/services/auth_services.dart';
+import 'package:medical_diagnosis_system/views/forget_password_page.dart';
 import 'package:medical_diagnosis_system/views/home_doctor.dart';
 import 'package:medical_diagnosis_system/views/home_user.dart';
 import 'package:medical_diagnosis_system/views/signup_user_page.dart';
@@ -107,7 +108,7 @@ class _LoginPageState extends State<LoginPage> {
                             icon: Icons.email,
                             controller: controllerUserEmail,
                             onChanged: (data) {
-                              messageId = email = data.trim();
+                              chatId = email = data.trim();
                             },
                           ),
                         ),
@@ -190,6 +191,26 @@ class _LoginPageState extends State<LoginPage> {
                           },
                         ),
                         const SizedBox(height: 20),
+                        Center(
+                          child: GestureDetector(
+                            onTap: () {
+                              Feedback.forTap(context);
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ForgetPasswordPage(),
+                                  ));
+                              unFocus(context);
+                            },
+                            child: const Text(
+                              'Forget Password ?',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: kPrimaryColor),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 5),
                         const Divider(
                           indent: 25,
                           endIndent: 25,
@@ -213,7 +234,7 @@ class _LoginPageState extends State<LoginPage> {
                                 try {
                                   final UserCredential credential =
                                       await AuthServices.signInWithGoogle();
-                                  messageId = credential.user!.email;
+                                  chatId = credential.user!.email;
                                   // ignore: use_build_context_synchronously
                                   Navigator.push(
                                       context,
@@ -241,7 +262,7 @@ class _LoginPageState extends State<LoginPage> {
                                 try {
                                   final UserCredential credential =
                                       await AuthServices.signInWithFacebook();
-                                  messageId = credential.user!.email;
+                                  chatId = credential.user!.email;
                                   // ignore: use_build_context_synchronously
                                   Navigator.push(
                                       context,
@@ -294,7 +315,7 @@ class _LoginPageState extends State<LoginPage> {
                             icon: Icons.email,
                             controller: controllerDoctorEmail,
                             onChanged: (data) {
-                              messageId = email = data.trim();
+                              chatId = email = data.trim();
                             },
                           ),
                         ),
@@ -360,6 +381,26 @@ class _LoginPageState extends State<LoginPage> {
                             }
                           },
                         ),
+                        const SizedBox(height: 20),
+                        Center(
+                          child: GestureDetector(
+                            onTap: () {
+                              Feedback.forTap(context);
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ForgetPasswordPage(),
+                                  ));
+                              unFocus(context);
+                            },
+                            child: const Text(
+                              'Forget Password ?',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: kPrimaryColor),
+                            ),
+                          ),
+                        ),
                         const SizedBox(height: 50)
                       ],
                     )),
@@ -367,9 +408,4 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
-
-  // Future<void> loginDoctor() async {
-  //   await FirebaseAuth.instance
-  //       .signInWithEmailAndPassword(email: email!, password: password!);
-  // }
 }

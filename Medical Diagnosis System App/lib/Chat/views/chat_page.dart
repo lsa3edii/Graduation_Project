@@ -4,13 +4,20 @@ import 'package:medical_diagnosis_system/widgets/custom_circle_avatar.dart';
 import '../../constants.dart';
 import '../../views/signup_user_page.dart';
 import '../../widgets/custom_text_field.dart';
-import '../models/messages.dart';
+import '../models/chats.dart';
 import '../widgets/chat_bubbles.dart';
 
 class ChatPage extends StatefulWidget {
+  final String? appBarText;
+  final String image;
   final String messageId;
 
-  const ChatPage({super.key, required this.messageId});
+  const ChatPage({
+    super.key,
+    this.appBarText,
+    required this.image,
+    required this.messageId,
+  });
 
   @override
   State<ChatPage> createState() => _ChatPageState();
@@ -38,17 +45,16 @@ class _ChatPageState extends State<ChatPage> {
 
   @override
   Widget build(BuildContext context) {
-    CollectionReference messages =
-        chats.doc(messageId).collection('$messageId-Chat');
+    CollectionReference chat = chats.doc(chatId).collection('$chatId-Chat');
 
     return StreamBuilder<QuerySnapshot>(
-      stream: messages.orderBy(kCreatedAt, descending: true).snapshots(),
+      stream: chat.orderBy(kCreatedAt, descending: true).snapshots(),
       builder: (context, snapshot) {
-        List<Message> texts = [];
+        List<Chat> texts = [];
 
         if (snapshot.hasData) {
           for (int i = 0; i < snapshot.data!.docs.length; i++) {
-            texts.add(Message.fromJson(snapshot.data!.docs[i]));
+            texts.add(Chat.fromJson(snapshot.data!.docs[i]));
           }
           // print(texts[0].text);
           return Scaffold(
@@ -58,19 +64,19 @@ class _ChatPageState extends State<ChatPage> {
               automaticallyImplyLeading: true,
               leadingWidth: 30,
               centerTitle: true,
-              title: const Row(
+              title: Row(
                 // mainAxisSize: MainAxisSize.min,
                 children: [
                   CustomCircleAvatar(
-                    image: kDoctorImage,
+                    image: widget.image,
                     r1: 25,
                     r2: 23,
                     borderColor: kSecondaryColor,
                   ),
-                  SizedBox(width: 15),
+                  const SizedBox(width: 15),
                   Text(
-                    'Dr. lSa3edii',
-                    style: TextStyle(
+                    widget.appBarText ?? 'Dr. lSa3edii',
+                    style: const TextStyle(
                       fontSize: 25,
                       fontFamily: 'Pacifico',
                       color: kSecondaryColor,
@@ -89,7 +95,7 @@ class _ChatPageState extends State<ChatPage> {
                       physics: const BouncingScrollPhysics(),
                       itemCount: texts.length,
                       itemBuilder: (context, i) {
-                        return texts[i].messageId == email
+                        return texts[i].chatId == email
                             ? ChatBubble1(message: texts[i])
                             : ChatBubble2(message: texts[i]);
                       },
@@ -103,8 +109,8 @@ class _ChatPageState extends State<ChatPage> {
                   onSubmitted: (data) {
                     text = data.trim();
                     if (text!.isNotEmpty) {
-                      messages.add({
-                        kMessageId: email,
+                      chat.add({
+                        kChatId: email,
                         kText: text,
                         kCreatedAt: DateTime.now(),
                       });
@@ -115,8 +121,8 @@ class _ChatPageState extends State<ChatPage> {
                   },
                   onPressed: () {
                     if (text!.isNotEmpty) {
-                      messages.add({
-                        kMessageId: email,
+                      chat.add({
+                        kChatId: email,
                         kText: text,
                         kCreatedAt: DateTime.now(),
                         // kCounter: snapshot.data!.docs[snapshot.data!.docs.length]
@@ -131,7 +137,7 @@ class _ChatPageState extends State<ChatPage> {
               ],
             ),
             floatingActionButton: Padding(
-              padding: const EdgeInsets.only(bottom: 55),
+              padding: const EdgeInsets.only(bottom: 70),
               child: SizedBox(
                 width: 40,
                 height: 50,

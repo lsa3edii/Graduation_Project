@@ -30,6 +30,7 @@ class CustomButton2 extends StatelessWidget {
   final VoidCallback? onPressed;
   final Color? color;
   final String? fontFamily;
+  final FontWeight? fontWeight;
 
   const CustomButton2({
     super.key,
@@ -37,6 +38,7 @@ class CustomButton2 extends StatelessWidget {
     required this.onPressed,
     this.color,
     this.fontFamily,
+    this.fontWeight,
   });
 
   @override
@@ -56,10 +58,41 @@ class CustomButton2 extends StatelessWidget {
         child: Text(
           buttonText,
           style: TextStyle(
-              fontSize: 20,
-              color: color ?? kSecondaryColor,
-              fontFamily: fontFamily ?? 'Pacifico'),
+            fontSize: 20,
+            color: color ?? kSecondaryColor,
+            fontFamily: fontFamily ?? 'Pacifico',
+            fontWeight: fontWeight ?? FontWeight.normal,
+          ),
         ),
+      ),
+    );
+  }
+}
+
+class CustomButton3 extends StatelessWidget {
+  final Widget widget;
+  final VoidCallback? onPressed;
+
+  const CustomButton3(
+      {super.key, required this.widget, required this.onPressed});
+
+  @override
+  Widget build(BuildContext context) {
+    return PopupMenuButton(
+      itemBuilder: (context) => [
+        const PopupMenuItem(
+          value: 'Disply Image',
+          child: Text('Disply Image'),
+        ),
+        const PopupMenuItem(
+          value: 'Update Image',
+          child: Text('Update Image'),
+        ),
+      ],
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(shape: const CircleBorder()),
+        onPressed: onPressed,
+        child: widget,
       ),
     );
   }

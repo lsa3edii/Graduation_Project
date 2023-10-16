@@ -122,4 +122,8 @@ class AuthServices {
       'username': username,
     }, SetOptions(merge: true));
   }
+
+  static Future<void> resetPassword({required String email}) async {
+    await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+  }
 }
