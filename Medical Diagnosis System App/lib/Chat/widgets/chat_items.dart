@@ -74,7 +74,7 @@ class ChatItem2 extends StatelessWidget {
         child: Row(
           children: [
             CustomCircleAvatar(
-              image: image ?? 'assets/icons/Medical Diagnosis System.png',
+              image: image ?? kDefaultImage,
               r1: 39,
               r2: 37,
               borderColor: kPrimaryColor,

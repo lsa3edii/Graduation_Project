@@ -79,6 +79,15 @@ class ForgetPasswordPage extends StatelessWidget {
                       if (formKey.currentState!.validate()) {
                         try {
                           await AuthServices.resetPassword(email: email!);
+
+                          if (!usersList.contains(email)) {
+                            // ignore: use_build_context_synchronously
+                            showSnackBar(context,
+                                message:
+                                    'This email is not found in our database.',
+                                color: Colors.blueGrey[200]);
+                            return;
+                          }
                           // ignore: use_build_context_synchronously
                           showSnackBar(context,
                               message:
@@ -87,13 +96,6 @@ class ForgetPasswordPage extends StatelessWidget {
                         } on FirebaseException {
                           showSnackBar(context,
                               message: 'The email address is badly formatted.',
-                              color: Colors.blueGrey[200]);
-                        }
-                        if (!usersList.contains(email)) {
-                          // ignore: use_build_context_synchronously
-                          showSnackBar(context,
-                              message:
-                                  'This email is not found in our database.',
                               color: Colors.blueGrey[200]);
                         }
                       }

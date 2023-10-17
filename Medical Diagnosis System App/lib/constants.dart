@@ -5,7 +5,7 @@ const kSecondaryColor = Color(0xffF8C409);
 
 const String kDefaultImage = 'assets/icons/Medical Diagnosis System.png';
 const String kDoctorImage = 'assets/images/doctorImage.jpg';
-
+const String kMyImage = 'assets/images/sa3edii.jpg';
 // const String kMessagesCollections = 'messages';
 // const String kCounter = 'counter';
 const String kUsers = 'users';

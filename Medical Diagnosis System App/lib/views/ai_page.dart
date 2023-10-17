@@ -30,16 +30,6 @@ class _AIPageState extends State<AIPage> {
   int _page = 0;
   bool _isLoading = false;
 
-  Future<void> pickImage(var imageSource) async {
-    final picker = ImagePicker();
-    pickedFile = await picker.pickImage(source: imageSource);
-
-    // if (img == null) return;
-    setState(() {
-      img = File(pickedFile!.path);
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -49,7 +39,7 @@ class _AIPageState extends State<AIPage> {
             _page = 0;
             unFocus(context);
           });
-        } else {
+        } else if (details.primaryVelocity! < 0) {
           setState(() {
             _page = 1;
             unFocus(context);
@@ -105,7 +95,10 @@ class _AIPageState extends State<AIPage> {
                     backgroundColor: kPrimaryColor,
                     tooltip: 'Gallery',
                     onPressed: () async {
-                      await pickImage(ImageSource.gallery);
+                      // img is changed because the setState
+                      img = await pickImage(
+                          imageSource: ImageSource.gallery,
+                          pickedFile: pickedFile);
 
                       setState(() {
                         _isLoading = true;
@@ -128,7 +121,9 @@ class _AIPageState extends State<AIPage> {
                     backgroundColor: kPrimaryColor,
                     tooltip: 'Camera',
                     onPressed: () async {
-                      await pickImage(ImageSource.camera);
+                      img = await pickImage(
+                          imageSource: ImageSource.camera,
+                          pickedFile: ImageSource.camera);
 
                       setState(() {
                         _isLoading = true;
@@ -187,10 +182,7 @@ class _AIPageState extends State<AIPage> {
                           child: Card(
                             elevation: 10,
                             child: img == null
-                                ? Image.asset(
-                                    'assets/icons/Medical Diagnosis System.png',
-                                    cacheHeight: 300,
-                                  )
+                                ? Image.asset(kDefaultImage, cacheHeight: 300)
                                 : Image.file(img!, cacheHeight: 300),
                           ),
                         ),

@@ -1,5 +1,7 @@
+import 'dart:io';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:medical_diagnosis_system/Chat/widgets/chat_items.dart';
 import 'package:medical_diagnosis_system/services/auth_services.dart';
 import 'package:medical_diagnosis_system/views/ai_page.dart';
@@ -16,6 +18,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../constants.dart';
 import '../Chat/views/chat_page.dart';
 import '../helper/helper_functions.dart';
+import 'disply_image.dart';
 
 class UserHomePage extends StatefulWidget {
   const UserHomePage({super.key});
@@ -25,6 +28,8 @@ class UserHomePage extends StatefulWidget {
 }
 
 class _UserHomePageState extends State<UserHomePage> {
+  File? img;
+  dynamic pickedFile;
   int _page = 1;
   bool isLoading = false;
 
@@ -154,9 +159,10 @@ class _UserHomePageState extends State<UserHomePage> {
                             padding: const EdgeInsets.only(top: 40, bottom: 5),
                             child: Center(
                               child: CustomButton3(
-                                widget: const CustomCircleAvatar(
+                                widget: CustomCircleAvatar(
                                   borderColor: Colors.white,
-                                  image: 'assets/images/sa3edii.jpg',
+                                  image: kMyImage,
+                                  img: img,
                                   r1: 72,
                                   r2: 70,
                                 ),
@@ -167,7 +173,27 @@ class _UserHomePageState extends State<UserHomePage> {
                                       'See Profile Picture',
                                       'Update Profile Picture',
                                     ],
-                                    onTap: () {},
+                                    onChoiceSelected: (i) async {
+                                      if (i == 0) {
+                                        // to pop bottom sheet
+                                        Navigator.pop(context);
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => DisplyImage(
+                                                image: kMyImage, img: img),
+                                          ),
+                                        );
+                                      } else {
+                                        Navigator.pop(context);
+
+                                        img = await pickImage(
+                                            imageSource: ImageSource.gallery,
+                                            pickedFile: pickedFile);
+
+                                        setState(() {});
+                                      }
+                                    },
                                   );
                                 },
                               ),

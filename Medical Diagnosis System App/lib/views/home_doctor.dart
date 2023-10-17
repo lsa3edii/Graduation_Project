@@ -1,15 +1,18 @@
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:medical_diagnosis_system/Chat/widgets/chat_items.dart';
 import 'package:medical_diagnosis_system/models/users.dart';
+import 'package:medical_diagnosis_system/views/disply_image.dart';
 import 'package:medical_diagnosis_system/views/signup_user_page.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'login_page.dart';
 import '../Chat/views/chat_page.dart';
 import '../widgets/custom_button.dart';
 import '../widgets/custom_text_field.dart';
 import '../widgets/icon_auth.dart';
-import 'login_page.dart';
 import '../widgets/custom_circle_avatar.dart';
 import '../widgets/custom_container.dart';
 import '../helper/helper_functions.dart';
@@ -24,6 +27,8 @@ class DoctorHomePage extends StatefulWidget {
 }
 
 class _DoctorHomePageState extends State<DoctorHomePage> {
+  File? img;
+  dynamic pickedFile;
   int _page = 1;
 
   @override
@@ -39,7 +44,7 @@ class _DoctorHomePageState extends State<DoctorHomePage> {
               _page = 0;
               unFocus(context);
             });
-          } else {
+          } else if (details.primaryVelocity! < 0) {
             setState(() {
               _page = 1;
               unFocus(context);
@@ -120,9 +125,10 @@ class _DoctorHomePageState extends State<DoctorHomePage> {
                             padding: const EdgeInsets.only(top: 40, bottom: 5),
                             child: Center(
                               child: CustomButton3(
-                                widget: const CustomCircleAvatar(
+                                widget: CustomCircleAvatar(
                                   // borderColor: Colors.white,
                                   image: kDoctorImage,
+                                  img: img,
                                   r1: 72,
                                   r2: 70,
                                 ),
@@ -133,7 +139,27 @@ class _DoctorHomePageState extends State<DoctorHomePage> {
                                       'See Profile Picture',
                                       'Update Profile Picture',
                                     ],
-                                    onTap: () {},
+                                    onChoiceSelected: (i) async {
+                                      if (i == 0) {
+                                        // to pop bottom sheet
+                                        Navigator.pop(context);
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => DisplyImage(
+                                                image: kDoctorImage, img: img),
+                                          ),
+                                        );
+                                      } else {
+                                        Navigator.pop(context);
+
+                                        img = await pickImage(
+                                            imageSource: ImageSource.gallery,
+                                            pickedFile: pickedFile);
+
+                                        setState(() {});
+                                      }
+                                    },
                                   );
                                 },
                               ),
@@ -184,7 +210,9 @@ class _DoctorHomePageState extends State<DoctorHomePage> {
                                 fontFamily: '',
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white,
-                                onPressed: () {},
+                                onPressed: () {
+                                  // print(users.doc(usercredential!.user!.uid));
+                                },
                               ),
                               const SizedBox(height: 35),
                               const Divider(

@@ -42,7 +42,7 @@ class _LoginPageState extends State<LoginPage> {
               _page = 0;
               unFocus(context);
             });
-          } else {
+          } else if (details.primaryVelocity! < 0) {
             setState(() {
               _page = 1;
               unFocus(context);
