@@ -388,7 +388,7 @@ class _UserHomePageState extends State<UserHomePage> {
                                     builder: (context) {
                                       return SplashScreen(
                                         page: ChatPage(
-                                            image: kDoctorImage,
+                                            appBarimage: kDoctorImage,
                                             messageId: chatId!),
                                         animation:
                                             'assets/animations/Animation - chat.json',

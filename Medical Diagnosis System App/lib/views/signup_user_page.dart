@@ -14,6 +14,9 @@ String? email;
 String? password;
 String? chatId;
 String? confirmPassword;
+
+UserCredential? usercredential;
+CollectionReference users = FirebaseFirestore.instance.collection(kUsers);
 CollectionReference chats =
     FirebaseFirestore.instance.collection(kChatCollection);
 // int? page;

@@ -9,13 +9,13 @@ import '../widgets/chat_bubbles.dart';
 
 class ChatPage extends StatefulWidget {
   final String? appBarText;
-  final String image;
+  final String appBarimage;
   final String messageId;
 
   const ChatPage({
     super.key,
     this.appBarText,
-    required this.image,
+    required this.appBarimage,
     required this.messageId,
   });
 
@@ -55,6 +55,8 @@ class _ChatPageState extends State<ChatPage> {
         if (snapshot.hasData) {
           for (int i = 0; i < snapshot.data!.docs.length; i++) {
             texts.add(Chat.fromJson(snapshot.data!.docs[i]));
+            // print(snapshot.data!.docs[i].id);
+            // print(snapshot.data!.docs[i]['text']);
           }
           // print(texts[0].text);
           return Scaffold(
@@ -68,7 +70,7 @@ class _ChatPageState extends State<ChatPage> {
                 // mainAxisSize: MainAxisSize.min,
                 children: [
                   CustomCircleAvatar(
-                    image: widget.image,
+                    image: widget.appBarimage,
                     r1: 25,
                     r2: 23,
                     borderColor: kSecondaryColor,

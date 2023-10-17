@@ -154,7 +154,8 @@ class _LoginPageState extends State<LoginPage> {
                                 setState(() {
                                   isLoading = true;
                                 });
-                                await AuthServices.signInWithEmailAndPassword(
+                                usercredential = await AuthServices
+                                    .signInWithEmailAndPassword(
                                   email: email!,
                                   password: password!,
                                 );
@@ -232,9 +233,9 @@ class _LoginPageState extends State<LoginPage> {
                               image: 'assets/icons/google.png',
                               onPressed: () async {
                                 try {
-                                  final UserCredential credential =
+                                  usercredential =
                                       await AuthServices.signInWithGoogle();
-                                  chatId = credential.user!.email;
+                                  chatId = usercredential!.user!.email;
                                   // ignore: use_build_context_synchronously
                                   Navigator.push(
                                       context,
@@ -260,9 +261,9 @@ class _LoginPageState extends State<LoginPage> {
                               image: 'assets/icons/facebook.png',
                               onPressed: () async {
                                 try {
-                                  final UserCredential credential =
+                                  usercredential =
                                       await AuthServices.signInWithFacebook();
-                                  chatId = credential.user!.email;
+                                  chatId = usercredential!.user!.email;
                                   // ignore: use_build_context_synchronously
                                   Navigator.push(
                                       context,

@@ -256,17 +256,17 @@ class _DoctorHomePageState extends State<DoctorHomePage> {
                   ),
                 )
               : StreamBuilder<QuerySnapshot>(
-                  stream:
-                      FirebaseFirestore.instance.collection(kUsers).snapshots(),
+                  stream: users.snapshots(),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
-                      List<UserModel> users = [];
+                      List<UserModel> usersList = [];
 
                       for (int i = 0; i < snapshot.data!.docs.length; i++) {
-                        users.add(UserModel.fromJson(snapshot.data!.docs[i]));
-                        // print(users[i].email);
+                        usersList
+                            .add(UserModel.fromJson(snapshot.data!.docs[i]));
+                        // print(usersList[i].email);
                       }
-                      if (users.isEmpty) {
+                      if (usersList.isEmpty) {
                         return const Center(
                           child: Text(
                             'Chats List is Empty...',
@@ -281,17 +281,17 @@ class _DoctorHomePageState extends State<DoctorHomePage> {
                         return Scrollbar(
                           child: ListView.builder(
                             physics: const BouncingScrollPhysics(),
-                            itemCount: users.length,
+                            itemCount: usersList.length,
                             itemBuilder: (context, i) {
-                              chatId = users[i].email;
+                              chatId = usersList[i].email;
                               return ChatItem2(
                                   buttonText: chatId!.split('@')[0],
                                   onPressed: () async {
                                     Navigator.push(context, MaterialPageRoute(
                                       builder: (context) {
                                         return ChatPage(
+                                            appBarimage: kDefaultImage,
                                             appBarText: chatId!.split('@')[0],
-                                            image: kDefaultImage,
                                             messageId: '$chatId-doctor');
                                       },
                                     ));
