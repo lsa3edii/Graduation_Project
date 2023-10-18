@@ -34,12 +34,14 @@ class _AIPageState extends State<AIPage> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onHorizontalDragEnd: (details) {
-        if (details.primaryVelocity! > 0) {
+        if (details.primaryVelocity! > 0 && _page == 1) {
+          Feedback.forTap(context);
           setState(() {
             _page = 0;
             unFocus(context);
           });
-        } else if (details.primaryVelocity! < 0) {
+        } else if (details.primaryVelocity! < 0 && _page == 0) {
+          Feedback.forTap(context);
           setState(() {
             _page = 1;
             unFocus(context);
@@ -80,6 +82,7 @@ class _AIPageState extends State<AIPage> {
             Icon(Icons.text_fields, color: Colors.white),
           ],
           onTap: (value) {
+            Feedback.forTap(context);
             setState(() {
               _page = value;
               unFocus(context);

@@ -67,18 +67,22 @@ class _UserHomePageState extends State<UserHomePage> {
       child: GestureDetector(
         onHorizontalDragEnd: (details) async {
           if (details.primaryVelocity! > 0 && _page == 1) {
+            Feedback.forTap(context);
             setState(() {
               _page = 0;
             });
           } else if (details.primaryVelocity! < 0 && _page == 0) {
+            Feedback.forTap(context);
             setState(() {
               _page = 1;
             });
           } else if (details.primaryVelocity! < 0 && _page == 1) {
+            Feedback.forTap(context);
             setState(() {
               _page = 2;
             });
           } else if (details.primaryVelocity! > 0 && _page == 2) {
+            Feedback.forTap(context);
             setState(() {
               _page = 1;
             });
@@ -141,6 +145,7 @@ class _UserHomePageState extends State<UserHomePage> {
               Icon(Icons.forum, color: Colors.white),
             ],
             onTap: (value) {
+              Feedback.forTap(context);
               setState(() {
                 _page = value;
               });
@@ -232,9 +237,10 @@ class _UserHomePageState extends State<UserHomePage> {
                               SizedBox(
                                 height: 45,
                                 child: CustomTextField(
-                                  icon: Icons.password,
                                   hintLabel: 'Password',
+                                  controller: TextEditingController(),
                                   obscureText: true,
+                                  showVisibilityToggle: true,
                                   onChanged: (data) {},
                                 ),
                               ),
@@ -244,7 +250,11 @@ class _UserHomePageState extends State<UserHomePage> {
                                 fontFamily: '',
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white,
-                                onPressed: () {},
+                                onPressed: () {
+                                  // var x = users
+                                  //     .doc(usercredential!.user!.uid)
+                                  //     .get();
+                                },
                               ),
                               const SizedBox(height: 35),
                               const Divider(

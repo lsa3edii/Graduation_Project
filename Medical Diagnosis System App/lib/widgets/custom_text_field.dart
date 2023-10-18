@@ -8,28 +8,42 @@ final TextEditingController controllerUserPassowrd = TextEditingController();
 final TextEditingController controllerDoctorEmail = TextEditingController();
 final TextEditingController controllerDoctorPassowrd = TextEditingController();
 
+final TextEditingController controllerUsernameSignUP = TextEditingController();
+final TextEditingController controllerEmailSignUP = TextEditingController();
+final TextEditingController controllerPasswordSignUP = TextEditingController();
+final TextEditingController controllerConfirmPasswordSignUP =
+    TextEditingController();
+
 final TextEditingController controllerChat = TextEditingController();
 
-class CustomTextField extends StatelessWidget {
+// ignore: must_be_immutable
+class CustomTextField extends StatefulWidget {
   final String? hintLabel;
   final dynamic icon;
   final Function(String data)? onChanged;
   final TextEditingController? controller;
   final int? maxLines;
   final int? maxLength;
-  final bool obscureText;
+  final bool showVisibilityToggle;
+  bool obscureText;
 
-  const CustomTextField({
+  CustomTextField({
     super.key,
-    required this.icon,
     required this.onChanged,
+    this.icon,
     this.controller,
     this.hintLabel,
     this.maxLines,
     this.maxLength,
     this.obscureText = false,
+    this.showVisibilityToggle = false,
   });
 
+  @override
+  State<CustomTextField> createState() => _CustomTextFieldState();
+}
+
+class _CustomTextFieldState extends State<CustomTextField> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -43,45 +57,65 @@ class CustomTextField extends StatelessWidget {
           }
           return null;
         },
-        controller: controller ?? TextEditingController(),
-        onChanged: onChanged,
-        maxLines: maxLines ?? 1,
-        maxLength: maxLength,
-        obscureText: obscureText,
+        controller: widget.controller ?? TextEditingController(),
+        onChanged: widget.onChanged,
+        maxLines: widget.maxLines ?? 1,
+        maxLength: widget.maxLength,
+        obscureText: widget.obscureText,
         decoration: InputDecoration(
           contentPadding:
               const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
           border: const OutlineInputBorder(),
           focusedBorder: const OutlineInputBorder(
               borderSide: BorderSide(color: kPrimaryColor)),
-          hintText: hintLabel ?? 'Enter a text',
+          hintText: widget.hintLabel ?? 'Enter a text',
           label: Text(
-            hintLabel ?? '',
+            widget.hintLabel ?? '',
             style: const TextStyle(color: kPrimaryColor),
           ),
-          suffix: Icon(icon),
+          suffix: Icon(widget.icon, color: kPrimaryColor),
+          suffixIcon: widget.showVisibilityToggle
+              ? IconButton(
+                  icon: Icon(!widget.obscureText
+                      ? Icons.visibility
+                      : Icons.visibility_off),
+                  color: kPrimaryColor,
+                  onPressed: () {
+                    setState(() {
+                      widget.obscureText = !widget.obscureText;
+                    });
+                  },
+                )
+              : null,
         ),
       ),
     );
   }
 }
 
-class CustomTextField2 extends StatelessWidget {
+// ignore: must_be_immutable
+class CustomTextField2 extends StatefulWidget {
   final String? hintLabel;
   final dynamic icon;
   final Function(String data)? onChanged;
   final TextEditingController? controller;
-  final bool obscureText;
+  final bool showVisibilityToggle;
+  bool obscureText;
 
-  const CustomTextField2({
-    super.key,
-    required this.icon,
-    required this.onChanged,
-    this.controller,
-    this.hintLabel,
-    this.obscureText = false,
-  });
+  CustomTextField2(
+      {super.key,
+      required this.onChanged,
+      this.icon,
+      this.controller,
+      this.hintLabel,
+      this.obscureText = false,
+      this.showVisibilityToggle = false});
 
+  @override
+  State<CustomTextField2> createState() => _CustomTextField2State();
+}
+
+class _CustomTextField2State extends State<CustomTextField2> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -95,42 +129,64 @@ class CustomTextField2 extends StatelessWidget {
           }
           return null;
         },
-        controller: controller ?? TextEditingController(),
-        onChanged: onChanged,
-        obscureText: obscureText,
+        controller: widget.controller ?? TextEditingController(),
+        onChanged: widget.onChanged,
+        obscureText: widget.obscureText,
         decoration: InputDecoration(
           contentPadding:
               const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
           border: const OutlineInputBorder(),
           focusedBorder: const OutlineInputBorder(
               borderSide: BorderSide(color: kPrimaryColor)),
-          hintText: hintLabel ?? 'Enter a text',
+          hintText: widget.hintLabel ?? 'Enter a text',
           label: Text(
-            hintLabel ?? '',
+            widget.hintLabel ?? '',
             style: const TextStyle(color: kPrimaryColor),
           ),
-          suffix: Icon(icon),
+          suffix: Icon(widget.icon, color: kPrimaryColor),
+          suffixIcon: widget.showVisibilityToggle
+              ? IconButton(
+                  icon: Icon(!widget.obscureText
+                      ? Icons.visibility
+                      : Icons.visibility_off),
+                  color: kPrimaryColor,
+                  onPressed: () {
+                    setState(() {
+                      widget.obscureText = !widget.obscureText;
+                    });
+                  },
+                )
+              : null,
         ),
       ),
     );
   }
 }
 
-class CustomTextFieldForCheckPassword extends StatelessWidget {
+// ignore: must_be_immutable
+class CustomTextFieldForCheckPassword extends StatefulWidget {
   final String hintLabel;
   final dynamic icon;
   final Function(String data)? onChanged;
   final TextEditingController? controller;
-  final bool obscureText;
+  bool obscureText;
 
-  const CustomTextFieldForCheckPassword(
-      {super.key,
-      required this.hintLabel,
-      required this.icon,
-      required this.onChanged,
-      this.controller,
-      this.obscureText = false});
+  CustomTextFieldForCheckPassword({
+    super.key,
+    required this.hintLabel,
+    required this.onChanged,
+    this.icon,
+    this.controller,
+    this.obscureText = false,
+  });
 
+  @override
+  State<CustomTextFieldForCheckPassword> createState() =>
+      _CustomTextFieldForCheckPasswordState();
+}
+
+class _CustomTextFieldForCheckPasswordState
+    extends State<CustomTextFieldForCheckPassword> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -147,21 +203,31 @@ class CustomTextFieldForCheckPassword extends StatelessWidget {
           return null;
         },
         // onSubmitted: (data) {},
-        controller: controller ?? TextEditingController(),
-        onChanged: onChanged,
-        obscureText: obscureText,
+        controller: widget.controller ?? TextEditingController(),
+        onChanged: widget.onChanged,
+        obscureText: widget.obscureText,
         decoration: InputDecoration(
           contentPadding:
               const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
           border: const OutlineInputBorder(),
           focusedBorder: const OutlineInputBorder(
               borderSide: BorderSide(color: kPrimaryColor)),
-          hintText: hintLabel,
+          hintText: widget.hintLabel,
           label: Text(
-            hintLabel,
+            widget.hintLabel,
             style: const TextStyle(color: kPrimaryColor),
           ),
-          suffix: Icon(icon),
+          suffix: Icon(widget.icon, color: kPrimaryColor),
+          suffixIcon: IconButton(
+            icon: Icon(
+                !widget.obscureText ? Icons.visibility : Icons.visibility_off),
+            color: kPrimaryColor,
+            onPressed: () {
+              setState(() {
+                widget.obscureText = !widget.obscureText;
+              });
+            },
+          ),
         ),
       ),
     );

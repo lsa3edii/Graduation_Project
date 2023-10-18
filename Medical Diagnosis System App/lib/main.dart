@@ -29,7 +29,7 @@ class MedicalDiagnosisSystem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    precacheImage(const AssetImage('assets/images/neurology2.jpg'), context);
+    // precacheImage(const AssetImage('assets/images/neurology2.jpg'), context);
     return const MaterialApp(
       title: 'Medical Diagnosis System',
       color: kPrimaryColor,

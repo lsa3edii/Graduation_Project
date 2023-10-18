@@ -39,12 +39,14 @@ class _DoctorHomePageState extends State<DoctorHomePage> {
       },
       child: GestureDetector(
         onHorizontalDragEnd: (details) {
-          if (details.primaryVelocity! > 0) {
+          if (details.primaryVelocity! > 0 && _page == 1) {
+            Feedback.forTap(context);
             setState(() {
               _page = 0;
               unFocus(context);
             });
-          } else if (details.primaryVelocity! < 0) {
+          } else if (details.primaryVelocity! < 0 && _page == 0) {
+            Feedback.forTap(context);
             setState(() {
               _page = 1;
               unFocus(context);
@@ -107,6 +109,7 @@ class _DoctorHomePageState extends State<DoctorHomePage> {
               Icon(Icons.forum, color: Colors.white),
             ],
             onTap: (value) {
+              Feedback.forTap(context);
               setState(() {
                 _page = value;
               });
@@ -198,9 +201,10 @@ class _DoctorHomePageState extends State<DoctorHomePage> {
                               SizedBox(
                                 height: 45,
                                 child: CustomTextField(
-                                  icon: Icons.password,
                                   hintLabel: 'Password',
+                                  controller: TextEditingController(),
                                   obscureText: true,
+                                  showVisibilityToggle: true,
                                   onChanged: (data) {},
                                 ),
                               ),
@@ -210,9 +214,7 @@ class _DoctorHomePageState extends State<DoctorHomePage> {
                                 fontFamily: '',
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white,
-                                onPressed: () {
-                                  // print(users.doc(usercredential!.user!.uid));
-                                },
+                                onPressed: () {},
                               ),
                               const SizedBox(height: 35),
                               const Divider(
@@ -317,10 +319,38 @@ class _DoctorHomePageState extends State<DoctorHomePage> {
                                   onPressed: () async {
                                     Navigator.push(context, MaterialPageRoute(
                                       builder: (context) {
-                                        return ChatPage(
-                                            appBarimage: kDefaultImage,
-                                            appBarText: chatId!.split('@')[0],
-                                            messageId: '$chatId-doctor');
+                                        // temporary solution
+                                        if (i == 0) {
+                                          chatId = usersList[0].email;
+                                          return ChatPage(
+                                              appBarimage: kDefaultImage,
+                                              appBarText: chatId!.split('@')[0],
+                                              messageId: '$chatId-doctor');
+                                        } else if (i == 1) {
+                                          chatId = usersList[1].email;
+                                          return ChatPage(
+                                              appBarimage: kDefaultImage,
+                                              appBarText: chatId!.split('@')[0],
+                                              messageId: '$chatId-doctor');
+                                        } else if (i == 2) {
+                                          chatId = usersList[2].email;
+                                          return ChatPage(
+                                              appBarimage: kDefaultImage,
+                                              appBarText: chatId!.split('@')[0],
+                                              messageId: '$chatId-doctor');
+                                        } else if (i == 3) {
+                                          chatId = usersList[3].email;
+                                          return ChatPage(
+                                              appBarimage: kDefaultImage,
+                                              appBarText: chatId!.split('@')[0],
+                                              messageId: '$chatId-doctor');
+                                        } else {
+                                          chatId = usersList[4].email;
+                                          return ChatPage(
+                                              appBarimage: kDefaultImage,
+                                              appBarText: chatId!.split('@')[0],
+                                              messageId: '$chatId-doctor');
+                                        }
                                       },
                                     ));
                                   });

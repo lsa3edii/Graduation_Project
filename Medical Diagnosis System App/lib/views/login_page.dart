@@ -37,12 +37,14 @@ class _LoginPageState extends State<LoginPage> {
       inAsyncCall: isLoading,
       child: GestureDetector(
         onHorizontalDragEnd: (details) {
-          if (details.primaryVelocity! > 0) {
+          if (details.primaryVelocity! > 0 && _page == 1) {
+            Feedback.forTap(context);
             setState(() {
               _page = 0;
               unFocus(context);
             });
-          } else if (details.primaryVelocity! < 0) {
+          } else if (details.primaryVelocity! < 0 && _page == 0) {
+            Feedback.forTap(context);
             setState(() {
               _page = 1;
               unFocus(context);
@@ -72,6 +74,7 @@ class _LoginPageState extends State<LoginPage> {
               // Image.asset('assets/icons/doctor.png')
             ],
             onTap: (value) {
+              Feedback.forTap(context);
               setState(() {
                 _page = value;
                 unFocus(context);
@@ -113,13 +116,14 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                         CustomTextField(
+                          // icon: Icons.password,
                           hintLabel: 'Password',
-                          icon: Icons.password,
                           controller: controllerUserPassowrd,
+                          showVisibilityToggle: true,
+                          obscureText: true,
                           onChanged: (data) {
                             password = data;
                           },
-                          obscureText: true,
                         ),
                         Padding(
                           padding: const EdgeInsets.only(top: 10, bottom: 25),
@@ -322,12 +326,12 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         CustomTextField2(
                           hintLabel: 'Password',
-                          icon: Icons.password,
+                          obscureText: true,
+                          showVisibilityToggle: true,
                           controller: controllerDoctorPassowrd,
                           onChanged: (data) {
                             password = data;
                           },
-                          obscureText: true,
                         ),
                         const SizedBox(height: 51),
                         CustomButton(

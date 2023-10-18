@@ -71,6 +71,7 @@ class _SignupUserPageState extends State<SignupUserPage> {
                 padding: const EdgeInsets.only(top: 7, bottom: 12),
                 child: CustomTextField(
                   hintLabel: 'Username',
+                  controller: controllerUsernameSignUP,
                   maxLength: 12,
                   icon: Icons.person,
                   onChanged: (data) {
@@ -82,6 +83,7 @@ class _SignupUserPageState extends State<SignupUserPage> {
                 padding: const EdgeInsets.only(bottom: 12),
                 child: CustomTextField(
                   hintLabel: 'Email',
+                  controller: controllerEmailSignUP,
                   icon: Icons.email,
                   onChanged: (data) {
                     email = data.trim();
@@ -92,20 +94,21 @@ class _SignupUserPageState extends State<SignupUserPage> {
                 padding: const EdgeInsets.only(bottom: 12),
                 child: CustomTextField(
                   hintLabel: 'Password',
-                  icon: Icons.password,
+                  controller: controllerPasswordSignUP,
+                  obscureText: true,
+                  showVisibilityToggle: true,
                   onChanged: (data) {
                     password = data;
                   },
-                  obscureText: true,
                 ),
               ),
               CustomTextFieldForCheckPassword(
                 hintLabel: 'Confirm Password',
-                icon: Icons.password,
+                controller: controllerConfirmPasswordSignUP,
+                obscureText: true,
                 onChanged: (data) {
                   confirmPassword = data;
                 },
-                obscureText: true,
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 10, bottom: 25),

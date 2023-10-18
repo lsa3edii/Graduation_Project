@@ -19,20 +19,31 @@ class DisplyImage extends StatelessWidget {
       imageProvider = FileImage(img!);
     }
 
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: kPrimaryColor,
-        centerTitle: true,
-        title: const Text(
-          'Medical Diagnosis System',
-          style: TextStyle(fontSize: 27, fontFamily: 'Pacifico'),
+    return GestureDetector(
+      // onVerticalDragEnd: (details) {
+      //   Feedback.forTap(context);
+
+      //   if (details.primaryVelocity! > 0) {
+      //     Navigator.pop(context);
+      //   } else if (details.primaryVelocity! < 0) {
+      //     Navigator.pop(context);
+      //   }
+      // },
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: kPrimaryColor,
+          centerTitle: true,
+          title: const Text(
+            'Medical Diagnosis System',
+            style: TextStyle(fontSize: 27, fontFamily: 'Pacifico'),
+          ),
         ),
-      ),
-      backgroundColor: Colors.white,
-      body: PhotoView(
-        imageProvider: imageProvider, // Replace with your image path
-        minScale: PhotoViewComputedScale.contained,
-        maxScale: PhotoViewComputedScale.covered * 2,
+        backgroundColor: Colors.white,
+        body: PhotoView(
+          imageProvider: imageProvider, // Replace with your image path
+          minScale: PhotoViewComputedScale.contained,
+          maxScale: PhotoViewComputedScale.covered * 2,
+        ),
       ),
     );
   }
