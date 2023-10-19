@@ -79,7 +79,7 @@ class _ChatPageState extends State<ChatPage> {
                   Text(
                     widget.appBarText ?? 'Dr. lSa3edii',
                     style: const TextStyle(
-                      fontSize: 25,
+                      fontSize: 27,
                       fontFamily: 'Pacifico',
                       color: kSecondaryColor,
                     ),

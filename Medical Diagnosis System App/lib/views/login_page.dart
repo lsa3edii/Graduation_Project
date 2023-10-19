@@ -9,6 +9,7 @@ import 'package:medical_diagnosis_system/views/signup_user_page.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import '../helper/helper_functions.dart';
 import '../constants.dart';
+import '../models/users.dart';
 import '../widgets/custom_button.dart';
 import '../widgets/custom_text_field.dart';
 import '../widgets/icon_auth.dart';
@@ -158,22 +159,34 @@ class _LoginPageState extends State<LoginPage> {
                                 setState(() {
                                   isLoading = true;
                                 });
-                                usercredential = await AuthServices
+                                userCredential = await AuthServices
                                     .signInWithEmailAndPassword(
                                   email: email!,
                                   password: password!,
+                                  userRole: userRole1,
                                 );
-                                // ignore: use_build_context_synchronously
-                                showSnackBar(context,
-                                    message: 'Login Succeeded!');
 
-                                // ignore: use_build_context_synchronously
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) {
-                                    return const UserHomePage();
-                                  }),
-                                );
+                                userRole = await AuthServices.retriveUserRole(
+                                    userCredential: userCredential!,
+                                    userField: UserFields.userRole);
+
+                                if (userRole == userRole1) {
+                                  // ignore: use_build_context_synchronously
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) {
+                                      return const UserHomePage();
+                                    }),
+                                  );
+                                  // ignore: use_build_context_synchronously
+                                  showSnackBar(context,
+                                      message: 'Login Succeeded!');
+                                } else {
+                                  // ignore: use_build_context_synchronously
+                                  showSnackBar(context,
+                                      message:
+                                          'Something went wrong! Try again.');
+                                }
                               } on FirebaseAuthException catch (e) {
                                 if (e.code == 'user-not-found') {
                                   showSnackBar(context,
@@ -237,9 +250,10 @@ class _LoginPageState extends State<LoginPage> {
                               image: 'assets/icons/google.png',
                               onPressed: () async {
                                 try {
-                                  usercredential =
-                                      await AuthServices.signInWithGoogle();
-                                  chatId = usercredential!.user!.email;
+                                  userCredential =
+                                      await AuthServices.signInWithGoogle(
+                                          userRole: userRole1);
+                                  chatId = userCredential!.user!.email;
                                   // ignore: use_build_context_synchronously
                                   Navigator.push(
                                       context,
@@ -265,9 +279,10 @@ class _LoginPageState extends State<LoginPage> {
                               image: 'assets/icons/facebook.png',
                               onPressed: () async {
                                 try {
-                                  usercredential =
-                                      await AuthServices.signInWithFacebook();
-                                  chatId = usercredential!.user!.email;
+                                  userCredential =
+                                      await AuthServices.signInWithFacebook(
+                                          userRole: userRole1);
+                                  chatId = userCredential!.user!.email;
                                   // ignore: use_build_context_synchronously
                                   Navigator.push(
                                       context,
@@ -337,34 +352,39 @@ class _LoginPageState extends State<LoginPage> {
                         CustomButton(
                           buttonText: 'Login',
                           onPressed: () async {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) {
-                                return const DoctorHomePage();
-                              }),
-                            );
                             if (formKey.currentState!.validate()) {
                               try {
                                 setState(() {
                                   isLoading = true;
                                 });
-                                // await AuthServices.signInWithEmailAndPassword(
-                                //   email!,
-                                //   password!,
-                                // );
+                                userCredential = await AuthServices
+                                    .signInWithEmailAndPassword(
+                                  email: email!,
+                                  password: password!,
+                                  userRole: userRole2,
+                                );
 
-                                // // ignore: use_build_context_synchronously
-                                // showSnackBar(context,
-                                //     message: 'Login succeeded!',
-                                //     color: Colors.white);
+                                userRole = await AuthServices.retriveUserRole(
+                                    userCredential: userCredential!,
+                                    userField: UserFields.userRole);
 
-                                // // ignore: use_build_context_synchronously
-                                // Navigator.push(
-                                //   context,
-                                //   MaterialPageRoute(builder: (context) {
-                                //     return const DoctorHomePage();
-                                //   }),
-                                // );
+                                if (userRole == userRole2) {
+                                  // ignore: use_build_context_synchronously
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) {
+                                      return const DoctorHomePage();
+                                    }),
+                                  );
+                                  // ignore: use_build_context_synchronously
+                                  showSnackBar(context,
+                                      message: 'Login Succeeded!');
+                                } else {
+                                  // ignore: use_build_context_synchronously
+                                  showSnackBar(context,
+                                      message:
+                                          'Something went wrong! Try again.');
+                                }
                               } on FirebaseAuthException catch (e) {
                                 if (e.code == 'user-not-found') {
                                   showSnackBar(context,

@@ -14,6 +14,16 @@ final TextEditingController controllerPasswordSignUP = TextEditingController();
 final TextEditingController controllerConfirmPasswordSignUP =
     TextEditingController();
 
+final TextEditingController controllerUsernameUserHome =
+    TextEditingController();
+final TextEditingController controllerPassowrdUserHome =
+    TextEditingController();
+
+final TextEditingController controllerUsernameDoctorHome =
+    TextEditingController();
+final TextEditingController controllerPassowrdDoctorHome =
+    TextEditingController();
+
 final TextEditingController controllerChat = TextEditingController();
 
 // ignore: must_be_immutable

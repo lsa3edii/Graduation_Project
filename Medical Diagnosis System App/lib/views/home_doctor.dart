@@ -186,6 +186,7 @@ class _DoctorHomePageState extends State<DoctorHomePage> {
                                 height: 65,
                                 child: CustomTextField(
                                   icon: Icons.person,
+                                  controller: controllerUsernameDoctorHome,
                                   maxLength: 12,
                                   hintLabel: 'Username',
                                   onChanged: (data) {},
@@ -202,7 +203,7 @@ class _DoctorHomePageState extends State<DoctorHomePage> {
                                 height: 45,
                                 child: CustomTextField(
                                   hintLabel: 'Password',
-                                  controller: TextEditingController(),
+                                  controller: controllerPassowrdDoctorHome,
                                   obscureText: true,
                                   showVisibilityToggle: true,
                                   onChanged: (data) {},
@@ -214,7 +215,7 @@ class _DoctorHomePageState extends State<DoctorHomePage> {
                                 fontFamily: '',
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white,
-                                onPressed: () {},
+                                onPressed: () async {},
                               ),
                               const SizedBox(height: 35),
                               const Divider(
@@ -314,46 +315,46 @@ class _DoctorHomePageState extends State<DoctorHomePage> {
                             itemCount: usersList.length,
                             itemBuilder: (context, i) {
                               chatId = usersList[i].email;
-                              return ChatItem2(
-                                  buttonText: chatId!.split('@')[0],
-                                  onPressed: () async {
-                                    Navigator.push(context, MaterialPageRoute(
-                                      builder: (context) {
-                                        // temporary solution
-                                        if (i == 0) {
-                                          chatId = usersList[0].email;
-                                          return ChatPage(
-                                              appBarimage: kDefaultImage,
-                                              appBarText: chatId!.split('@')[0],
-                                              messageId: '$chatId-doctor');
-                                        } else if (i == 1) {
-                                          chatId = usersList[1].email;
-                                          return ChatPage(
-                                              appBarimage: kDefaultImage,
-                                              appBarText: chatId!.split('@')[0],
-                                              messageId: '$chatId-doctor');
-                                        } else if (i == 2) {
-                                          chatId = usersList[2].email;
-                                          return ChatPage(
-                                              appBarimage: kDefaultImage,
-                                              appBarText: chatId!.split('@')[0],
-                                              messageId: '$chatId-doctor');
-                                        } else if (i == 3) {
-                                          chatId = usersList[3].email;
-                                          return ChatPage(
-                                              appBarimage: kDefaultImage,
-                                              appBarText: chatId!.split('@')[0],
-                                              messageId: '$chatId-doctor');
-                                        } else {
-                                          chatId = usersList[4].email;
-                                          return ChatPage(
-                                              appBarimage: kDefaultImage,
-                                              appBarText: chatId!.split('@')[0],
-                                              messageId: '$chatId-doctor');
-                                        }
-                                      },
-                                    ));
-                                  });
+                              // print(i);
+                              return chatId == email
+                                  ? null
+                                  : ChatItem2(
+                                      buttonText: chatId!.split('@')[0],
+                                      onPressed: () async {
+                                        Navigator.push(context,
+                                            MaterialPageRoute(
+                                          builder: (context) {
+                                            chatId = usersList[i].email;
+                                            // print(i);
+                                            return ChatPage(
+                                                appBarimage: kDefaultImage,
+                                                appBarText:
+                                                    chatId!.split('@')[0],
+                                                messageId: '$chatId-doctor');
+
+                                            // // temporary solution
+                                            // if (i == 0) {
+                                            //   chatId = usersList[0].email;
+                                            //   return ChatPage(
+                                            //       appBarimage: kDefaultImage,
+                                            //       appBarText: chatId!.split('@')[0],
+                                            //       messageId: '$chatId-doctor');
+                                            // } else if (i == 1) {
+                                            //   chatId = usersList[1].email;
+                                            //   return ChatPage(
+                                            //       appBarimage: kDefaultImage,
+                                            //       appBarText: chatId!.split('@')[0],
+                                            //       messageId: '$chatId-doctor');
+                                            // } else {
+                                            //   chatId = usersList[2].email;
+                                            //   return ChatPage(
+                                            //       appBarimage: kDefaultImage,
+                                            //       appBarText: chatId!.split('@')[0],
+                                            //       messageId: '$chatId-doctor');
+                                            // }
+                                          },
+                                        ));
+                                      });
                             },
                           ),
                         );

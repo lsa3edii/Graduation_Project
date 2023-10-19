@@ -13,3 +13,6 @@ const String kChatCollection = 'chats';
 const String kText = 'text';
 const String kChatId = 'chat_id';
 const String kCreatedAt = 'createdAt';
+
+const String userRole1 = 'patient';
+const String userRole2 = 'doctor';

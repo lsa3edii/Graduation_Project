@@ -38,7 +38,7 @@ class MedicalDiagnosisSystem extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: SplashScreen(
         page: LoginPage(),
-        // StreamBuilder<User?>(
+        // page: StreamBuilder<User?>(
         //   stream: FirebaseAuth.instance.authStateChanges(),
         //   builder: (context, snapshot) {
         //     if (snapshot.connectionState == ConnectionState.active) {

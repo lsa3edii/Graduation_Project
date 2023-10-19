@@ -13,6 +13,7 @@ class AuthServices {
     required String email,
     required String password,
     required String username,
+    required String userRole,
   }) async {
     try {
       UserCredential userCredential =
@@ -26,6 +27,7 @@ class AuthServices {
         email: email,
         password: password,
         username: username,
+        userRole: userRole,
       );
 
       return userCredential;
@@ -34,8 +36,11 @@ class AuthServices {
     }
   }
 
-  static Future<UserCredential> signInWithEmailAndPassword(
-      {required String email, required String password}) async {
+  static Future<UserCredential> signInWithEmailAndPassword({
+    required String email,
+    required String password,
+    required String userRole,
+  }) async {
     try {
       UserCredential userCredential =
           await FirebaseAuth.instance.signInWithEmailAndPassword(
@@ -43,11 +48,12 @@ class AuthServices {
         password: password,
       );
 
-      _createUserCollection(
-        userCredential: userCredential,
-        email: email,
-        password: password,
-      );
+      // _createUserCollection(
+      //   userCredential: userCredential,
+      //   email: email,
+      //   password: password,
+      //   userRole: userRole,
+      // );
 
       return userCredential;
     } catch (ex) {
@@ -55,7 +61,8 @@ class AuthServices {
     }
   }
 
-  static Future<UserCredential> signInWithGoogle() async {
+  static Future<UserCredential> signInWithGoogle(
+      {required String userRole}) async {
     try {
       final GoogleSignInAccount? gUser = await _gSignIn.signIn();
       final GoogleSignInAuthentication gAuth = await gUser!.authentication;
@@ -71,6 +78,7 @@ class AuthServices {
       _createUserCollection(
         userCredential: userCredential,
         email: userCredential.user!.email!,
+        userRole: userRole,
       );
 
       return userCredential;
@@ -79,7 +87,8 @@ class AuthServices {
     }
   }
 
-  static Future<UserCredential> signInWithFacebook() async {
+  static Future<UserCredential> signInWithFacebook(
+      {required String userRole}) async {
     try {
       final LoginResult loginResult = await FacebookAuth.instance.login();
       final credential =
@@ -91,6 +100,7 @@ class AuthServices {
       _createUserCollection(
         userCredential: userCredential,
         email: userCredential.user!.email!,
+        userRole: userRole,
       );
 
       return userCredential;
@@ -111,6 +121,7 @@ class AuthServices {
   static void _createUserCollection({
     required UserCredential userCredential,
     required String email,
+    required String userRole,
     String? password,
     String? username,
   }) {
@@ -120,10 +131,21 @@ class AuthServices {
       'email': email,
       'password': password,
       'username': username,
+      'userRole': userRole,
     }, SetOptions(merge: true));
   }
 
   static Future<void> resetPassword({required String email}) async {
     await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+  }
+
+  static Future<String> retriveUserRole(
+      {required UserCredential userCredential,
+      required String userField}) async {
+    final DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
+        .collection(kUsers)
+        .doc(userCredential.user!.uid)
+        .get();
+    return userSnapshot[userField];
   }
 }

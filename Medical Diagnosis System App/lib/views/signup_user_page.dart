@@ -15,10 +15,12 @@ String? password;
 String? chatId;
 String? confirmPassword;
 
-UserCredential? usercredential;
+UserCredential? userCredential;
 CollectionReference users = FirebaseFirestore.instance.collection(kUsers);
 CollectionReference chats =
     FirebaseFirestore.instance.collection(kChatCollection);
+
+String? userRole;
 // int? page;
 
 class SignupUserPage extends StatefulWidget {
@@ -143,6 +145,7 @@ class _SignupUserPageState extends State<SignupUserPage> {
                         email: email!,
                         password: password!,
                         username: username!,
+                        userRole: userRole1,
                       );
                       // ignore: use_build_context_synchronously
                       unFocus(context);

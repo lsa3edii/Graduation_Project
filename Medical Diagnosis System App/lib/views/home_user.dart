@@ -222,6 +222,7 @@ class _UserHomePageState extends State<UserHomePage> {
                                 height: 65,
                                 child: CustomTextField(
                                   icon: Icons.person,
+                                  controller: controllerUsernameUserHome,
                                   maxLength: 12,
                                   hintLabel: 'Username',
                                   onChanged: (data) {},
@@ -238,7 +239,7 @@ class _UserHomePageState extends State<UserHomePage> {
                                 height: 45,
                                 child: CustomTextField(
                                   hintLabel: 'Password',
-                                  controller: TextEditingController(),
+                                  controller: controllerPassowrdUserHome,
                                   obscureText: true,
                                   showVisibilityToggle: true,
                                   onChanged: (data) {},
@@ -250,11 +251,7 @@ class _UserHomePageState extends State<UserHomePage> {
                                 fontFamily: '',
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white,
-                                onPressed: () {
-                                  // var x = users
-                                  //     .doc(usercredential!.user!.uid)
-                                  //     .get();
-                                },
+                                onPressed: () {},
                               ),
                               const SizedBox(height: 35),
                               const Divider(
