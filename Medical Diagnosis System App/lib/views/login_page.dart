@@ -117,7 +117,7 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                         CustomTextField(
-                          // icon: Icons.password,
+                          icon: Icons.password,
                           hintLabel: 'Password',
                           controller: controllerUserPassowrd,
                           showVisibilityToggle: true,
@@ -246,6 +246,7 @@ class _LoginPageState extends State<LoginPage> {
                             IconAuth(
                               image: 'assets/icons/google.png',
                               onPressed: () async {
+                                // AuthServices.logout();
                                 try {
                                   userCredential =
                                       await AuthServices.signInWithGoogle(
@@ -337,6 +338,7 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                         CustomTextField2(
+                          icon: Icons.password,
                           hintLabel: 'Password',
                           obscureText: true,
                           showVisibilityToggle: true,

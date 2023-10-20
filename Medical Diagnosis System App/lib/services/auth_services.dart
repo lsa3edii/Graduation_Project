@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:medical_diagnosis_system/constants.dart';
+// import 'package:medical_diagnosis_system/models/users.dart';
 
 class AuthServices {
   static final GoogleSignIn _gSignIn = GoogleSignIn();
@@ -79,6 +80,10 @@ class AuthServices {
         userCredential: userCredential,
         email: userCredential.user!.email!,
         userRole: userRole,
+        // username: await retriveUserData(
+        //     userCredential: userCredential, userField: UserFields.username),
+        // password: await retriveUserData(
+        //     userCredential: userCredential, userField: UserFields.password),
       );
 
       return userCredential;

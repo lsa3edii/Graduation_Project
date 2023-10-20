@@ -95,6 +95,7 @@ class _SignupUserPageState extends State<SignupUserPage> {
               Padding(
                 padding: const EdgeInsets.only(bottom: 12),
                 child: CustomTextField(
+                  icon: Icons.password,
                   hintLabel: 'Password',
                   controller: controllerPasswordSignUP,
                   obscureText: true,
@@ -105,6 +106,7 @@ class _SignupUserPageState extends State<SignupUserPage> {
                 ),
               ),
               CustomTextFieldForCheckPassword(
+                icon: Icons.password,
                 hintLabel: 'Confirm Password',
                 controller: controllerConfirmPasswordSignUP,
                 obscureText: true,

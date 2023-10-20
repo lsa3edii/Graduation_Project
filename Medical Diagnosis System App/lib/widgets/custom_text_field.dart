@@ -83,7 +83,10 @@ class _CustomTextFieldState extends State<CustomTextField> {
             widget.hintLabel ?? '',
             style: const TextStyle(color: kPrimaryColor),
           ),
-          suffix: Icon(widget.icon, color: kPrimaryColor),
+          prefixIcon: Icon(
+            widget.icon,
+            color: kPrimaryColor,
+          ),
           suffixIcon: widget.showVisibilityToggle
               ? IconButton(
                   icon: Icon(!widget.obscureText
@@ -153,7 +156,7 @@ class _CustomTextField2State extends State<CustomTextField2> {
             widget.hintLabel ?? '',
             style: const TextStyle(color: kPrimaryColor),
           ),
-          suffix: Icon(widget.icon, color: kPrimaryColor),
+          prefixIcon: Icon(widget.icon, color: kPrimaryColor),
           suffixIcon: widget.showVisibilityToggle
               ? IconButton(
                   icon: Icon(!widget.obscureText
@@ -227,7 +230,7 @@ class _CustomTextFieldForCheckPasswordState
             widget.hintLabel,
             style: const TextStyle(color: kPrimaryColor),
           ),
-          suffix: Icon(widget.icon, color: kPrimaryColor),
+          prefixIcon: Icon(widget.icon, color: kPrimaryColor),
           suffixIcon: IconButton(
             icon: Icon(
                 !widget.obscureText ? Icons.visibility : Icons.visibility_off),

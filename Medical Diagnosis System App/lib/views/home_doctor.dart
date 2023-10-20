@@ -213,10 +213,11 @@ class _DoctorHomePageState extends State<DoctorHomePage> {
                                     ),
                                   ),
                                   SizedBox(
-                                    height: 45,
+                                    height: 65,
                                     child: CustomTextField(
                                       hintLabel: 'Password',
                                       controller: controllerPasswordDoctorHome,
+                                      maxLength: 25,
                                       obscureText: true,
                                       showVisibilityToggle: true,
                                       onChanged: (data) {
@@ -224,7 +225,7 @@ class _DoctorHomePageState extends State<DoctorHomePage> {
                                       },
                                     ),
                                   ),
-                                  const SizedBox(height: 30),
+                                  const SizedBox(height: 15),
                                   CustomButton2(
                                     buttonText: 'Update',
                                     fontFamily: '',

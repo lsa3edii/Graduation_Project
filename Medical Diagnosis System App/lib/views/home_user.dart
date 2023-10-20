@@ -150,6 +150,7 @@ class _UserHomePageState extends State<UserHomePage> {
             ],
             onTap: (value) {
               Feedback.forTap(context);
+              clearUserData();
               setState(() {
                 _page = value;
               });
@@ -250,10 +251,12 @@ class _UserHomePageState extends State<UserHomePage> {
                                     ),
                                   ),
                                   SizedBox(
-                                    height: 45,
+                                    height: 65,
                                     child: CustomTextField(
+                                      icon: Icons.password,
                                       hintLabel: 'Password',
                                       controller: controllerPasswordUserHome,
+                                      maxLength: 25,
                                       obscureText: true,
                                       showVisibilityToggle: true,
                                       onChanged: (data) {
@@ -261,7 +264,7 @@ class _UserHomePageState extends State<UserHomePage> {
                                       },
                                     ),
                                   ),
-                                  const SizedBox(height: 30),
+                                  const SizedBox(height: 15),
                                   CustomButton2(
                                     buttonText: 'Update',
                                     fontFamily: '',
@@ -273,6 +276,7 @@ class _UserHomePageState extends State<UserHomePage> {
                                           setState(() {
                                             isLoading = true;
                                           });
+
                                           AuthServices.createUserCollection(
                                             userCredential: userCredential!,
                                             email: email!,
