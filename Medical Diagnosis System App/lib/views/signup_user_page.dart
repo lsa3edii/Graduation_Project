@@ -147,6 +147,8 @@ class _SignupUserPageState extends State<SignupUserPage> {
                         username: username!,
                         userRole: userRole1,
                       );
+                      clearUserSignUpData();
+
                       // ignore: use_build_context_synchronously
                       unFocus(context);
 

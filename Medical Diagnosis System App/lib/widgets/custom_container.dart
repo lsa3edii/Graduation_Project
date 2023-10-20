@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import '../constants.dart';
 
 class CustomContainer extends StatelessWidget {
+  final String? username;
   final int flag;
 
-  const CustomContainer({super.key, this.flag = 0});
+  const CustomContainer({super.key, this.username, this.flag = 0});
 
   @override
   Widget build(BuildContext context) {
@@ -34,8 +35,8 @@ class CustomContainer extends StatelessWidget {
                     Container(
                       height: 75,
                       alignment: Alignment.bottomCenter,
-                      child: const Text('Muhammed',
-                          style: TextStyle(
+                      child: Text(username ?? 'User',
+                          style: const TextStyle(
                             fontSize: 25,
                             color: Colors.white,
                             // fontStyle: FontStyle.italic,

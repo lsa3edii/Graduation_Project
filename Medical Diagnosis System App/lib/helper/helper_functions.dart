@@ -19,11 +19,22 @@ void showSnackBar(BuildContext context,
 void clearUserData() {
   controllerUserEmail.clear();
   controllerUserPassowrd.clear();
+  controllerUsernameUserHome.clear();
+  controllerPasswordUserHome.clear();
+}
+
+void clearUserSignUpData() {
+  controllerEmailSignUP.clear();
+  controllerPasswordSignUP.clear();
+  controllerConfirmPasswordSignUP.clear();
+  controllerUsernameSignUP.clear();
 }
 
 void clearDoctorData() {
   controllerDoctorEmail.clear();
   controllerDoctorPassowrd.clear();
+  controllerUsernameDoctorHome.clear();
+  controllerPasswordDoctorHome.clear();
 }
 
 void unFocus(BuildContext context) {

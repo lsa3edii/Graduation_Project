@@ -7,6 +7,7 @@ import 'package:medical_diagnosis_system/Chat/widgets/chat_items.dart';
 import 'package:medical_diagnosis_system/models/users.dart';
 import 'package:medical_diagnosis_system/views/disply_image.dart';
 import 'package:medical_diagnosis_system/views/signup_user_page.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'login_page.dart';
 import '../Chat/views/chat_page.dart';
@@ -29,7 +30,9 @@ class DoctorHomePage extends StatefulWidget {
 class _DoctorHomePageState extends State<DoctorHomePage> {
   File? img;
   dynamic pickedFile;
+  bool isLoading = false;
   int _page = 1;
+  GlobalKey<FormState> formKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
@@ -116,174 +119,220 @@ class _DoctorHomePageState extends State<DoctorHomePage> {
             },
           ),
           body: _page == 0
-              ? InteractiveViewer(
-                  maxScale: 2,
-                  child: Column(
-                    children: [
-                      Stack(
-                        clipBehavior: Clip.none,
+              ? ModalProgressHUD(
+                  inAsyncCall: isLoading,
+                  child: Form(
+                    key: formKey,
+                    child: InteractiveViewer(
+                      maxScale: 2,
+                      child: Column(
                         children: [
-                          const CustomContainer(),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 40, bottom: 5),
-                            child: Center(
-                              child: CustomButton3(
-                                widget: CustomCircleAvatar(
-                                  // borderColor: Colors.white,
-                                  image: kDoctorImage,
-                                  img: img,
-                                  r1: 72,
-                                  r2: 70,
+                          Stack(
+                            clipBehavior: Clip.none,
+                            children: [
+                              const CustomContainer(),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(top: 40, bottom: 5),
+                                child: Center(
+                                  child: CustomButton3(
+                                    widget: CustomCircleAvatar(
+                                      // borderColor: Colors.white,
+                                      image: kDoctorImage,
+                                      img: img,
+                                      r1: 72,
+                                      r2: 70,
+                                    ),
+                                    onPressed: () {
+                                      showSheet(
+                                        context: context,
+                                        choices: [
+                                          'See Profile Picture',
+                                          'Update Profile Picture',
+                                        ],
+                                        onChoiceSelected: (i) async {
+                                          if (i == 0) {
+                                            // to pop bottom sheet
+                                            Navigator.pop(context);
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    DisplyImage(
+                                                        image: kDoctorImage,
+                                                        img: img),
+                                              ),
+                                            );
+                                          } else {
+                                            Navigator.pop(context);
+
+                                            img = await pickImage(
+                                                imageSource:
+                                                    ImageSource.gallery,
+                                                pickedFile: pickedFile);
+
+                                            setState(() {});
+                                          }
+                                        },
+                                      );
+                                    },
+                                  ),
                                 ),
-                                onPressed: () {
-                                  showSheet(
-                                    context: context,
-                                    choices: [
-                                      'See Profile Picture',
-                                      'Update Profile Picture',
-                                    ],
-                                    onChoiceSelected: (i) async {
-                                      if (i == 0) {
-                                        // to pop bottom sheet
-                                        Navigator.pop(context);
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => DisplyImage(
-                                                image: kDoctorImage, img: img),
-                                          ),
-                                        );
-                                      } else {
-                                        Navigator.pop(context);
+                              )
+                            ],
+                          ),
+                          Expanded(
+                            child: Scrollbar(
+                              child: ListView(
+                                physics: const BouncingScrollPhysics(),
+                                children: [
+                                  const Center(
+                                    child: Text(
+                                      'Username',
+                                      style: TextStyle(
+                                          fontSize: 20, fontFamily: 'Pacifico'),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 65,
+                                    child: CustomTextField(
+                                      icon: Icons.person,
+                                      controller: controllerUsernameDoctorHome,
+                                      maxLength: 12,
+                                      hintLabel: 'Username',
+                                      onChanged: (data) {
+                                        username = data.trim();
+                                      },
+                                    ),
+                                  ),
+                                  const Center(
+                                    child: Text(
+                                      'Password',
+                                      style: TextStyle(
+                                          fontSize: 20, fontFamily: 'Pacifico'),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 45,
+                                    child: CustomTextField(
+                                      hintLabel: 'Password',
+                                      controller: controllerPasswordDoctorHome,
+                                      obscureText: true,
+                                      showVisibilityToggle: true,
+                                      onChanged: (data) {
+                                        password = data;
+                                      },
+                                    ),
+                                  ),
+                                  const SizedBox(height: 30),
+                                  CustomButton2(
+                                    buttonText: 'Update',
+                                    fontFamily: '',
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                    onPressed: () async {
+                                      if (formKey.currentState!.validate()) {
+                                        try {
+                                          setState(() {
+                                            isLoading = true;
+                                          });
+                                          AuthServices.createUserCollection(
+                                            userCredential: userCredential!,
+                                            email: email!,
+                                            password: password,
+                                            userRole: userRole2,
+                                            username: username,
+                                          );
 
-                                        img = await pickImage(
-                                            imageSource: ImageSource.gallery,
-                                            pickedFile: pickedFile);
+                                          await userCredential!.user!
+                                              .updatePassword(password!);
 
-                                        setState(() {});
+                                          // ignore: use_build_context_synchronously
+                                          unFocus(context);
+                                          clearDoctorData();
+
+                                          // ignore: use_build_context_synchronously
+                                          showSnackBar(context,
+                                              message: 'Successfully updated!');
+                                        } catch (e) {
+                                          showSnackBar(context,
+                                              message: e.toString());
+                                        }
+                                        setState(() {
+                                          isLoading = false;
+                                        });
                                       }
                                     },
-                                  );
-                                },
+                                  ),
+                                  const SizedBox(height: 35),
+                                  const Divider(
+                                    indent: 25,
+                                    endIndent: 25,
+                                    thickness: 1,
+                                    color: Colors.grey,
+                                  ),
+                                  const SizedBox(height: 5),
+                                  const Center(
+                                    child: Text(
+                                      'Contact The Developer :',
+                                      style: TextStyle(
+                                          fontSize: 27,
+                                          color: kPrimaryColor,
+                                          fontFamily: 'Pacifico'),
+                                    ),
+                                  ),
+                                  Center(
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        IconAuth(
+                                          image: 'assets/icons/facebook.png',
+                                          onPressed: () async {
+                                            await launchUrl(
+                                                Uri.parse(
+                                                    'https://www.facebook.com/MuhammedAbdulrahim0'),
+                                                mode: LaunchMode
+                                                    .externalApplication);
+                                          },
+                                        ),
+                                        IconAuth(
+                                          image: 'assets/icons/linkedin.png',
+                                          onPressed: () async {
+                                            await launchUrl(
+                                                Uri.parse(
+                                                    'https://www.linkedin.com/in/muhammedabdulrahim'),
+                                                mode: LaunchMode
+                                                    .externalApplication);
+                                          },
+                                        ),
+                                        IconAuth(
+                                          image: 'assets/icons/whatsapp.png',
+                                          onPressed: () async {
+                                            await launchUrl(
+                                                Uri.parse(
+                                                    'https://wa.me/+2001098867501'),
+                                                mode: LaunchMode
+                                                    .externalApplication);
+                                          },
+                                        ),
+                                        IconAuth(
+                                          image: 'assets/icons/github.png',
+                                          onPressed: () async {
+                                            await launchUrl(Uri.parse(
+                                                'https://github.com/lsa3edii'));
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  const SizedBox(height: 50),
+                                ],
                               ),
                             ),
                           )
                         ],
                       ),
-                      Expanded(
-                        child: Scrollbar(
-                          child: ListView(
-                            physics: const BouncingScrollPhysics(),
-                            children: [
-                              const Center(
-                                child: Text(
-                                  'Username',
-                                  style: TextStyle(
-                                      fontSize: 20, fontFamily: 'Pacifico'),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 65,
-                                child: CustomTextField(
-                                  icon: Icons.person,
-                                  controller: controllerUsernameDoctorHome,
-                                  maxLength: 12,
-                                  hintLabel: 'Username',
-                                  onChanged: (data) {},
-                                ),
-                              ),
-                              const Center(
-                                child: Text(
-                                  'Password',
-                                  style: TextStyle(
-                                      fontSize: 20, fontFamily: 'Pacifico'),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 45,
-                                child: CustomTextField(
-                                  hintLabel: 'Password',
-                                  controller: controllerPassowrdDoctorHome,
-                                  obscureText: true,
-                                  showVisibilityToggle: true,
-                                  onChanged: (data) {},
-                                ),
-                              ),
-                              const SizedBox(height: 30),
-                              CustomButton2(
-                                buttonText: 'Update',
-                                fontFamily: '',
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                                onPressed: () async {},
-                              ),
-                              const SizedBox(height: 35),
-                              const Divider(
-                                indent: 25,
-                                endIndent: 25,
-                                thickness: 1,
-                                color: Colors.grey,
-                              ),
-                              const SizedBox(height: 5),
-                              const Center(
-                                child: Text(
-                                  'Contact The Developer :',
-                                  style: TextStyle(
-                                      fontSize: 27,
-                                      color: kPrimaryColor,
-                                      fontFamily: 'Pacifico'),
-                                ),
-                              ),
-                              Center(
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    IconAuth(
-                                      image: 'assets/icons/facebook.png',
-                                      onPressed: () async {
-                                        await launchUrl(
-                                            Uri.parse(
-                                                'https://www.facebook.com/MuhammedAbdulrahim0'),
-                                            mode:
-                                                LaunchMode.externalApplication);
-                                      },
-                                    ),
-                                    IconAuth(
-                                      image: 'assets/icons/linkedin.png',
-                                      onPressed: () async {
-                                        await launchUrl(
-                                            Uri.parse(
-                                                'https://www.linkedin.com/in/muhammedabdulrahim'),
-                                            mode:
-                                                LaunchMode.externalApplication);
-                                      },
-                                    ),
-                                    IconAuth(
-                                      image: 'assets/icons/whatsapp.png',
-                                      onPressed: () async {
-                                        await launchUrl(
-                                            Uri.parse(
-                                                'https://wa.me/+2001098867501'),
-                                            mode:
-                                                LaunchMode.externalApplication);
-                                      },
-                                    ),
-                                    IconAuth(
-                                      image: 'assets/icons/github.png',
-                                      onPressed: () async {
-                                        await launchUrl(Uri.parse(
-                                            'https://github.com/lsa3edii'));
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              const SizedBox(height: 50),
-                            ],
-                          ),
-                        ),
-                      )
-                    ],
+                    ),
                   ),
                 )
               : StreamBuilder<QuerySnapshot>(

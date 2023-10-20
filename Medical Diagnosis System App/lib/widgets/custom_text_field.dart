@@ -16,12 +16,12 @@ final TextEditingController controllerConfirmPasswordSignUP =
 
 final TextEditingController controllerUsernameUserHome =
     TextEditingController();
-final TextEditingController controllerPassowrdUserHome =
+final TextEditingController controllerPasswordUserHome =
     TextEditingController();
 
 final TextEditingController controllerUsernameDoctorHome =
     TextEditingController();
-final TextEditingController controllerPassowrdDoctorHome =
+final TextEditingController controllerPasswordDoctorHome =
     TextEditingController();
 
 final TextEditingController controllerChat = TextEditingController();

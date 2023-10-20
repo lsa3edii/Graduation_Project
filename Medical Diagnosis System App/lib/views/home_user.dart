@@ -14,10 +14,12 @@ import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 import 'package:medical_diagnosis_system/widgets/custom_container.dart';
 import 'package:medical_diagnosis_system/widgets/custom_text_field.dart';
 import 'package:medical_diagnosis_system/widgets/icon_auth.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../constants.dart';
 import '../Chat/views/chat_page.dart';
 import '../helper/helper_functions.dart';
+import '../models/users.dart';
 import 'disply_image.dart';
 
 class UserHomePage extends StatefulWidget {
@@ -32,6 +34,8 @@ class _UserHomePageState extends State<UserHomePage> {
   dynamic pickedFile;
   int _page = 1;
   bool isLoading = false;
+  String? localUsername;
+  GlobalKey<FormState> formKey = GlobalKey();
 
   List<Widget> images = [
     Row(
@@ -152,212 +156,271 @@ class _UserHomePageState extends State<UserHomePage> {
             },
           ),
           body: _page == 0
-              ? InteractiveViewer(
-                  maxScale: 2,
-                  child: Column(
-                    children: [
-                      Stack(
-                        clipBehavior: Clip.none,
+              ? ModalProgressHUD(
+                  inAsyncCall: isLoading,
+                  child: Form(
+                    key: formKey,
+                    child: InteractiveViewer(
+                      maxScale: 2,
+                      child: Column(
                         children: [
-                          const CustomContainer(),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 40, bottom: 5),
-                            child: Center(
-                              child: CustomButton3(
-                                widget: CustomCircleAvatar(
-                                  borderColor: Colors.white,
-                                  image: kMyImage,
-                                  img: img,
-                                  r1: 72,
-                                  r2: 70,
+                          Stack(
+                            clipBehavior: Clip.none,
+                            children: [
+                              const CustomContainer(),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(top: 40, bottom: 5),
+                                child: Center(
+                                  child: CustomButton3(
+                                    widget: CustomCircleAvatar(
+                                      borderColor: Colors.white,
+                                      image: kMyImage,
+                                      img: img,
+                                      r1: 72,
+                                      r2: 70,
+                                    ),
+                                    onPressed: () {
+                                      showSheet(
+                                        context: context,
+                                        choices: [
+                                          'See Profile Picture',
+                                          'Update Profile Picture',
+                                        ],
+                                        onChoiceSelected: (i) async {
+                                          if (i == 0) {
+                                            // to pop bottom sheet
+                                            Navigator.pop(context);
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    DisplyImage(
+                                                        image: kMyImage,
+                                                        img: img),
+                                              ),
+                                            );
+                                          } else {
+                                            Navigator.pop(context);
+
+                                            img = await pickImage(
+                                                imageSource:
+                                                    ImageSource.gallery,
+                                                pickedFile: pickedFile);
+
+                                            setState(() {});
+                                          }
+                                        },
+                                      );
+                                    },
+                                  ),
                                 ),
-                                onPressed: () {
-                                  showSheet(
-                                    context: context,
-                                    choices: [
-                                      'See Profile Picture',
-                                      'Update Profile Picture',
-                                    ],
-                                    onChoiceSelected: (i) async {
-                                      if (i == 0) {
-                                        // to pop bottom sheet
-                                        Navigator.pop(context);
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => DisplyImage(
-                                                image: kMyImage, img: img),
-                                          ),
-                                        );
-                                      } else {
-                                        Navigator.pop(context);
+                              )
+                            ],
+                          ),
+                          Expanded(
+                            child: Scrollbar(
+                              child: ListView(
+                                physics: const BouncingScrollPhysics(),
+                                children: [
+                                  const Center(
+                                    child: Text(
+                                      'Username',
+                                      style: TextStyle(
+                                          fontSize: 20, fontFamily: 'Pacifico'),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 65,
+                                    child: CustomTextField(
+                                      icon: Icons.person,
+                                      controller: controllerUsernameUserHome,
+                                      maxLength: 12,
+                                      hintLabel: 'Username',
+                                      onChanged: (data) {
+                                        localUsername = username = data.trim();
+                                      },
+                                    ),
+                                  ),
+                                  const Center(
+                                    child: Text(
+                                      'Password',
+                                      style: TextStyle(
+                                          fontSize: 20, fontFamily: 'Pacifico'),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 45,
+                                    child: CustomTextField(
+                                      hintLabel: 'Password',
+                                      controller: controllerPasswordUserHome,
+                                      obscureText: true,
+                                      showVisibilityToggle: true,
+                                      onChanged: (data) {
+                                        password = data;
+                                      },
+                                    ),
+                                  ),
+                                  const SizedBox(height: 30),
+                                  CustomButton2(
+                                    buttonText: 'Update',
+                                    fontFamily: '',
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                    onPressed: () async {
+                                      if (formKey.currentState!.validate()) {
+                                        try {
+                                          setState(() {
+                                            isLoading = true;
+                                          });
+                                          AuthServices.createUserCollection(
+                                            userCredential: userCredential!,
+                                            email: email!,
+                                            password: password,
+                                            userRole: userRole1,
+                                            username: username,
+                                          );
 
-                                        img = await pickImage(
-                                            imageSource: ImageSource.gallery,
-                                            pickedFile: pickedFile);
+                                          await userCredential!.user!
+                                              .updatePassword(password!);
 
-                                        setState(() {});
+                                          // ignore: use_build_context_synchronously
+                                          unFocus(context);
+                                          clearUserData();
+
+                                          // ignore: use_build_context_synchronously
+                                          showSnackBar(context,
+                                              message: 'Successfully updated!');
+                                        } catch (e) {
+                                          showSnackBar(context,
+                                              message: e.toString());
+                                        }
+                                        setState(() {
+                                          isLoading = false;
+                                        });
                                       }
                                     },
-                                  );
-                                },
+                                  ),
+                                  const SizedBox(height: 35),
+                                  const Divider(
+                                    indent: 25,
+                                    endIndent: 25,
+                                    thickness: 1,
+                                    color: Colors.grey,
+                                  ),
+                                  const SizedBox(height: 5),
+                                  const Center(
+                                    child: Text(
+                                      'Contact The Developer :',
+                                      style: TextStyle(
+                                          fontSize: 27,
+                                          color: kPrimaryColor,
+                                          fontFamily: 'Pacifico'),
+                                    ),
+                                  ),
+                                  Center(
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        IconAuth(
+                                          image: 'assets/icons/facebook.png',
+                                          onPressed: () async {
+                                            await launchUrl(
+                                                Uri.parse(
+                                                    'https://www.facebook.com/MuhammedAbdulrahim0'),
+                                                mode: LaunchMode
+                                                    .externalApplication);
+                                          },
+                                        ),
+                                        IconAuth(
+                                          image: 'assets/icons/linkedin.png',
+                                          onPressed: () async {
+                                            await launchUrl(
+                                                Uri.parse(
+                                                    'https://www.linkedin.com/in/muhammedabdulrahim'),
+                                                mode: LaunchMode
+                                                    .externalApplication);
+                                          },
+                                        ),
+                                        IconAuth(
+                                          image: 'assets/icons/whatsapp.png',
+                                          onPressed: () async {
+                                            await launchUrl(
+                                                Uri.parse(
+                                                    'https://wa.me/+2001098867501'),
+                                                mode: LaunchMode
+                                                    .externalApplication);
+                                          },
+                                        ),
+                                        IconAuth(
+                                          image: 'assets/icons/github.png',
+                                          onPressed: () async {
+                                            await launchUrl(Uri.parse(
+                                                'https://github.com/lsa3edii'));
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  const SizedBox(height: 50),
+                                ],
                               ),
                             ),
                           )
                         ],
                       ),
-                      Expanded(
-                        child: Scrollbar(
-                          child: ListView(
-                            physics: const BouncingScrollPhysics(),
-                            children: [
-                              const Center(
-                                child: Text(
-                                  'Username',
-                                  style: TextStyle(
-                                      fontSize: 20, fontFamily: 'Pacifico'),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 65,
-                                child: CustomTextField(
-                                  icon: Icons.person,
-                                  controller: controllerUsernameUserHome,
-                                  maxLength: 12,
-                                  hintLabel: 'Username',
-                                  onChanged: (data) {},
-                                ),
-                              ),
-                              const Center(
-                                child: Text(
-                                  'Password',
-                                  style: TextStyle(
-                                      fontSize: 20, fontFamily: 'Pacifico'),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 45,
-                                child: CustomTextField(
-                                  hintLabel: 'Password',
-                                  controller: controllerPassowrdUserHome,
-                                  obscureText: true,
-                                  showVisibilityToggle: true,
-                                  onChanged: (data) {},
-                                ),
-                              ),
-                              const SizedBox(height: 30),
-                              CustomButton2(
-                                buttonText: 'Update',
-                                fontFamily: '',
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                                onPressed: () {},
-                              ),
-                              const SizedBox(height: 35),
-                              const Divider(
-                                indent: 25,
-                                endIndent: 25,
-                                thickness: 1,
-                                color: Colors.grey,
-                              ),
-                              const SizedBox(height: 5),
-                              const Center(
-                                child: Text(
-                                  'Contact The Developer :',
-                                  style: TextStyle(
-                                      fontSize: 27,
-                                      color: kPrimaryColor,
-                                      fontFamily: 'Pacifico'),
-                                ),
-                              ),
-                              Center(
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    IconAuth(
-                                      image: 'assets/icons/facebook.png',
-                                      onPressed: () async {
-                                        await launchUrl(
-                                            Uri.parse(
-                                                'https://www.facebook.com/MuhammedAbdulrahim0'),
-                                            mode:
-                                                LaunchMode.externalApplication);
-                                      },
-                                    ),
-                                    IconAuth(
-                                      image: 'assets/icons/linkedin.png',
-                                      onPressed: () async {
-                                        await launchUrl(
-                                            Uri.parse(
-                                                'https://www.linkedin.com/in/muhammedabdulrahim'),
-                                            mode:
-                                                LaunchMode.externalApplication);
-                                      },
-                                    ),
-                                    IconAuth(
-                                      image: 'assets/icons/whatsapp.png',
-                                      onPressed: () async {
-                                        await launchUrl(
-                                            Uri.parse(
-                                                'https://wa.me/+2001098867501'),
-                                            mode:
-                                                LaunchMode.externalApplication);
-                                      },
-                                    ),
-                                    IconAuth(
-                                      image: 'assets/icons/github.png',
-                                      onPressed: () async {
-                                        await launchUrl(Uri.parse(
-                                            'https://github.com/lsa3edii'));
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              const SizedBox(height: 50),
-                            ],
-                          ),
-                        ),
-                      )
-                    ],
+                    ),
                   ),
                 )
               : _page == 1
-                  ? Column(
-                      children: [
-                        const CustomContainer(flag: 1),
-                        Expanded(
-                          child: ListView(
-                            physics: const BouncingScrollPhysics(),
-                            children: [
-                              ImageSlideshow(
-                                height: 315,
-                                indicatorRadius: 5,
-                                indicatorColor: kPrimaryColor,
-                                isLoop: true,
-                                children: images,
+                  ? FutureBuilder<String?>(
+                      future: AuthServices.retriveUserData(
+                          userCredential: userCredential!,
+                          userField: UserFields.username),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          // localUsername to load username faster in UI
+                          localUsername = username = snapshot.data;
+                        } else {
+                          username = null;
+                        }
+                        return Column(
+                          children: [
+                            CustomContainer(username: localUsername, flag: 1),
+                            Expanded(
+                              child: ListView(
+                                physics: const BouncingScrollPhysics(),
+                                children: [
+                                  ImageSlideshow(
+                                    height: 315,
+                                    indicatorRadius: 5,
+                                    indicatorColor: kPrimaryColor,
+                                    isLoop: true,
+                                    children: images,
+                                  ),
+                                  const SizedBox(height: 57),
+                                  CustomButton2(
+                                      buttonText: 'Get Started',
+                                      onPressed: () {
+                                        Navigator.push(context,
+                                            MaterialPageRoute(
+                                          builder: (context) {
+                                            return const SplashScreen(
+                                              page: AIPage(),
+                                              animation:
+                                                  'assets/animations/Animation - ai.json',
+                                              flag: 1,
+                                            );
+                                          },
+                                        ));
+                                      }),
+                                  const SizedBox(height: 50),
+                                ],
                               ),
-                              const SizedBox(height: 57),
-                              CustomButton2(
-                                  buttonText: 'Get Started',
-                                  onPressed: () {
-                                    Navigator.push(context, MaterialPageRoute(
-                                      builder: (context) {
-                                        return const SplashScreen(
-                                          page: AIPage(),
-                                          animation:
-                                              'assets/animations/Animation - ai.json',
-                                          flag: 1,
-                                        );
-                                      },
-                                    ));
-                                  }),
-                              const SizedBox(height: 50),
-                            ],
-                          ),
-                        ),
-                      ],
-                    )
+                            ),
+                          ],
+                        );
+                      })
                   : FutureBuilder(
                       future: Future.delayed(const Duration(milliseconds: 300)),
                       builder: (context, snapshot) {

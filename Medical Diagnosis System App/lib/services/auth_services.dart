@@ -22,7 +22,7 @@ class AuthServices {
         password: password,
       );
 
-      _createUserCollection(
+      createUserCollection(
         userCredential: userCredential,
         email: email,
         password: password,
@@ -39,7 +39,7 @@ class AuthServices {
   static Future<UserCredential> signInWithEmailAndPassword({
     required String email,
     required String password,
-    required String userRole,
+    // required String userRole,
   }) async {
     try {
       UserCredential userCredential =
@@ -75,7 +75,7 @@ class AuthServices {
       UserCredential userCredential =
           await FirebaseAuth.instance.signInWithCredential(credential);
 
-      _createUserCollection(
+      createUserCollection(
         userCredential: userCredential,
         email: userCredential.user!.email!,
         userRole: userRole,
@@ -97,7 +97,7 @@ class AuthServices {
       UserCredential userCredential =
           await FirebaseAuth.instance.signInWithCredential(credential);
 
-      _createUserCollection(
+      createUserCollection(
         userCredential: userCredential,
         email: userCredential.user!.email!,
         userRole: userRole,
@@ -118,7 +118,7 @@ class AuthServices {
     FirebaseAuth.instance.signOut();
   }
 
-  static void _createUserCollection({
+  static void createUserCollection({
     required UserCredential userCredential,
     required String email,
     required String userRole,
@@ -139,7 +139,7 @@ class AuthServices {
     await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
   }
 
-  static Future<String> retriveUserRole(
+  static Future<String?> retriveUserData(
       {required UserCredential userCredential,
       required String userField}) async {
     final DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
@@ -148,4 +148,18 @@ class AuthServices {
         .get();
     return userSnapshot[userField];
   }
+
+  // static Future<void> updatePassword({
+  //   required UserCredential userCredential,
+  //   required String email,
+  //   required String oldPassword,
+  //   required String newPassword,
+  // }) async {
+  //   var credential =
+  //       EmailAuthProvider.credential(email: email, password: oldPassword);
+
+  //   await userCredential.user!
+  //       .reauthenticateWithCredential(credential)
+  //       .then((value) => userCredential.user!.updatePassword(newPassword));
+  // }
 }
