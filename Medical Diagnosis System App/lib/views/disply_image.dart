@@ -6,14 +6,17 @@ import 'package:photo_view/photo_view.dart';
 class DisplyImage extends StatelessWidget {
   final File? img;
   final String image;
+  final int flag;
 
-  const DisplyImage({super.key, required this.image, this.img});
+  const DisplyImage({super.key, required this.image, this.img, this.flag = 0});
 
   @override
   Widget build(BuildContext context) {
     ImageProvider<Object>? imageProvider;
 
-    if (img == null) {
+    if (flag == 1) {
+      imageProvider = NetworkImage(image);
+    } else if (img == null) {
       imageProvider = AssetImage(image);
     } else {
       imageProvider = FileImage(img!);
@@ -40,7 +43,7 @@ class DisplyImage extends StatelessWidget {
         ),
         backgroundColor: Colors.white,
         body: PhotoView(
-          imageProvider: imageProvider, // Replace with your image path
+          imageProvider: imageProvider,
           minScale: PhotoViewComputedScale.contained,
           maxScale: PhotoViewComputedScale.covered * 2,
         ),

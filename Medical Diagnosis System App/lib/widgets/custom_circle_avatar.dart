@@ -7,20 +7,25 @@ class CustomCircleAvatar extends StatelessWidget {
   final File? img;
   final String image;
   final Color? borderColor;
+  final int flag;
 
-  const CustomCircleAvatar(
-      {super.key,
-      required this.image,
-      this.img,
-      this.r1 = 35,
-      this.r2 = 33,
-      this.borderColor});
+  const CustomCircleAvatar({
+    super.key,
+    required this.image,
+    this.img,
+    this.r1 = 35,
+    this.r2 = 33,
+    this.borderColor,
+    this.flag = 0,
+  });
 
   @override
   Widget build(BuildContext context) {
     ImageProvider<Object> backgroundImage;
 
-    if (img == null) {
+    if (flag == 1) {
+      backgroundImage = NetworkImage(image);
+    } else if (img == null) {
       backgroundImage = AssetImage(image);
     } else {
       backgroundImage = FileImage(img!);

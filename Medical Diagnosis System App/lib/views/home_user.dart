@@ -157,225 +157,417 @@ class _UserHomePageState extends State<UserHomePage> {
             },
           ),
           body: _page == 0
-              ? ModalProgressHUD(
-                  inAsyncCall: isLoading,
-                  child: Form(
-                    key: formKey,
-                    child: InteractiveViewer(
-                      maxScale: 2,
-                      child: Column(
-                        children: [
-                          Stack(
-                            clipBehavior: Clip.none,
+              ? !AuthServices.isUserAuthenticatedWithGoogle()
+                  ? ModalProgressHUD(
+                      inAsyncCall: isLoading,
+                      child: Form(
+                        key: formKey,
+                        child: InteractiveViewer(
+                          maxScale: 2,
+                          child: Column(
                             children: [
-                              const CustomContainer(),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.only(top: 40, bottom: 5),
-                                child: Center(
-                                  child: CustomButton3(
-                                    widget: CustomCircleAvatar(
-                                      borderColor: Colors.white,
-                                      image: kMyImage,
-                                      img: img,
-                                      r1: 72,
-                                      r2: 70,
+                              Stack(
+                                clipBehavior: Clip.none,
+                                children: [
+                                  const CustomContainer(),
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        top: 40, bottom: 5),
+                                    child: Center(
+                                      child: CustomButton3(
+                                        widget: CustomCircleAvatar(
+                                          borderColor: Colors.white,
+                                          image: kMyImage,
+                                          img: img,
+                                          r1: 72,
+                                          r2: 70,
+                                        ),
+                                        onPressed: () {
+                                          showSheet(
+                                            context: context,
+                                            choices: [
+                                              'See Profile Picture',
+                                              'Update Profile Picture',
+                                            ],
+                                            onChoiceSelected: (i) async {
+                                              if (i == 0) {
+                                                // to pop bottom sheet
+                                                Navigator.pop(context);
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        DisplyImage(
+                                                            image: kMyImage,
+                                                            img: img),
+                                                  ),
+                                                );
+                                              } else {
+                                                Navigator.pop(context);
+
+                                                img = await pickImage(
+                                                    imageSource:
+                                                        ImageSource.gallery,
+                                                    pickedFile: pickedFile);
+
+                                                setState(() {});
+                                              }
+                                            },
+                                          );
+                                        },
+                                      ),
                                     ),
-                                    onPressed: () {
-                                      showSheet(
-                                        context: context,
-                                        choices: [
-                                          'See Profile Picture',
-                                          'Update Profile Picture',
-                                        ],
-                                        onChoiceSelected: (i) async {
-                                          if (i == 0) {
-                                            // to pop bottom sheet
-                                            Navigator.pop(context);
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    DisplyImage(
-                                                        image: kMyImage,
-                                                        img: img),
-                                              ),
-                                            );
-                                          } else {
-                                            Navigator.pop(context);
+                                  )
+                                ],
+                              ),
+                              Expanded(
+                                child: Scrollbar(
+                                  child: ListView(
+                                    physics: const BouncingScrollPhysics(),
+                                    children: [
+                                      const Center(
+                                        child: Text(
+                                          'Username',
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              fontFamily: 'Pacifico'),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 65,
+                                        child: CustomTextField(
+                                          icon: Icons.person,
+                                          controller:
+                                              controllerUsernameUserHome,
+                                          maxLength: 12,
+                                          hintLabel: 'Username',
+                                          onChanged: (data) {
+                                            localUsername =
+                                                username = data.trim();
+                                          },
+                                        ),
+                                      ),
+                                      const Center(
+                                        child: Text(
+                                          'Password',
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              fontFamily: 'Pacifico'),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 65,
+                                        child: CustomTextField(
+                                          icon: Icons.password,
+                                          hintLabel: 'Password',
+                                          controller:
+                                              controllerPasswordUserHome,
+                                          maxLength: 25,
+                                          obscureText: true,
+                                          showVisibilityToggle: true,
+                                          onChanged: (data) {
+                                            password = data;
+                                          },
+                                        ),
+                                      ),
+                                      const SizedBox(height: 15),
+                                      CustomButton2(
+                                        buttonText: 'Update',
+                                        fontFamily: '',
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                        onPressed: () async {
+                                          if (formKey.currentState!
+                                              .validate()) {
+                                            try {
+                                              setState(() {
+                                                isLoading = true;
+                                              });
 
-                                            img = await pickImage(
-                                                imageSource:
-                                                    ImageSource.gallery,
-                                                pickedFile: pickedFile);
+                                              AuthServices.createUserCollection(
+                                                userCredential: userCredential!,
+                                                email: email!,
+                                                password: password,
+                                                userRole: userRole1,
+                                                username: username,
+                                              );
 
-                                            setState(() {});
+                                              await userCredential!.user!
+                                                  .updatePassword(password!);
+
+                                              // ignore: use_build_context_synchronously
+                                              unFocus(context);
+                                              clearUserData();
+
+                                              // ignore: use_build_context_synchronously
+                                              showSnackBar(context,
+                                                  message:
+                                                      'Successfully updated!');
+                                            } catch (e) {
+                                              showSnackBar(context,
+                                                  message: e.toString());
+                                            }
+                                            setState(() {
+                                              isLoading = false;
+                                            });
                                           }
                                         },
-                                      );
-                                    },
+                                      ),
+                                      const SizedBox(height: 35),
+                                      const Divider(
+                                        indent: 25,
+                                        endIndent: 25,
+                                        thickness: 1,
+                                        color: Colors.grey,
+                                      ),
+                                      const SizedBox(height: 5),
+                                      const Center(
+                                        child: Text(
+                                          'Contact The Developer :',
+                                          style: TextStyle(
+                                              fontSize: 27,
+                                              color: kPrimaryColor,
+                                              fontFamily: 'Pacifico'),
+                                        ),
+                                      ),
+                                      Center(
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            IconAuth(
+                                              image:
+                                                  'assets/icons/facebook.png',
+                                              onPressed: () async {
+                                                await launchUrl(
+                                                    Uri.parse(
+                                                        'https://www.facebook.com/MuhammedAbdulrahim0'),
+                                                    mode: LaunchMode
+                                                        .externalApplication);
+                                              },
+                                            ),
+                                            IconAuth(
+                                              image:
+                                                  'assets/icons/linkedin.png',
+                                              onPressed: () async {
+                                                await launchUrl(
+                                                    Uri.parse(
+                                                        'https://www.linkedin.com/in/muhammedabdulrahim'),
+                                                    mode: LaunchMode
+                                                        .externalApplication);
+                                              },
+                                            ),
+                                            IconAuth(
+                                              image:
+                                                  'assets/icons/whatsapp.png',
+                                              onPressed: () async {
+                                                await launchUrl(
+                                                    Uri.parse(
+                                                        'https://wa.me/+2001098867501'),
+                                                    mode: LaunchMode
+                                                        .externalApplication);
+                                              },
+                                            ),
+                                            IconAuth(
+                                              image: 'assets/icons/github.png',
+                                              onPressed: () async {
+                                                await launchUrl(Uri.parse(
+                                                    'https://github.com/lsa3edii'));
+                                              },
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      const SizedBox(height: 50),
+                                    ],
                                   ),
                                 ),
                               )
                             ],
                           ),
-                          Expanded(
-                            child: Scrollbar(
-                              child: ListView(
-                                physics: const BouncingScrollPhysics(),
+                        ),
+                      ),
+                    )
+                  : ModalProgressHUD(
+                      inAsyncCall: isLoading,
+                      child: Form(
+                        key: formKey,
+                        child: InteractiveViewer(
+                          maxScale: 2,
+                          child: Column(
+                            children: [
+                              Stack(
+                                clipBehavior: Clip.none,
                                 children: [
-                                  const Center(
-                                    child: Text(
-                                      'Username',
-                                      style: TextStyle(
-                                          fontSize: 20, fontFamily: 'Pacifico'),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 65,
-                                    child: CustomTextField(
-                                      icon: Icons.person,
-                                      controller: controllerUsernameUserHome,
-                                      maxLength: 12,
-                                      hintLabel: 'Username',
-                                      onChanged: (data) {
-                                        localUsername = username = data.trim();
-                                      },
-                                    ),
-                                  ),
-                                  const Center(
-                                    child: Text(
-                                      'Password',
-                                      style: TextStyle(
-                                          fontSize: 20, fontFamily: 'Pacifico'),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 65,
-                                    child: CustomTextField(
-                                      icon: Icons.password,
-                                      hintLabel: 'Password',
-                                      controller: controllerPasswordUserHome,
-                                      maxLength: 25,
-                                      obscureText: true,
-                                      showVisibilityToggle: true,
-                                      onChanged: (data) {
-                                        password = data;
-                                      },
-                                    ),
-                                  ),
-                                  const SizedBox(height: 15),
-                                  CustomButton2(
-                                    buttonText: 'Update',
-                                    fontFamily: '',
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
-                                    onPressed: () async {
-                                      if (formKey.currentState!.validate()) {
-                                        try {
-                                          setState(() {
-                                            isLoading = true;
-                                          });
-
-                                          AuthServices.createUserCollection(
-                                            userCredential: userCredential!,
-                                            email: email!,
-                                            password: password,
-                                            userRole: userRole1,
-                                            username: username,
+                                  const CustomContainer(),
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        top: 40, bottom: 5),
+                                    child: Center(
+                                      child: CustomButton3(
+                                        widget: CustomCircleAvatar(
+                                          borderColor: Colors.white,
+                                          image: userCredential!.user!.photoURL!
+                                              .replaceAll("s96-c", "s400-c"),
+                                          img: img,
+                                          r1: 72,
+                                          r2: 70,
+                                          flag: 1,
+                                        ),
+                                        onPressed: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => DisplyImage(
+                                                image: userCredential!
+                                                    .user!.photoURL!
+                                                    .replaceAll(
+                                                        "s96-c", "s400-c"),
+                                                img: img,
+                                                flag: 1,
+                                              ),
+                                            ),
                                           );
-
-                                          await userCredential!.user!
-                                              .updatePassword(password!);
-
-                                          // ignore: use_build_context_synchronously
-                                          unFocus(context);
-                                          clearUserData();
-
-                                          // ignore: use_build_context_synchronously
-                                          showSnackBar(context,
-                                              message: 'Successfully updated!');
-                                        } catch (e) {
-                                          showSnackBar(context,
-                                              message: e.toString());
-                                        }
-                                        setState(() {
-                                          isLoading = false;
-                                        });
-                                      }
-                                    },
-                                  ),
-                                  const SizedBox(height: 35),
-                                  const Divider(
-                                    indent: 25,
-                                    endIndent: 25,
-                                    thickness: 1,
-                                    color: Colors.grey,
-                                  ),
-                                  const SizedBox(height: 5),
-                                  const Center(
-                                    child: Text(
-                                      'Contact The Developer :',
-                                      style: TextStyle(
-                                          fontSize: 27,
-                                          color: kPrimaryColor,
-                                          fontFamily: 'Pacifico'),
+                                        },
+                                      ),
                                     ),
-                                  ),
-                                  Center(
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        IconAuth(
-                                          image: 'assets/icons/facebook.png',
-                                          onPressed: () async {
-                                            await launchUrl(
-                                                Uri.parse(
-                                                    'https://www.facebook.com/MuhammedAbdulrahim0'),
-                                                mode: LaunchMode
-                                                    .externalApplication);
-                                          },
-                                        ),
-                                        IconAuth(
-                                          image: 'assets/icons/linkedin.png',
-                                          onPressed: () async {
-                                            await launchUrl(
-                                                Uri.parse(
-                                                    'https://www.linkedin.com/in/muhammedabdulrahim'),
-                                                mode: LaunchMode
-                                                    .externalApplication);
-                                          },
-                                        ),
-                                        IconAuth(
-                                          image: 'assets/icons/whatsapp.png',
-                                          onPressed: () async {
-                                            await launchUrl(
-                                                Uri.parse(
-                                                    'https://wa.me/+2001098867501'),
-                                                mode: LaunchMode
-                                                    .externalApplication);
-                                          },
-                                        ),
-                                        IconAuth(
-                                          image: 'assets/icons/github.png',
-                                          onPressed: () async {
-                                            await launchUrl(Uri.parse(
-                                                'https://github.com/lsa3edii'));
-                                          },
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  const SizedBox(height: 50),
+                                  )
                                 ],
                               ),
-                            ),
-                          )
-                        ],
+                              Expanded(
+                                child: Scrollbar(
+                                  child: ListView(
+                                    physics: const BouncingScrollPhysics(),
+                                    children: [
+                                      const Center(
+                                        child: Text(
+                                          'Username',
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              fontFamily: 'Pacifico'),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 65,
+                                        child: CustomTextField(
+                                          icon: Icons.person,
+                                          controller:
+                                              controllerUsernameUserHome,
+                                          isEnabled: false,
+                                          maxLength: 12,
+                                          hintLabel: 'Username',
+                                          onChanged: (data) {
+                                            localUsername =
+                                                username = data.trim();
+                                          },
+                                        ),
+                                      ),
+                                      const Center(
+                                        child: Text(
+                                          'Password',
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              fontFamily: 'Pacifico'),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 65,
+                                        child: CustomTextField(
+                                          icon: Icons.password,
+                                          hintLabel: 'Password',
+                                          controller:
+                                              controllerPasswordUserHome,
+                                          isEnabled: false,
+                                          maxLength: 25,
+                                          obscureText: true,
+                                          showVisibilityToggle: true,
+                                          onChanged: (data) {
+                                            password = data;
+                                          },
+                                        ),
+                                      ),
+                                      const SizedBox(height: 15),
+                                      CustomButton2(
+                                        buttonText: 'Update',
+                                        isEnabled: false,
+                                        fontFamily: '',
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                        onPressed: () {},
+                                      ),
+                                      const SizedBox(height: 35),
+                                      const Divider(
+                                        indent: 25,
+                                        endIndent: 25,
+                                        thickness: 1,
+                                        color: Colors.grey,
+                                      ),
+                                      const SizedBox(height: 5),
+                                      const Center(
+                                        child: Text(
+                                          'Contact The Developer :',
+                                          style: TextStyle(
+                                              fontSize: 27,
+                                              color: kPrimaryColor,
+                                              fontFamily: 'Pacifico'),
+                                        ),
+                                      ),
+                                      Center(
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            IconAuth(
+                                              image:
+                                                  'assets/icons/facebook.png',
+                                              onPressed: () async {
+                                                await launchUrl(
+                                                    Uri.parse(
+                                                        'https://www.facebook.com/MuhammedAbdulrahim0'),
+                                                    mode: LaunchMode
+                                                        .externalApplication);
+                                              },
+                                            ),
+                                            IconAuth(
+                                              image:
+                                                  'assets/icons/linkedin.png',
+                                              onPressed: () async {
+                                                await launchUrl(
+                                                    Uri.parse(
+                                                        'https://www.linkedin.com/in/muhammedabdulrahim'),
+                                                    mode: LaunchMode
+                                                        .externalApplication);
+                                              },
+                                            ),
+                                            IconAuth(
+                                              image:
+                                                  'assets/icons/whatsapp.png',
+                                              onPressed: () async {
+                                                await launchUrl(
+                                                    Uri.parse(
+                                                        'https://wa.me/+2001098867501'),
+                                                    mode: LaunchMode
+                                                        .externalApplication);
+                                              },
+                                            ),
+                                            IconAuth(
+                                              image: 'assets/icons/github.png',
+                                              onPressed: () async {
+                                                await launchUrl(Uri.parse(
+                                                    'https://github.com/lsa3edii'));
+                                              },
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      const SizedBox(height: 50),
+                                    ],
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                )
+                    )
               : _page == 1
                   ? FutureBuilder<String?>(
                       future: AuthServices.retriveUserData(

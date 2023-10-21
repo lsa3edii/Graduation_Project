@@ -31,6 +31,7 @@ class CustomButton2 extends StatelessWidget {
   final Color? color;
   final String? fontFamily;
   final FontWeight? fontWeight;
+  final bool isEnabled;
 
   const CustomButton2({
     super.key,
@@ -39,6 +40,7 @@ class CustomButton2 extends StatelessWidget {
     this.color,
     this.fontFamily,
     this.fontWeight,
+    this.isEnabled = true,
   });
 
   @override
@@ -54,7 +56,7 @@ class CustomButton2 extends StatelessWidget {
             )
             // minimumSize: const Size(300, 50),
             ),
-        onPressed: onPressed,
+        onPressed: isEnabled ? onPressed : null,
         child: Text(
           buttonText,
           style: TextStyle(

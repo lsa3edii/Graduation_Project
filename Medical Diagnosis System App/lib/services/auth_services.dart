@@ -76,14 +76,18 @@ class AuthServices {
       UserCredential userCredential =
           await FirebaseAuth.instance.signInWithCredential(credential);
 
+      dynamic username = userCredential.user!.displayName;
+      if (username != null) {
+        if (username.length > 12) {
+          username = username.split(' ')[0];
+        }
+      }
+
       createUserCollection(
         userCredential: userCredential,
         email: userCredential.user!.email!,
         userRole: userRole,
-        // username: await retriveUserData(
-        //     userCredential: userCredential, userField: UserFields.username),
-        // password: await retriveUserData(
-        //     userCredential: userCredential, userField: UserFields.password),
+        username: username,
       );
 
       return userCredential;
@@ -152,6 +156,19 @@ class AuthServices {
         .doc(userCredential.user!.uid)
         .get();
     return userSnapshot[userField];
+  }
+
+  static bool isUserAuthenticatedWithGoogle() {
+    final user = FirebaseAuth.instance.currentUser;
+
+    if (user != null) {
+      for (var info in user.providerData) {
+        if (info.providerId == 'google.com') {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 
   // static Future<void> updatePassword({

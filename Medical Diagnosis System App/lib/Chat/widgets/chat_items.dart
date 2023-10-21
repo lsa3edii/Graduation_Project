@@ -65,7 +65,7 @@ class ChatItem2 extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(bottom: 5),
-      height: 100,
+      height: 85,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.blueGrey[100],
@@ -75,8 +75,8 @@ class ChatItem2 extends StatelessWidget {
           children: [
             CustomCircleAvatar(
               image: image ?? kDefaultImage,
-              r1: 39,
-              r2: 37,
+              r1: 35,
+              r2: 33,
               borderColor: kPrimaryColor,
             ),
             const SizedBox(width: 15),

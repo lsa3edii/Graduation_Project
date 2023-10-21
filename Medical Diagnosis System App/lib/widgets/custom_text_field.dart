@@ -35,6 +35,7 @@ class CustomTextField extends StatefulWidget {
   final int? maxLines;
   final int? maxLength;
   final bool showVisibilityToggle;
+  final bool isEnabled;
   bool obscureText;
 
   CustomTextField({
@@ -46,6 +47,7 @@ class CustomTextField extends StatefulWidget {
     this.maxLines,
     this.maxLength,
     this.obscureText = false,
+    this.isEnabled = true,
     this.showVisibilityToggle = false,
   });
 
@@ -72,6 +74,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
         maxLines: widget.maxLines ?? 1,
         maxLength: widget.maxLength,
         obscureText: widget.obscureText,
+        enabled: widget.isEnabled,
         decoration: InputDecoration(
           contentPadding:
               const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
