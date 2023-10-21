@@ -572,6 +572,7 @@ class _UserHomePageState extends State<UserHomePage> {
                         return Column(
                           children: [
                             CustomContainer(username: localUsername, flag: 1),
+                            const SizedBox(height: 5),
                             Expanded(
                               child: ListView(
                                 physics: const BouncingScrollPhysics(),
@@ -582,6 +583,9 @@ class _UserHomePageState extends State<UserHomePage> {
                                     indicatorColor: kPrimaryColor,
                                     isLoop: true,
                                     children: images,
+                                    onPageChanged: (value) {
+                                      Feedback.forTap(context);
+                                    },
                                   ),
                                   const SizedBox(height: 57),
                                   CustomButton2(
@@ -662,7 +666,7 @@ class _UserHomePageState extends State<UserHomePage> {
                               ),
                               const SizedBox(height: 25),
                               ChatItem1(
-                                buttonText: 'Dr. lSa3edii',
+                                buttonText: 'DOCTOR',
                                 image: kDoctorImage,
                                 onPressed: () {
                                   Navigator.push(context, MaterialPageRoute(

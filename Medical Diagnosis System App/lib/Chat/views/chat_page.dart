@@ -77,7 +77,7 @@ class _ChatPageState extends State<ChatPage> {
                   ),
                   const SizedBox(width: 15),
                   Text(
-                    widget.appBarText ?? 'Dr. lSa3edii',
+                    widget.appBarText ?? 'DOCTOR',
                     style: const TextStyle(
                       fontSize: 27,
                       fontFamily: 'Pacifico',
