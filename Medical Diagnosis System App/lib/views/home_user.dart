@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:medical_diagnosis_system/Chat/widgets/chat_items.dart';
@@ -64,6 +65,8 @@ class _UserHomePageState extends State<UserHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    user = FirebaseAuth.instance.currentUser;
+
     return WillPopScope(
       onWillPop: () async {
         return false;
@@ -387,192 +390,178 @@ class _UserHomePageState extends State<UserHomePage> {
                         ),
                       ),
                     )
-                  : ModalProgressHUD(
-                      inAsyncCall: isLoading,
-                      child: Form(
-                        key: formKey,
-                        child: InteractiveViewer(
-                          maxScale: 2,
-                          child: Column(
+                  : InteractiveViewer(
+                      maxScale: 2,
+                      child: Column(
+                        children: [
+                          Stack(
+                            clipBehavior: Clip.none,
                             children: [
-                              Stack(
-                                clipBehavior: Clip.none,
-                                children: [
-                                  const CustomContainer(),
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                        top: 40, bottom: 5),
-                                    child: Center(
-                                      child: CustomButton3(
-                                        widget: CustomCircleAvatar(
-                                          borderColor: Colors.white,
-                                          image: userCredential!.user!.photoURL!
-                                              .replaceAll("s96-c", "s400-c"),
-                                          img: img,
-                                          r1: 72,
-                                          r2: 70,
-                                          flag: 1,
-                                        ),
-                                        onPressed: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) => DisplyImage(
-                                                image: userCredential!
-                                                    .user!.photoURL!
-                                                    .replaceAll(
-                                                        "s96-c", "s400-c"),
-                                                img: img,
-                                                flag: 1,
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                      ),
+                              const CustomContainer(),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(top: 40, bottom: 5),
+                                child: Center(
+                                  child: CustomButton3(
+                                    widget: CustomCircleAvatar(
+                                      borderColor: Colors.white,
+                                      image: user!.photoURL!
+                                          .replaceAll("s96-c", "s400-c"),
+                                      img: img,
+                                      r1: 72,
+                                      r2: 70,
+                                      flag: 1,
                                     ),
-                                  )
-                                ],
-                              ),
-                              Expanded(
-                                child: Scrollbar(
-                                  child: ListView(
-                                    physics: const BouncingScrollPhysics(),
-                                    children: [
-                                      const Center(
-                                        child: Text(
-                                          'Username',
-                                          style: TextStyle(
-                                              fontSize: 20,
-                                              fontFamily: 'Pacifico'),
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => DisplyImage(
+                                            image: user!.photoURL!
+                                                .replaceAll("s96-c", "s400-c"),
+                                            img: img,
+                                            flag: 1,
+                                          ),
                                         ),
-                                      ),
-                                      SizedBox(
-                                        height: 65,
-                                        child: CustomTextField(
-                                          icon: Icons.person,
-                                          controller:
-                                              controllerUsernameUserHome,
-                                          isEnabled: false,
-                                          maxLength: 12,
-                                          hintLabel: 'Username',
-                                          onChanged: (data) {
-                                            localUsername =
-                                                username = data.trim();
-                                          },
-                                        ),
-                                      ),
-                                      const Center(
-                                        child: Text(
-                                          'Password',
-                                          style: TextStyle(
-                                              fontSize: 20,
-                                              fontFamily: 'Pacifico'),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 65,
-                                        child: CustomTextField(
-                                          icon: Icons.password,
-                                          hintLabel: 'Password',
-                                          controller:
-                                              controllerPasswordUserHome,
-                                          isEnabled: false,
-                                          maxLength: 25,
-                                          obscureText: true,
-                                          showVisibilityToggle: true,
-                                          onChanged: (data) {
-                                            password = data;
-                                          },
-                                        ),
-                                      ),
-                                      const SizedBox(height: 15),
-                                      CustomButton2(
-                                        buttonText: 'Update',
-                                        isEnabled: false,
-                                        fontFamily: '',
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white,
-                                        onPressed: () {},
-                                      ),
-                                      const SizedBox(height: 35),
-                                      const Divider(
-                                        indent: 25,
-                                        endIndent: 25,
-                                        thickness: 1,
-                                        color: Colors.grey,
-                                      ),
-                                      const SizedBox(height: 5),
-                                      const Center(
-                                        child: Text(
-                                          'Contact The Developer :',
-                                          style: TextStyle(
-                                              fontSize: 27,
-                                              color: kPrimaryColor,
-                                              fontFamily: 'Pacifico'),
-                                        ),
-                                      ),
-                                      Center(
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            IconAuth(
-                                              image:
-                                                  'assets/icons/facebook.png',
-                                              onPressed: () async {
-                                                await launchUrl(
-                                                    Uri.parse(
-                                                        'https://www.facebook.com/MuhammedAbdulrahim0'),
-                                                    mode: LaunchMode
-                                                        .externalApplication);
-                                              },
-                                            ),
-                                            IconAuth(
-                                              image:
-                                                  'assets/icons/linkedin.png',
-                                              onPressed: () async {
-                                                await launchUrl(
-                                                    Uri.parse(
-                                                        'https://www.linkedin.com/in/muhammedabdulrahim'),
-                                                    mode: LaunchMode
-                                                        .externalApplication);
-                                              },
-                                            ),
-                                            IconAuth(
-                                              image:
-                                                  'assets/icons/whatsapp.png',
-                                              onPressed: () async {
-                                                await launchUrl(
-                                                    Uri.parse(
-                                                        'https://wa.me/+2001098867501'),
-                                                    mode: LaunchMode
-                                                        .externalApplication);
-                                              },
-                                            ),
-                                            IconAuth(
-                                              image: 'assets/icons/github.png',
-                                              onPressed: () async {
-                                                await launchUrl(Uri.parse(
-                                                    'https://github.com/lsa3edii'));
-                                              },
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      const SizedBox(height: 50),
-                                    ],
+                                      );
+                                    },
                                   ),
                                 ),
                               )
                             ],
                           ),
-                        ),
+                          Expanded(
+                            child: Scrollbar(
+                              child: ListView(
+                                physics: const BouncingScrollPhysics(),
+                                children: [
+                                  const Center(
+                                    child: Text(
+                                      'Username',
+                                      style: TextStyle(
+                                          fontSize: 20, fontFamily: 'Pacifico'),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 65,
+                                    child: CustomTextField(
+                                      icon: Icons.person,
+                                      controller: controllerUsernameUserHome,
+                                      isEnabled: false,
+                                      maxLength: 12,
+                                      hintLabel: 'Username',
+                                      onChanged: (data) {
+                                        localUsername = username = data.trim();
+                                      },
+                                    ),
+                                  ),
+                                  const Center(
+                                    child: Text(
+                                      'Password',
+                                      style: TextStyle(
+                                          fontSize: 20, fontFamily: 'Pacifico'),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 65,
+                                    child: CustomTextField(
+                                      icon: Icons.password,
+                                      hintLabel: 'Password',
+                                      controller: controllerPasswordUserHome,
+                                      isEnabled: false,
+                                      maxLength: 25,
+                                      obscureText: true,
+                                      showVisibilityToggle: true,
+                                      onChanged: (data) {
+                                        password = data;
+                                      },
+                                    ),
+                                  ),
+                                  const SizedBox(height: 15),
+                                  const CustomButton2(
+                                    buttonText: 'Update',
+                                    isEnabled: false,
+                                    fontFamily: '',
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                    onPressed: null,
+                                  ),
+                                  const SizedBox(height: 35),
+                                  const Divider(
+                                    indent: 25,
+                                    endIndent: 25,
+                                    thickness: 1,
+                                    color: Colors.grey,
+                                  ),
+                                  const SizedBox(height: 5),
+                                  const Center(
+                                    child: Text(
+                                      'Contact The Developer :',
+                                      style: TextStyle(
+                                          fontSize: 27,
+                                          color: kPrimaryColor,
+                                          fontFamily: 'Pacifico'),
+                                    ),
+                                  ),
+                                  Center(
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        IconAuth(
+                                          image: 'assets/icons/facebook.png',
+                                          onPressed: () async {
+                                            await launchUrl(
+                                                Uri.parse(
+                                                    'https://www.facebook.com/MuhammedAbdulrahim0'),
+                                                mode: LaunchMode
+                                                    .externalApplication);
+                                          },
+                                        ),
+                                        IconAuth(
+                                          image: 'assets/icons/linkedin.png',
+                                          onPressed: () async {
+                                            await launchUrl(
+                                                Uri.parse(
+                                                    'https://www.linkedin.com/in/muhammedabdulrahim'),
+                                                mode: LaunchMode
+                                                    .externalApplication);
+                                          },
+                                        ),
+                                        IconAuth(
+                                          image: 'assets/icons/whatsapp.png',
+                                          onPressed: () async {
+                                            await launchUrl(
+                                                Uri.parse(
+                                                    'https://wa.me/+2001098867501'),
+                                                mode: LaunchMode
+                                                    .externalApplication);
+                                          },
+                                        ),
+                                        IconAuth(
+                                          image: 'assets/icons/github.png',
+                                          onPressed: () async {
+                                            await launchUrl(Uri.parse(
+                                                'https://github.com/lsa3edii'));
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  const SizedBox(height: 50),
+                                ],
+                              ),
+                            ),
+                          )
+                        ],
                       ),
                     )
               : _page == 1
                   ? FutureBuilder<String?>(
                       future: AuthServices.retriveUserData(
-                          userCredential: userCredential!,
-                          userField: UserFields.username),
+                        uid: user?.uid,
+                        userCredential: userCredential,
+                        userField: UserFields.username,
+                      ),
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
                           // localUsername to load username faster in UI

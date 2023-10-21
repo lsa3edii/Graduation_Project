@@ -148,12 +148,14 @@ class AuthServices {
     await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
   }
 
-  static Future<String?> retriveUserData(
-      {required UserCredential userCredential,
-      required String userField}) async {
+  static Future<String?> retriveUserData({
+    required UserCredential? userCredential,
+    required String userField,
+    String? uid,
+  }) async {
     final DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
         .collection(kUsers)
-        .doc(userCredential.user!.uid)
+        .doc(uid ?? userCredential!.user!.uid)
         .get();
     return userSnapshot[userField];
   }

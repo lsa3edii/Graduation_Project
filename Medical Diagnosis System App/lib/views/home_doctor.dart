@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:medical_diagnosis_system/Chat/widgets/chat_items.dart';
@@ -36,6 +37,8 @@ class _DoctorHomePageState extends State<DoctorHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    user = FirebaseAuth.instance.currentUser;
+
     return WillPopScope(
       onWillPop: () async {
         return false;
@@ -215,6 +218,7 @@ class _DoctorHomePageState extends State<DoctorHomePage> {
                                   SizedBox(
                                     height: 65,
                                     child: CustomTextField(
+                                      icon: Icons.password,
                                       hintLabel: 'Password',
                                       controller: controllerPasswordDoctorHome,
                                       maxLength: 25,
@@ -366,7 +370,7 @@ class _DoctorHomePageState extends State<DoctorHomePage> {
                             itemBuilder: (context, i) {
                               chatId = usersList[i].email;
                               // print(i);
-                              return chatId == email
+                              return chatId == user!.email
                                   ? null
                                   : ChatItem2(
                                       buttonText: chatId!.split('@')[0],

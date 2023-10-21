@@ -361,6 +361,7 @@ class _LoginPageState extends State<LoginPage> {
                                         email: email!, password: password!);
 
                                 userRole = await AuthServices.retriveUserData(
+                                    uid: user?.uid,
                                     userCredential: userCredential!,
                                     userField: UserFields.userRole);
 

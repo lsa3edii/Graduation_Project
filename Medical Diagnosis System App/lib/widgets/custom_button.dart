@@ -80,22 +80,10 @@ class CustomButton3 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PopupMenuButton(
-      itemBuilder: (context) => [
-        const PopupMenuItem(
-          value: 'Disply Image',
-          child: Text('Disply Image'),
-        ),
-        const PopupMenuItem(
-          value: 'Update Image',
-          child: Text('Update Image'),
-        ),
-      ],
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(shape: const CircleBorder()),
-        onPressed: onPressed,
-        child: widget,
-      ),
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(shape: const CircleBorder()),
+      onPressed: onPressed,
+      child: widget,
     );
   }
 }

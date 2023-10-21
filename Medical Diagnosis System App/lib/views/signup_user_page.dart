@@ -15,6 +15,8 @@ String? password;
 String? chatId;
 String? confirmPassword;
 
+var user = FirebaseAuth.instance.currentUser;
+
 UserCredential? userCredential;
 CollectionReference users = FirebaseFirestore.instance.collection(kUsers);
 CollectionReference chats =
