@@ -108,7 +108,9 @@ class _AIPageState extends State<AIPage> {
                       });
 
                       // await Future.delayed(const Duration(seconds: 1));
-                      await API.predictImage(img: img!);
+                      if (img != null) {
+                        await API.predictImage(img: img!);
+                      }
 
                       setState(() {
                         predictionImage = API.prediction;
@@ -133,7 +135,9 @@ class _AIPageState extends State<AIPage> {
                       });
 
                       // await Future.delayed(const Duration(seconds: 1));
-                      await API.predictImage(img: img!);
+                      if (img != null) {
+                        await API.predictImage(img: img!);
+                      }
 
                       setState(() {
                         predictionImage = API.prediction;

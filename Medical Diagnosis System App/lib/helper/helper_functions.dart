@@ -41,12 +41,15 @@ void unFocus(BuildContext context) {
   FocusScope.of(context).unfocus();
 }
 
-Future<File> pickImage(
+Future<File?> pickImage(
     {required var imageSource, required dynamic pickedFile}) async {
   final picker = ImagePicker();
   pickedFile = await picker.pickImage(source: imageSource);
 
-  return File(pickedFile!.path);
+  if (pickedFile != null) {
+    return File(pickedFile.path);
+  }
+  return null;
 }
 
 dynamic showSheet({
@@ -75,6 +78,40 @@ dynamic showSheet({
             );
           },
         ),
+      );
+    },
+  );
+}
+
+dynamic showMyDialog(
+    {required BuildContext context, required VoidCallback onPressed}) {
+  return showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text(
+          'Confirm Deletion !',
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
+        ),
+        content: const Text('Are you sure you want to delete your account?'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: onPressed,
+            child: const Text(
+              'OK',
+              style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
+            ),
+          ),
+          TextButton(
+            child: const Text(
+              'Cancel',
+              style: TextStyle(color: Colors.black),
+            ),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+        ],
       );
     },
   );

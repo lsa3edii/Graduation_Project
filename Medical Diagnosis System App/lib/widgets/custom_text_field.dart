@@ -254,12 +254,17 @@ class CustomTextFieldForChat extends StatelessWidget {
   final Function(String data)? onChanged;
   final Function(String data)? onSubmitted;
   final VoidCallback? onPressed;
+  final VoidCallback? cameraOnPressed;
+  final VoidCallback? galleryOnPressed;
 
-  const CustomTextFieldForChat(
-      {super.key,
-      required this.onChanged,
-      required this.onSubmitted,
-      required this.onPressed});
+  const CustomTextFieldForChat({
+    super.key,
+    required this.onChanged,
+    required this.onSubmitted,
+    required this.onPressed,
+    required this.cameraOnPressed,
+    required this.galleryOnPressed,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -286,6 +291,33 @@ class CustomTextFieldForChat extends StatelessWidget {
                   ),
                   contentPadding:
                       const EdgeInsets.symmetric(vertical: 12, horizontal: 17),
+                  suffixIcon: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SizedBox(
+                        width: 30,
+                        child: IconButton(
+                          onPressed: galleryOnPressed,
+                          splashRadius: 20,
+                          icon: const Icon(
+                            Icons.image,
+                            color: kPrimaryColor,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 50,
+                        child: IconButton(
+                          onPressed: cameraOnPressed,
+                          splashRadius: 20,
+                          icon: const Icon(
+                            Icons.camera,
+                            color: kPrimaryColor,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                   // suffix: GestureDetector(
                   //   onTap: onTap,
                   //   child: Icon(Icons.send, color: Colors.blue[900]),

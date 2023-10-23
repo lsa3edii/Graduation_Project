@@ -163,7 +163,7 @@ class _LoginPageState extends State<LoginPage> {
                                     .signInWithEmailAndPassword(
                                         email: email!, password: password!);
 
-                                userRole = await AuthServices.retriveUserData(
+                                userRole = await AuthServices.retrieveUserData(
                                     userCredential: userCredential!,
                                     userField: UserFields.userRole);
 
@@ -360,7 +360,7 @@ class _LoginPageState extends State<LoginPage> {
                                     .signInWithEmailAndPassword(
                                         email: email!, password: password!);
 
-                                userRole = await AuthServices.retriveUserData(
+                                userRole = await AuthServices.retrieveUserData(
                                     userCredential: userCredential!,
                                     userField: UserFields.userRole);
 

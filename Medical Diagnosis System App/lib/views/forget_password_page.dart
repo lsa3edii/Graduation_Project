@@ -74,7 +74,7 @@ class ForgetPasswordPage extends StatelessWidget {
                     buttonText: 'Reset Password',
                     fontFamily: '',
                     fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                    textColor: Colors.white,
                     onPressed: () async {
                       if (formKey.currentState!.validate()) {
                         try {

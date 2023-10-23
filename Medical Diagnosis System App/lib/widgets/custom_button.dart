@@ -28,7 +28,8 @@ class CustomButton extends StatelessWidget {
 class CustomButton2 extends StatelessWidget {
   final String buttonText;
   final VoidCallback? onPressed;
-  final Color? color;
+  final Color? buttonColor;
+  final Color? textColor;
   final String? fontFamily;
   final FontWeight? fontWeight;
   final bool isEnabled;
@@ -37,7 +38,8 @@ class CustomButton2 extends StatelessWidget {
     super.key,
     required this.buttonText,
     required this.onPressed,
-    this.color,
+    this.buttonColor,
+    this.textColor,
     this.fontFamily,
     this.fontWeight,
     this.isEnabled = true,
@@ -50,7 +52,7 @@ class CustomButton2 extends StatelessWidget {
       padding: const EdgeInsets.only(right: 50, left: 50),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-            backgroundColor: kPrimaryColor,
+            backgroundColor: buttonColor ?? kPrimaryColor,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15),
             )
@@ -61,7 +63,7 @@ class CustomButton2 extends StatelessWidget {
           buttonText,
           style: TextStyle(
             fontSize: 20,
-            color: color ?? kSecondaryColor,
+            color: textColor ?? kSecondaryColor,
             fontFamily: fontFamily ?? 'Pacifico',
             fontWeight: fontWeight ?? FontWeight.normal,
           ),

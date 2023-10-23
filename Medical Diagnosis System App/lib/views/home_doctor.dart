@@ -86,11 +86,16 @@ class _DoctorHomePageState extends State<DoctorHomePage> {
                         }
                       },
                       icon: const Icon(Icons.logout),
+                      color: kSecondaryColor,
                     ),
                   ),
                   const Text(
                     'LogOut',
-                    style: TextStyle(fontSize: 12, fontFamily: 'Pacifico'),
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontFamily: 'Pacifico',
+                      color: kSecondaryColor,
+                    ),
                   )
                 ],
               ),
@@ -137,50 +142,74 @@ class _DoctorHomePageState extends State<DoctorHomePage> {
                               Padding(
                                 padding:
                                     const EdgeInsets.only(top: 40, bottom: 5),
-                                child: Center(
-                                  child: CustomButton3(
-                                    widget: CustomCircleAvatar(
-                                      // borderColor: Colors.white,
-                                      image: kDoctorImage,
-                                      img: img,
-                                      r1: 72,
-                                      r2: 70,
-                                    ),
-                                    onPressed: () {
-                                      showSheet(
-                                        context: context,
-                                        choices: [
-                                          'See Profile Picture',
-                                          'Update Profile Picture',
-                                        ],
-                                        onChoiceSelected: (i) async {
-                                          if (i == 0) {
-                                            // to pop bottom sheet
-                                            Navigator.pop(context);
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    DisplyImage(
-                                                        image: kDoctorImage,
-                                                        img: img),
-                                              ),
+                                child: StreamBuilder<String?>(
+                                    stream: AuthServices.retrieveImage(
+                                            email: user?.email)
+                                        .asStream(),
+                                    builder: (context, snapshot) {
+                                      int flag = 0;
+                                      String? image;
+
+                                      if (snapshot.hasData) {
+                                        image = snapshot.data;
+                                        flag = 1;
+                                      } else {
+                                        flag = 0;
+                                      }
+                                      return Center(
+                                        child: CustomButton3(
+                                          widget: CustomCircleAvatar(
+                                            // borderColor: Colors.white,
+                                            image: image ?? kDoctorImage,
+                                            img: img,
+                                            r1: 72,
+                                            r2: 70,
+                                            flag: flag,
+                                            flag3: 1,
+                                          ),
+                                          onPressed: () {
+                                            showSheet(
+                                              context: context,
+                                              choices: [
+                                                'See Profile Picture',
+                                                'Change Profile Picture',
+                                              ],
+                                              onChoiceSelected: (i) async {
+                                                if (i == 0) {
+                                                  // to pop bottom sheet
+                                                  Navigator.pop(context);
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          DisplyImage(
+                                                              image: image ??
+                                                                  kDoctorImage,
+                                                              img: img,
+                                                              flag: flag),
+                                                    ),
+                                                  );
+                                                } else {
+                                                  Navigator.pop(context);
+
+                                                  img = await pickImage(
+                                                      imageSource:
+                                                          ImageSource.gallery,
+                                                      pickedFile: pickedFile);
+
+                                                  AuthServices.uploadImage(
+                                                    email: user!.email!,
+                                                    img: img,
+                                                  );
+
+                                                  setState(() {});
+                                                }
+                                              },
                                             );
-                                          } else {
-                                            Navigator.pop(context);
-
-                                            img = await pickImage(
-                                                imageSource:
-                                                    ImageSource.gallery,
-                                                pickedFile: pickedFile);
-
-                                            setState(() {});
-                                          }
-                                        },
+                                          },
+                                        ),
                                       );
-                                    },
-                                  ),
-                                ),
+                                    }),
                               )
                             ],
                           ),
@@ -234,7 +263,7 @@ class _DoctorHomePageState extends State<DoctorHomePage> {
                                     buttonText: 'Update',
                                     fontFamily: '',
                                     fontWeight: FontWeight.bold,
-                                    color: Colors.white,
+                                    textColor: Colors.white,
                                     onPressed: () async {
                                       if (formKey.currentState!.validate()) {
                                         try {
@@ -370,44 +399,63 @@ class _DoctorHomePageState extends State<DoctorHomePage> {
                             itemBuilder: (context, i) {
                               chatId = usersList[i].email;
                               // print(i);
-                              return chatId == user!.email
+                              return chatId == user?.email
                                   ? null
-                                  : ChatItem2(
-                                      buttonText: chatId!.split('@')[0],
-                                      onPressed: () async {
-                                        Navigator.push(context,
-                                            MaterialPageRoute(
-                                          builder: (context) {
-                                            chatId = usersList[i].email;
-                                            // print(i);
-                                            return ChatPage(
-                                                appBarimage: kDefaultImage,
-                                                appBarText:
-                                                    chatId!.split('@')[0],
-                                                messageId: '$chatId-doctor');
+                                  : FutureBuilder<String?>(
+                                      future: AuthServices.retrieveImage(
+                                          email: chatId),
+                                      builder: (context, snapshot) {
+                                        String? image;
+                                        int flag = 0;
+                                        if (snapshot.hasData) {
+                                          image = snapshot.data;
+                                          flag = 1;
+                                        } else {
+                                          flag = 0;
+                                        }
+                                        return ChatItem2(
+                                            image: image,
+                                            flag: flag,
+                                            buttonText: usersList[i]
+                                                .email
+                                                .split('@')[0],
+                                            onPressed: () async {
+                                              Navigator.push(context,
+                                                  MaterialPageRoute(
+                                                builder: (context) {
+                                                  chatId = usersList[i].email;
+                                                  // print(i);
+                                                  return ChatPage(
+                                                      appBarimage:
+                                                          kDefaultImage,
+                                                      appBarText:
+                                                          chatId!.split('@')[0],
+                                                      messageId:
+                                                          '$chatId-doctor');
 
-                                            // // temporary solution
-                                            // if (i == 0) {
-                                            //   chatId = usersList[0].email;
-                                            //   return ChatPage(
-                                            //       appBarimage: kDefaultImage,
-                                            //       appBarText: chatId!.split('@')[0],
-                                            //       messageId: '$chatId-doctor');
-                                            // } else if (i == 1) {
-                                            //   chatId = usersList[1].email;
-                                            //   return ChatPage(
-                                            //       appBarimage: kDefaultImage,
-                                            //       appBarText: chatId!.split('@')[0],
-                                            //       messageId: '$chatId-doctor');
-                                            // } else {
-                                            //   chatId = usersList[2].email;
-                                            //   return ChatPage(
-                                            //       appBarimage: kDefaultImage,
-                                            //       appBarText: chatId!.split('@')[0],
-                                            //       messageId: '$chatId-doctor');
-                                            // }
-                                          },
-                                        ));
+                                                  // // temporary solution
+                                                  // if (i == 0) {
+                                                  //   chatId = usersList[0].email;
+                                                  //   return ChatPage(
+                                                  //       appBarimage: kDefaultImage,
+                                                  //       appBarText: chatId!.split('@')[0],
+                                                  //       messageId: '$chatId-doctor');
+                                                  // } else if (i == 1) {
+                                                  //   chatId = usersList[1].email;
+                                                  //   return ChatPage(
+                                                  //       appBarimage: kDefaultImage,
+                                                  //       appBarText: chatId!.split('@')[0],
+                                                  //       messageId: '$chatId-doctor');
+                                                  // } else {
+                                                  //   chatId = usersList[2].email;
+                                                  //   return ChatPage(
+                                                  //       appBarimage: kDefaultImage,
+                                                  //       appBarText: chatId!.split('@')[0],
+                                                  //       messageId: '$chatId-doctor');
+                                                  // }
+                                                },
+                                              ));
+                                            });
                                       });
                             },
                           ),

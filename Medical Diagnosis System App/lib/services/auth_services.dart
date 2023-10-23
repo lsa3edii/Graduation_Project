@@ -1,8 +1,11 @@
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:medical_diagnosis_system/constants.dart';
+import 'package:medical_diagnosis_system/views/signup_user_page.dart';
 // import 'package:medical_diagnosis_system/models/users.dart';
 
 class AuthServices {
@@ -148,7 +151,15 @@ class AuthServices {
     await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
   }
 
-  static Future<String?> retriveUserData({
+  static void deleteAccount() {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      user.delete();
+      users.doc(user.uid).delete();
+    }
+  }
+
+  static Future<String?> retrieveUserData({
     required UserCredential? userCredential,
     required String userField,
     String? uid,
@@ -157,6 +168,7 @@ class AuthServices {
         .collection(kUsers)
         .doc(uid ?? userCredential!.user!.uid)
         .get();
+
     return userSnapshot[userField];
   }
 
@@ -171,6 +183,30 @@ class AuthServices {
       }
     }
     return false;
+  }
+
+  static void uploadImage({required String email, File? img}) {
+    final path = '${email.split('@')[0]}.jpg';
+    final ref = FirebaseStorage.instance.ref().child(path);
+
+    if (img != null) {
+      ref.putFile(img);
+    }
+  }
+
+  static Future<String?> retrieveImage({String? email}) async {
+    if (email != null) {
+      final path = '${email.split('@')[0]}.jpg';
+      final ref = FirebaseStorage.instance.ref().child(path);
+
+      try {
+        final url = await ref.getDownloadURL();
+        return url;
+      } on Exception {
+        return null;
+      }
+    }
+    return null;
   }
 
   // static Future<void> updatePassword({

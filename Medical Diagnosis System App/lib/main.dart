@@ -37,7 +37,9 @@ class MedicalDiagnosisSystem extends StatefulWidget {
 class _MedicalDiagnosisSystemState extends State<MedicalDiagnosisSystem> {
   Future<void> _loadUserRole() async {
     if (user != null) {
-      userRole = await AuthServices.retriveUserData(
+      chatId = user!.email;
+
+      userRole = await AuthServices.retrieveUserData(
         uid: user!.uid,
         userCredential: userCredential,
         userField: UserFields.userRole,

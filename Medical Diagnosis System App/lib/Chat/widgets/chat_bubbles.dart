@@ -56,12 +56,3 @@ class ChatBubble2 extends StatelessWidget {
     );
   }
 }
-
-//          CircleAvatar(
-//             radius: 20,
-//             backgroundColor: Colors.blue[900],
-//             child: const CircleAvatar(
-//               backgroundColor: Colors.white,
-//               radius: 18,
-//               backgroundImage: AssetImage('assets/images/scholar.png'),
-//             ),

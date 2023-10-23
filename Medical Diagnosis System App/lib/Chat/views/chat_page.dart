@@ -1,7 +1,10 @@
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:medical_diagnosis_system/widgets/custom_circle_avatar.dart';
 import '../../constants.dart';
+import '../../helper/helper_functions.dart';
 import '../../views/signup_user_page.dart';
 import '../../widgets/custom_text_field.dart';
 import '../models/chats.dart';
@@ -27,6 +30,9 @@ class _ChatPageState extends State<ChatPage> {
   String? text;
   late String email;
   final ScrollController _controller = ScrollController();
+
+  File? img;
+  dynamic pickedFile;
 
   void _scrollDown() {
     _controller.animateTo(
@@ -134,6 +140,20 @@ class _ChatPageState extends State<ChatPage> {
                     controllerChat.clear(); // controller.text = '';
                     _scrollDown();
                     text = '';
+                  },
+                  cameraOnPressed: () async {
+                    img = await pickImage(
+                        imageSource: ImageSource.camera,
+                        pickedFile: pickedFile);
+
+                    setState(() {});
+                  },
+                  galleryOnPressed: () async {
+                    img = await pickImage(
+                        imageSource: ImageSource.gallery,
+                        pickedFile: pickedFile);
+
+                    setState(() {});
                   },
                 ),
               ],

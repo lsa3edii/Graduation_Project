@@ -53,12 +53,14 @@ class ChatItem2 extends StatelessWidget {
   final String buttonText;
   final String? image;
   final VoidCallback? onPressed;
+  final int flag;
 
   const ChatItem2({
     super.key,
     required this.buttonText,
-    this.image,
     required this.onPressed,
+    this.image,
+    this.flag = 0,
   });
 
   @override
@@ -78,6 +80,8 @@ class ChatItem2 extends StatelessWidget {
               r1: 35,
               r2: 33,
               borderColor: kPrimaryColor,
+              flag: flag,
+              flag2: 1,
             ),
             const SizedBox(width: 15),
             Text(

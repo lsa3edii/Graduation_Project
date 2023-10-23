@@ -122,11 +122,16 @@ class _UserHomePageState extends State<UserHomePage> {
                         }
                       },
                       icon: const Icon(Icons.logout),
+                      color: kSecondaryColor,
                     ),
                   ),
                   const Text(
                     'LogOut',
-                    style: TextStyle(fontSize: 12, fontFamily: 'Pacifico'),
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontFamily: 'Pacifico',
+                      color: kSecondaryColor,
+                    ),
                   )
                 ],
               ),
@@ -176,50 +181,73 @@ class _UserHomePageState extends State<UserHomePage> {
                                   Padding(
                                     padding: const EdgeInsets.only(
                                         top: 40, bottom: 5),
-                                    child: Center(
-                                      child: CustomButton3(
-                                        widget: CustomCircleAvatar(
-                                          borderColor: Colors.white,
-                                          image: kMyImage,
-                                          img: img,
-                                          r1: 72,
-                                          r2: 70,
-                                        ),
-                                        onPressed: () {
-                                          showSheet(
-                                            context: context,
-                                            choices: [
-                                              'See Profile Picture',
-                                              'Update Profile Picture',
-                                            ],
-                                            onChoiceSelected: (i) async {
-                                              if (i == 0) {
-                                                // to pop bottom sheet
-                                                Navigator.pop(context);
-                                                Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        DisplyImage(
-                                                            image: kMyImage,
-                                                            img: img),
-                                                  ),
+                                    child: FutureBuilder<String?>(
+                                        future: AuthServices.retrieveImage(
+                                            email: user?.email),
+                                        builder: (context, snapshot) {
+                                          int flag = 0;
+                                          String? image;
+
+                                          if (snapshot.hasData) {
+                                            image = snapshot.data;
+                                            flag = 1;
+                                          } else {
+                                            flag = 0;
+                                          }
+                                          return Center(
+                                            child: CustomButton3(
+                                              widget: CustomCircleAvatar(
+                                                borderColor: Colors.white,
+                                                image: image ?? kDefaultImage,
+                                                img: img,
+                                                r1: 72,
+                                                r2: 70,
+                                                flag: flag,
+                                                flag3: 1,
+                                              ),
+                                              onPressed: () {
+                                                showSheet(
+                                                  context: context,
+                                                  choices: [
+                                                    'See Profile Picture',
+                                                    'Change Profile Picture',
+                                                  ],
+                                                  onChoiceSelected: (i) async {
+                                                    if (i == 0) {
+                                                      // to pop bottom sheet
+                                                      Navigator.pop(context);
+                                                      Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              DisplyImage(
+                                                                  image: image!,
+                                                                  img: img,
+                                                                  flag: flag),
+                                                        ),
+                                                      );
+                                                    } else {
+                                                      Navigator.pop(context);
+
+                                                      img = await pickImage(
+                                                        imageSource:
+                                                            ImageSource.gallery,
+                                                        pickedFile: pickedFile,
+                                                      );
+
+                                                      AuthServices.uploadImage(
+                                                        email: user!.email!,
+                                                        img: img,
+                                                      );
+
+                                                      setState(() {});
+                                                    }
+                                                  },
                                                 );
-                                              } else {
-                                                Navigator.pop(context);
-
-                                                img = await pickImage(
-                                                    imageSource:
-                                                        ImageSource.gallery,
-                                                    pickedFile: pickedFile);
-
-                                                setState(() {});
-                                              }
-                                            },
+                                              },
+                                            ),
                                           );
-                                        },
-                                      ),
-                                    ),
+                                        }),
                                   )
                                 ],
                               ),
@@ -278,7 +306,7 @@ class _UserHomePageState extends State<UserHomePage> {
                                         buttonText: 'Update',
                                         fontFamily: '',
                                         fontWeight: FontWeight.bold,
-                                        color: Colors.white,
+                                        textColor: Colors.white,
                                         onPressed: () async {
                                           if (formKey.currentState!
                                               .validate()) {
@@ -314,6 +342,28 @@ class _UserHomePageState extends State<UserHomePage> {
                                               isLoading = false;
                                             });
                                           }
+                                        },
+                                      ),
+                                      const SizedBox(height: 10),
+                                      CustomButton2(
+                                        buttonText: 'Delete Account',
+                                        buttonColor: Colors.red[700],
+                                        fontFamily: '',
+                                        fontWeight: FontWeight.bold,
+                                        textColor: Colors.white,
+                                        onPressed: () {
+                                          showMyDialog(
+                                            context: context,
+                                            onPressed: () {
+                                              AuthServices.deleteAccount();
+                                              AuthServices.logout();
+                                              Navigator.pop(context);
+                                              Navigator.pop(context);
+                                              showSnackBar(context,
+                                                  message:
+                                                      'Account deleted.. logout!');
+                                            },
+                                          );
                                         },
                                       ),
                                       const SizedBox(height: 35),
@@ -427,7 +477,7 @@ class _UserHomePageState extends State<UserHomePage> {
                                     },
                                   ),
                                 ),
-                              )
+                              ),
                             ],
                           ),
                           Expanded(
@@ -483,8 +533,30 @@ class _UserHomePageState extends State<UserHomePage> {
                                     isEnabled: false,
                                     fontFamily: '',
                                     fontWeight: FontWeight.bold,
-                                    color: Colors.white,
+                                    textColor: Colors.white,
                                     onPressed: null,
+                                  ),
+                                  const SizedBox(height: 10),
+                                  CustomButton2(
+                                    buttonText: 'Delete Account',
+                                    buttonColor: Colors.red[700],
+                                    fontFamily: '',
+                                    fontWeight: FontWeight.bold,
+                                    textColor: Colors.white,
+                                    onPressed: () {
+                                      showMyDialog(
+                                        context: context,
+                                        onPressed: () {
+                                          AuthServices.deleteAccount();
+                                          AuthServices.logout();
+                                          Navigator.pop(context);
+                                          Navigator.pop(context);
+                                          showSnackBar(context,
+                                              message:
+                                                  'Account deleted.. logout!');
+                                        },
+                                      );
+                                    },
                                   ),
                                   const SizedBox(height: 35),
                                   const Divider(
@@ -557,7 +629,7 @@ class _UserHomePageState extends State<UserHomePage> {
                     )
               : _page == 1
                   ? FutureBuilder<String?>(
-                      future: AuthServices.retriveUserData(
+                      future: AuthServices.retrieveUserData(
                         uid: user?.uid,
                         userCredential: userCredential,
                         userField: UserFields.username,
