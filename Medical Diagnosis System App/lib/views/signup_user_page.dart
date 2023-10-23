@@ -79,7 +79,7 @@ class _SignupUserPageState extends State<SignupUserPage> {
                   maxLength: 12,
                   icon: Icons.person,
                   onChanged: (data) {
-                    username = data;
+                    username = data.trim();
                   },
                 ),
               ),
@@ -151,6 +151,7 @@ class _SignupUserPageState extends State<SignupUserPage> {
                         username: username!,
                         userRole: userRole1,
                       );
+                      AuthServices.logout();
                       clearUserSignUpData();
 
                       // ignore: use_build_context_synchronously

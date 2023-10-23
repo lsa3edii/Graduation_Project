@@ -298,6 +298,16 @@ class _DoctorHomePageState extends State<DoctorHomePage> {
                                       }
                                     },
                                   ),
+                                  const SizedBox(height: 10),
+                                  CustomButton2(
+                                    buttonText: 'Delete Account',
+                                    buttonColor: Colors.red[700],
+                                    isEnabled: false,
+                                    fontFamily: '',
+                                    fontWeight: FontWeight.bold,
+                                    textColor: Colors.white,
+                                    onPressed: null,
+                                  ),
                                   const SizedBox(height: 35),
                                   const Divider(
                                     indent: 25,
@@ -398,8 +408,7 @@ class _DoctorHomePageState extends State<DoctorHomePage> {
                             itemCount: usersList.length,
                             itemBuilder: (context, i) {
                               chatId = usersList[i].email;
-                              // print(i);
-                              return chatId == user?.email
+                              return chatId == '' // solve it later
                                   ? null
                                   : FutureBuilder<String?>(
                                       future: AuthServices.retrieveImage(
@@ -424,14 +433,14 @@ class _DoctorHomePageState extends State<DoctorHomePage> {
                                                   MaterialPageRoute(
                                                 builder: (context) {
                                                   chatId = usersList[i].email;
-                                                  // print(i);
                                                   return ChatPage(
-                                                      appBarimage:
+                                                      appBarimage: image ??
                                                           kDefaultImage,
                                                       appBarText:
                                                           chatId!.split('@')[0],
                                                       messageId:
-                                                          '$chatId-doctor');
+                                                          '$chatId-doctor',
+                                                      flag: flag);
 
                                                   // // temporary solution
                                                   // if (i == 0) {

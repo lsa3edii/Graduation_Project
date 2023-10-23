@@ -14,12 +14,14 @@ class ChatPage extends StatefulWidget {
   final String? appBarText;
   final String appBarimage;
   final String messageId;
+  final int flag;
 
   const ChatPage({
     super.key,
-    this.appBarText,
     required this.appBarimage,
     required this.messageId,
+    this.appBarText,
+    this.flag = 0,
   });
 
   @override
@@ -80,6 +82,7 @@ class _ChatPageState extends State<ChatPage> {
                     r1: 25,
                     r2: 23,
                     borderColor: kSecondaryColor,
+                    flag: widget.flag,
                   ),
                   const SizedBox(width: 15),
                   Text(

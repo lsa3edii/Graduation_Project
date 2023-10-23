@@ -6,14 +6,19 @@ import '../widgets/custom_text_field.dart';
 
 void showSnackBar(BuildContext context,
     {required String message, Color? color}) {
-  ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(
-      content: Text(message,
+  final scaffoldMessenger = ScaffoldMessenger.maybeOf(context);
+  if (scaffoldMessenger != null) {
+    scaffoldMessenger.showSnackBar(
+      SnackBar(
+        content: Text(
+          message,
           style: const TextStyle(
-              fontSize: 17, fontWeight: FontWeight.bold, color: kPrimaryColor)),
-      backgroundColor: color ?? Colors.white,
-    ),
-  );
+              fontSize: 17, fontWeight: FontWeight.bold, color: kPrimaryColor),
+        ),
+        backgroundColor: color ?? Colors.white,
+      ),
+    );
+  }
 }
 
 void clearUserData() {
@@ -83,33 +88,43 @@ dynamic showSheet({
   );
 }
 
-dynamic showMyDialog(
+dynamic showDialogDelete(
     {required BuildContext context, required VoidCallback onPressed}) {
   return showDialog(
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: const Text(
-          'Confirm Deletion !',
-          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
+        title: const Row(
+          children: [
+            Icon(Icons.warning, color: Colors.red),
+            Text(
+              ' Confirm Deletion !',
+              style: TextStyle(fontWeight: FontWeight.w900, color: Colors.red),
+            ),
+          ],
         ),
         content: const Text('Are you sure you want to delete your account?'),
         actions: <Widget>[
           TextButton(
             onPressed: onPressed,
+            style: ButtonStyle(
+                backgroundColor: MaterialStatePropertyAll(Colors.red[700])),
             child: const Text(
               'OK',
-              style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
+              style:
+                  TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
             ),
           ),
           TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            style: ButtonStyle(
+                overlayColor: MaterialStatePropertyAll(Colors.grey[300])),
             child: const Text(
               'Cancel',
               style: TextStyle(color: Colors.black),
             ),
-            onPressed: () {
-              Navigator.pop(context);
-            },
           ),
         ],
       );

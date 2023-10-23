@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -6,6 +7,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:medical_diagnosis_system/constants.dart';
 import 'package:medical_diagnosis_system/views/signup_user_page.dart';
+import 'package:http/http.dart' as http;
 // import 'package:medical_diagnosis_system/models/users.dart';
 
 class AuthServices {
@@ -207,6 +209,21 @@ class AuthServices {
       }
     }
     return null;
+  }
+
+  static void uploadImage2(
+      {required String email, required String photoURL}) async {
+    final path = '${email.split('@')[0]}.jpg';
+    final Reference storageRef = FirebaseStorage.instance.ref().child(path);
+
+    try {
+      final http.Response response = await http.get(Uri.parse(photoURL));
+      final Uint8List imageData = response.bodyBytes;
+      storageRef.putData(
+          imageData, SettableMetadata(contentType: 'image/jpeg'));
+    } on Exception {
+      //
+    }
   }
 
   // static Future<void> updatePassword({

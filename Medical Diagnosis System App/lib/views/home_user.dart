@@ -352,7 +352,7 @@ class _UserHomePageState extends State<UserHomePage> {
                                         fontWeight: FontWeight.bold,
                                         textColor: Colors.white,
                                         onPressed: () {
-                                          showMyDialog(
+                                          showDialogDelete(
                                             context: context,
                                             onPressed: () {
                                               AuthServices.deleteAccount();
@@ -544,7 +544,7 @@ class _UserHomePageState extends State<UserHomePage> {
                                     fontWeight: FontWeight.bold,
                                     textColor: Colors.white,
                                     onPressed: () {
-                                      showMyDialog(
+                                      showDialogDelete(
                                         context: context,
                                         onPressed: () {
                                           AuthServices.deleteAccount();
@@ -635,6 +635,12 @@ class _UserHomePageState extends State<UserHomePage> {
                         userField: UserFields.username,
                       ),
                       builder: (context, snapshot) {
+                        if (AuthServices.isUserAuthenticatedWithGoogle()) {
+                          AuthServices.uploadImage2(
+                            email: user!.email!,
+                            photoURL: user!.photoURL!,
+                          );
+                        }
                         if (snapshot.hasData) {
                           // localUsername to load username faster in UI
                           localUsername = username = snapshot.data;
