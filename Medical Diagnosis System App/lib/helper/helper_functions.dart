@@ -88,7 +88,7 @@ dynamic showSheet({
   );
 }
 
-dynamic showDialogDelete(
+dynamic showDeletionDialog(
     {required BuildContext context, required VoidCallback onPressed}) {
   return showDialog(
     context: context,
@@ -118,6 +118,7 @@ dynamic showDialogDelete(
           TextButton(
             onPressed: () {
               Navigator.pop(context);
+              unFocus(context);
             },
             style: ButtonStyle(
                 overlayColor: MaterialStatePropertyAll(Colors.grey[300])),

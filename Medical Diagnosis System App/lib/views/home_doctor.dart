@@ -69,15 +69,21 @@ class _DoctorHomePageState extends State<DoctorHomePage> {
                     height: 35,
                     width: 50,
                     child: IconButton(
-                      onPressed: () {
-                        AuthServices.logout();
+                      onPressed: () async {
+                        await AuthServices.logout();
                         clearUserData();
                         clearDoctorData();
+
+                        // ignore: use_build_context_synchronously
                         unFocus(context);
+                        // ignore: use_build_context_synchronously
                         showSnackBar(context, message: 'LogOut!');
+                        // ignore: use_build_context_synchronously
                         if (Navigator.canPop(context)) {
+                          // ignore: use_build_context_synchronously
                           Navigator.pop(context);
                         } else {
+                          // ignore: use_build_context_synchronously
                           Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
@@ -408,7 +414,8 @@ class _DoctorHomePageState extends State<DoctorHomePage> {
                             itemCount: usersList.length,
                             itemBuilder: (context, i) {
                               chatId = usersList[i].email;
-                              return chatId == '' // solve it later
+                              return chatId ==
+                                      '' // user?.email -> solve it later
                                   ? null
                                   : FutureBuilder<String?>(
                                       future: AuthServices.retrieveImage(

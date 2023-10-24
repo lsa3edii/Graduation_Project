@@ -36,6 +36,7 @@ class MedicalDiagnosisSystem extends StatefulWidget {
 
 class _MedicalDiagnosisSystemState extends State<MedicalDiagnosisSystem> {
   Future<void> _loadUserRole() async {
+    user = FirebaseAuth.instance.currentUser;
     if (user != null) {
       chatId = user!.email;
 
@@ -69,10 +70,15 @@ class _MedicalDiagnosisSystemState extends State<MedicalDiagnosisSystem> {
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.active) {
               if (snapshot.hasData) {
-                if (userRole == userRole1) {
-                  return const UserHomePage();
-                } else if (userRole == userRole2) {
-                  return const DoctorHomePage();
+                if (user != null) {
+                  if (user!.emailVerified && userRole == userRole1) {
+                    return const UserHomePage();
+                  } else if (/* user!.emailVerified && */ userRole ==
+                      userRole2) {
+                    return const DoctorHomePage();
+                  } else {
+                    return const LoginPage();
+                  }
                 } else {
                   return const LoginPage();
                 }

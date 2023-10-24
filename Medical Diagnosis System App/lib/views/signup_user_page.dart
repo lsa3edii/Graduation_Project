@@ -15,7 +15,7 @@ String? password;
 String? chatId;
 String? confirmPassword;
 
-var user = FirebaseAuth.instance.currentUser;
+User? user = FirebaseAuth.instance.currentUser;
 
 UserCredential? userCredential;
 CollectionReference users = FirebaseFirestore.instance.collection(kUsers);
@@ -80,6 +80,9 @@ class _SignupUserPageState extends State<SignupUserPage> {
                   icon: Icons.person,
                   onChanged: (data) {
                     username = data.trim();
+                    if (username!.isEmpty) {
+                      username = null;
+                    }
                   },
                 ),
               ),
@@ -151,14 +154,19 @@ class _SignupUserPageState extends State<SignupUserPage> {
                         username: username!,
                         userRole: userRole1,
                       );
-                      AuthServices.logout();
+                      // AuthServices.logout(); // to solve a problem
                       clearUserSignUpData();
 
                       // ignore: use_build_context_synchronously
                       unFocus(context);
 
                       // ignore: use_build_context_synchronously
-                      showSnackBar(context, message: 'Succeed.. Go to login!');
+                      showSnackBar(context,
+                          message:
+                              'We will send you an email to verify your account.');
+
+                      await Future.delayed(const Duration(seconds: 2));
+
                       // ignore: use_build_context_synchronously
                       Navigator.pop(context);
                     } on FirebaseAuthException catch (e) {

@@ -11,6 +11,7 @@ import 'package:http/http.dart' as http;
 // import 'package:medical_diagnosis_system/models/users.dart';
 
 class AuthServices {
+  // static User? user = FirebaseAuth.instance.currentUser;
   static final GoogleSignIn _gSignIn = GoogleSignIn();
 
   AuthServices();
@@ -35,6 +36,7 @@ class AuthServices {
         username: username,
         userRole: userRole,
       );
+      await sendVerificationEmail();
 
       return userCredential;
     } catch (ex) {
@@ -129,7 +131,7 @@ class AuthServices {
     } on Exception {
       //
     }
-    FirebaseAuth.instance.signOut();
+    await FirebaseAuth.instance.signOut();
   }
 
   static void createUserCollection({
@@ -149,15 +151,22 @@ class AuthServices {
     }, SetOptions(merge: true));
   }
 
+  static Future<void> sendVerificationEmail() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      await user.sendEmailVerification();
+    }
+  }
+
   static Future<void> resetPassword({required String email}) async {
     await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
   }
 
-  static void deleteAccount() {
+  static Future<void> deleteAccount() async {
     User? user = FirebaseAuth.instance.currentUser;
     if (user != null) {
-      user.delete();
-      users.doc(user.uid).delete();
+      await user.delete();
+      await users.doc(user.uid).delete();
     }
   }
 

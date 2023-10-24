@@ -105,15 +105,21 @@ class _UserHomePageState extends State<UserHomePage> {
                     height: 35,
                     width: 50,
                     child: IconButton(
-                      onPressed: () {
-                        AuthServices.logout();
+                      onPressed: () async {
+                        await AuthServices.logout();
                         clearUserData();
                         clearDoctorData();
+
+                        // ignore: use_build_context_synchronously
                         unFocus(context);
+                        // ignore: use_build_context_synchronously
                         showSnackBar(context, message: 'LogOut!');
+                        // ignore: use_build_context_synchronously
                         if (Navigator.canPop(context)) {
+                          // ignore: use_build_context_synchronously
                           Navigator.pop(context);
                         } else {
+                          // ignore: use_build_context_synchronously
                           Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
@@ -221,7 +227,8 @@ class _UserHomePageState extends State<UserHomePage> {
                                                         MaterialPageRoute(
                                                           builder: (context) =>
                                                               DisplyImage(
-                                                                  image: image!,
+                                                                  image: image ??
+                                                                      kDefaultImage,
                                                                   img: img,
                                                                   flag: flag),
                                                         ),
@@ -352,13 +359,20 @@ class _UserHomePageState extends State<UserHomePage> {
                                         fontWeight: FontWeight.bold,
                                         textColor: Colors.white,
                                         onPressed: () {
-                                          showDialogDelete(
+                                          showDeletionDialog(
                                             context: context,
-                                            onPressed: () {
-                                              AuthServices.deleteAccount();
-                                              AuthServices.logout();
+                                            onPressed: () async {
+                                              await AuthServices
+                                                  .deleteAccount();
+                                              await AuthServices.logout();
+
+                                              // ignore: use_build_context_synchronously
                                               Navigator.pop(context);
+                                              // ignore: use_build_context_synchronously
                                               Navigator.pop(context);
+                                              // ignore: use_build_context_synchronously
+                                              unFocus(context);
+                                              // ignore: use_build_context_synchronously
                                               showSnackBar(context,
                                                   message:
                                                       'Account deleted.. logout!');
@@ -544,13 +558,19 @@ class _UserHomePageState extends State<UserHomePage> {
                                     fontWeight: FontWeight.bold,
                                     textColor: Colors.white,
                                     onPressed: () {
-                                      showDialogDelete(
+                                      showDeletionDialog(
                                         context: context,
-                                        onPressed: () {
-                                          AuthServices.deleteAccount();
-                                          AuthServices.logout();
+                                        onPressed: () async {
+                                          await AuthServices.deleteAccount();
+                                          await AuthServices.logout();
+
+                                          // ignore: use_build_context_synchronously
                                           Navigator.pop(context);
+                                          // ignore: use_build_context_synchronously
                                           Navigator.pop(context);
+                                          // ignore: use_build_context_synchronously
+                                          unFocus(context);
+                                          // ignore: use_build_context_synchronously
                                           showSnackBar(context,
                                               message:
                                                   'Account deleted.. logout!');

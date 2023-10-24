@@ -290,8 +290,10 @@ class _AIPageState extends State<AIPage> {
                       ),
                       const SizedBox(height: 10),
                       CustomTextField(
+                        controller: controllerNLP,
                         maxLines: 12,
                         maxLength: 5000,
+                        isNLPText: true,
                         icon: Icons.text_fields,
                         onChanged: (data) {},
                       ),

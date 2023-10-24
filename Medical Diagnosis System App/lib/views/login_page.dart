@@ -159,6 +159,7 @@ class _LoginPageState extends State<LoginPage> {
                                 setState(() {
                                   isLoading = true;
                                 });
+
                                 userCredential = await AuthServices
                                     .signInWithEmailAndPassword(
                                         email: email!, password: password!);
@@ -167,22 +168,30 @@ class _LoginPageState extends State<LoginPage> {
                                     userCredential: userCredential!,
                                     userField: UserFields.userRole);
 
-                                if (userRole == userRole1) {
-                                  // ignore: use_build_context_synchronously
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(builder: (context) {
-                                      return const UserHomePage();
-                                    }),
-                                  );
-                                  // ignore: use_build_context_synchronously
-                                  showSnackBar(context,
-                                      message: 'Login Succeeded!');
+                                user = FirebaseAuth.instance.currentUser;
+                                if (user!.emailVerified) {
+                                  if (userRole == userRole1) {
+                                    // ignore: use_build_context_synchronously
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) {
+                                        return const UserHomePage();
+                                      }),
+                                    );
+                                    // ignore: use_build_context_synchronously
+                                    showSnackBar(context,
+                                        message: 'Login Succeeded!');
+                                  } else {
+                                    // ignore: use_build_context_synchronously
+                                    showSnackBar(context,
+                                        message:
+                                            'Something went wrong! Try again.');
+                                  }
                                 } else {
                                   // ignore: use_build_context_synchronously
                                   showSnackBar(context,
                                       message:
-                                          'Something went wrong! Try again.');
+                                          "your account hasn't been activated yet!");
                                 }
                               } on FirebaseAuthException catch (e) {
                                 if (e.code == 'user-not-found') {
@@ -356,6 +365,7 @@ class _LoginPageState extends State<LoginPage> {
                                 setState(() {
                                   isLoading = true;
                                 });
+
                                 userCredential = await AuthServices
                                     .signInWithEmailAndPassword(
                                         email: email!, password: password!);
@@ -364,23 +374,31 @@ class _LoginPageState extends State<LoginPage> {
                                     userCredential: userCredential!,
                                     userField: UserFields.userRole);
 
-                                if (userRole == userRole2) {
-                                  // ignore: use_build_context_synchronously
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(builder: (context) {
-                                      return const DoctorHomePage();
-                                    }),
-                                  );
-                                  // ignore: use_build_context_synchronously
-                                  showSnackBar(context,
-                                      message: 'Login Succeeded!');
-                                } else {
-                                  // ignore: use_build_context_synchronously
-                                  showSnackBar(context,
-                                      message:
-                                          'Something went wrong! Try again.');
-                                }
+                                user = FirebaseAuth.instance.currentUser;
+                                if (/* user!.emailVerified */ true) {
+                                  if (userRole == userRole2) {
+                                    // ignore: use_build_context_synchronously
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) {
+                                        return const DoctorHomePage();
+                                      }),
+                                    );
+                                    // ignore: use_build_context_synchronously
+                                    showSnackBar(context,
+                                        message: 'Login Succeeded!');
+                                  } else {
+                                    // ignore: use_build_context_synchronously
+                                    showSnackBar(context,
+                                        message:
+                                            'Something went wrong! Try again.');
+                                  }
+                                } // else {
+                                //   // ignore: use_build_context_synchronously
+                                //   showSnackBar(context,
+                                //       message:
+                                //           "your account hasn't been activated yet!");
+                                // }
                               } on FirebaseAuthException catch (e) {
                                 if (e.code == 'user-not-found') {
                                   showSnackBar(context,

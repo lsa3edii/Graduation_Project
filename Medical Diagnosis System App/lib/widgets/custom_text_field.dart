@@ -25,6 +25,7 @@ final TextEditingController controllerPasswordDoctorHome =
     TextEditingController();
 
 final TextEditingController controllerChat = TextEditingController();
+final TextEditingController controllerNLP = TextEditingController();
 
 // ignore: must_be_immutable
 class CustomTextField extends StatefulWidget {
@@ -36,6 +37,7 @@ class CustomTextField extends StatefulWidget {
   final int? maxLength;
   final bool showVisibilityToggle;
   final bool isEnabled;
+  final bool isNLPText;
   bool obscureText;
 
   CustomTextField({
@@ -48,6 +50,7 @@ class CustomTextField extends StatefulWidget {
     this.maxLength,
     this.obscureText = false,
     this.isEnabled = true,
+    this.isNLPText = false,
     this.showVisibilityToggle = false,
   });
 
@@ -86,10 +89,14 @@ class _CustomTextFieldState extends State<CustomTextField> {
             widget.hintLabel ?? '',
             style: const TextStyle(color: kPrimaryColor),
           ),
-          prefixIcon: Icon(
-            widget.icon,
-            color: kPrimaryColor,
-          ),
+          suffix:
+              widget.isNLPText ? Icon(widget.icon, color: kPrimaryColor) : null,
+          prefixIcon: !widget.isNLPText
+              ? Icon(
+                  widget.icon,
+                  color: kPrimaryColor,
+                )
+              : null,
           suffixIcon: widget.showVisibilityToggle
               ? IconButton(
                   icon: Icon(!widget.obscureText
