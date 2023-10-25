@@ -64,8 +64,22 @@ class AuthServices {
       // );
 
       return userCredential;
+    } on FirebaseAuthException catch (ex) {
+      // ex.code dosen't work.
+      // if (ex.code == 'user-not-found') {
+      //   throw Exception('User not found !');
+      // } else if (ex.code == 'wrong-password') {
+      //   throw Exception('Wrong password !');
+      // }
+      if (ex.code == 'INVALID_LOGIN_CREDENTIALS') {
+        throw Exception('User not found or Wrong password !');
+      } else if (ex.code == 'too-many-requests') {
+        throw Exception('You have tried too much, Please try again later !');
+      } else {
+        throw Exception('An unexpected error occurred.');
+      }
     } catch (ex) {
-      throw Exception(ex);
+      throw Exception('An unexpected error occurred.');
     }
   }
 

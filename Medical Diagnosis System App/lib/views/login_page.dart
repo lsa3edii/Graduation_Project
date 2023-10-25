@@ -194,21 +194,21 @@ class _LoginPageState extends State<LoginPage> {
                                           "your account hasn't been activated yet!");
                                 }
                               } on FirebaseAuthException catch (e) {
-                                if (e.code == 'user-not-found') {
-                                  showSnackBar(context,
-                                      message: 'User not found!');
-                                } else if (e.code == 'wrong-password') {
-                                  showSnackBar(context,
-                                      message: 'Wrong password!');
-                                } else {
-                                  showSnackBar(context, message: e.toString());
-                                }
+                                showSnackBar(context,
+                                    message: e
+                                        .toString()
+                                        .replaceAll('Exception: ', ''));
                               } catch (e) {
-                                showSnackBar(context, message: e.toString());
+                                showSnackBar(context,
+                                    message: e
+                                        .toString()
+                                        .replaceAll('Exception: ', ''));
+                              } finally {
+                                unFocus(context);
+                                setState(() {
+                                  isLoading = false;
+                                });
                               }
-                              setState(() {
-                                isLoading = false;
-                              });
                             } else {
                               showSnackBar(context, message: 'Login Failed!');
                             }
@@ -400,21 +400,20 @@ class _LoginPageState extends State<LoginPage> {
                                 //           "your account hasn't been activated yet!");
                                 // }
                               } on FirebaseAuthException catch (e) {
-                                if (e.code == 'user-not-found') {
-                                  showSnackBar(context,
-                                      message: 'User not found!');
-                                } else if (e.code == 'wrong-password') {
-                                  showSnackBar(context,
-                                      message: 'Wrong password!');
-                                } else {
-                                  showSnackBar(context, message: e.toString());
-                                }
+                                showSnackBar(context,
+                                    message: e
+                                        .toString()
+                                        .replaceAll('Exception: ', ''));
                               } catch (e) {
-                                showSnackBar(context, message: e.toString());
+                                showSnackBar(context,
+                                    message: e
+                                        .toString()
+                                        .replaceAll('Exception: ', ''));
+                              } finally {
+                                setState(() {
+                                  isLoading = false;
+                                });
                               }
-                              setState(() {
-                                isLoading = false;
-                              });
                             } else {
                               showSnackBar(context, message: 'Login Failed!');
                             }

@@ -366,6 +366,7 @@ class _UserHomePageState extends State<UserHomePage> {
                                                   .deleteAccount();
                                               await AuthServices.logout();
 
+                                              clearUserData();
                                               // ignore: use_build_context_synchronously
                                               Navigator.pop(context);
                                               // ignore: use_build_context_synchronously
@@ -564,6 +565,7 @@ class _UserHomePageState extends State<UserHomePage> {
                                           await AuthServices.deleteAccount();
                                           await AuthServices.logout();
 
+                                          clearUserData();
                                           // ignore: use_build_context_synchronously
                                           Navigator.pop(context);
                                           // ignore: use_build_context_synchronously
