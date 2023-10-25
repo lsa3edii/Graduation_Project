@@ -39,8 +39,17 @@ class AuthServices {
       await sendVerificationEmail();
 
       return userCredential;
+    } on FirebaseAuthException catch (ex) {
+      if (ex.code == 'email-already-in-use') {
+        throw Exception('Email already in use !');
+      } else if (ex.code == 'weak-password') {
+        throw Exception(
+            'Weak password, Password must be at least 6 characters !');
+      } else {
+        throw Exception('An unexpected error occurred.');
+      }
     } catch (ex) {
-      throw Exception(ex);
+      throw Exception('An unexpected error occurred.');
     }
   }
 

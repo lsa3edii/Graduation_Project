@@ -170,20 +170,16 @@ class _SignupUserPageState extends State<SignupUserPage> {
                       // ignore: use_build_context_synchronously
                       Navigator.pop(context);
                     } on FirebaseAuthException catch (e) {
-                      if (e.code == 'weak-password') {
-                        showSnackBar(context, message: 'Weak password!');
-                      } else if (e.code == 'email-already-in-use') {
-                        showSnackBar(context,
-                            message: 'Email already in use!!');
-                      } else {
-                        showSnackBar(context, message: e.toString());
-                      }
+                      showSnackBar(context,
+                          message: e.toString().replaceAll('Exception: ', ''));
                     } catch (e) {
-                      showSnackBar(context, message: e.toString());
+                      showSnackBar(context,
+                          message: e.toString().replaceAll('Exception: ', ''));
+                    } finally {
+                      setState(() {
+                        isLoading = false;
+                      });
                     }
-                    setState(() {
-                      isLoading = false;
-                    });
                   } else {
                     showSnackBar(context, message: 'Error!');
                   }

@@ -83,365 +83,366 @@ class _LoginPageState extends State<LoginPage> {
             },
           ),
           body: Form(
-              key: formKey,
-              child: _page == 0
-                  ? ListView(
-                      physics: const BouncingScrollPhysics(),
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(top: 20),
-                          child: Image.asset(
-                            kDefaultImage,
-                            height: 200,
-                            cacheHeight: 200,
-                          ),
+            key: formKey,
+            child: _page == 0
+                ? ListView(
+                    physics: const BouncingScrollPhysics(),
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: 20),
+                        child: Image.asset(
+                          kDefaultImage,
+                          height: 200,
+                          cacheHeight: 200,
                         ),
-                        const Padding(
-                          padding: EdgeInsets.only(top: 10, left: 10),
-                          child: Text('User Login :',
-                              style: TextStyle(
-                                fontSize: 25,
-                                fontFamily: 'Pacifico',
-                                color: kPrimaryColor,
-                              )),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 7, bottom: 12),
-                          child: CustomTextField(
-                            hintLabel: 'Email',
-                            icon: Icons.email,
-                            controller: controllerUserEmail,
-                            onChanged: (data) {
-                              chatId = email = data.trim();
-                            },
-                          ),
-                        ),
-                        CustomTextField(
-                          icon: Icons.password,
-                          hintLabel: 'Password',
-                          controller: controllerUserPassowrd,
-                          showVisibilityToggle: true,
-                          obscureText: true,
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.only(top: 10, left: 10),
+                        child: Text('User Login :',
+                            style: TextStyle(
+                              fontSize: 25,
+                              fontFamily: 'Pacifico',
+                              color: kPrimaryColor,
+                            )),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 7, bottom: 12),
+                        child: CustomTextField(
+                          hintLabel: 'Email',
+                          icon: Icons.email,
+                          controller: controllerUserEmail,
                           onChanged: (data) {
-                            password = data;
+                            chatId = email = data.trim();
                           },
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 10, bottom: 25),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Text("don't have an account?  "),
-                              GestureDetector(
-                                onTap: () {
-                                  Feedback.forTap(context);
-                                  Navigator.push(context,
-                                      MaterialPageRoute(builder: (context) {
-                                    return const SignupUserPage();
-                                  }));
-                                  unFocus(context);
-                                },
-                                child: const Text(
-                                  'Sign Up',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: kPrimaryColor),
-                                ),
+                      ),
+                      CustomTextField(
+                        icon: Icons.password,
+                        hintLabel: 'Password',
+                        controller: controllerUserPassowrd,
+                        showVisibilityToggle: true,
+                        obscureText: true,
+                        onChanged: (data) {
+                          password = data;
+                        },
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 10, bottom: 25),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text("don't have an account?  "),
+                            GestureDetector(
+                              onTap: () {
+                                Feedback.forTap(context);
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder: (context) {
+                                  return const SignupUserPage();
+                                }));
+                                unFocus(context);
+                              },
+                              child: const Text(
+                                'Sign Up',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: kPrimaryColor),
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
-                        CustomButton(
-                          buttonText: 'Login',
-                          onPressed: () async {
-                            if (formKey.currentState!.validate()) {
-                              try {
-                                setState(() {
-                                  isLoading = true;
-                                });
+                      ),
+                      CustomButton(
+                        buttonText: 'Login',
+                        onPressed: () async {
+                          if (formKey.currentState!.validate()) {
+                            try {
+                              setState(() {
+                                isLoading = true;
+                              });
 
-                                userCredential = await AuthServices
-                                    .signInWithEmailAndPassword(
-                                        email: email!, password: password!);
+                              userCredential =
+                                  await AuthServices.signInWithEmailAndPassword(
+                                      email: email!, password: password!);
 
-                                userRole = await AuthServices.retrieveUserData(
-                                    userCredential: userCredential!,
-                                    userField: UserFields.userRole);
+                              userRole = await AuthServices.retrieveUserData(
+                                  userCredential: userCredential!,
+                                  userField: UserFields.userRole);
 
-                                user = FirebaseAuth.instance.currentUser;
-                                if (user!.emailVerified) {
-                                  if (userRole == userRole1) {
-                                    // ignore: use_build_context_synchronously
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(builder: (context) {
-                                        return const UserHomePage();
-                                      }),
-                                    );
-                                    // ignore: use_build_context_synchronously
-                                    showSnackBar(context,
-                                        message: 'Login Succeeded!');
-                                  } else {
-                                    // ignore: use_build_context_synchronously
-                                    showSnackBar(context,
-                                        message:
-                                            'Something went wrong! Try again.');
-                                  }
+                              user = FirebaseAuth.instance.currentUser;
+                              if (user!.emailVerified) {
+                                if (userRole == userRole1) {
+                                  // ignore: use_build_context_synchronously
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) {
+                                      return const UserHomePage();
+                                    }),
+                                  );
+                                  // ignore: use_build_context_synchronously
+                                  showSnackBar(context,
+                                      message: 'Login Succeeded!');
                                 } else {
                                   // ignore: use_build_context_synchronously
                                   showSnackBar(context,
                                       message:
-                                          "your account hasn't been activated yet!");
+                                          'Something went wrong! Try again.');
                                 }
-                              } on FirebaseAuthException catch (e) {
+                              } else {
+                                // ignore: use_build_context_synchronously
                                 showSnackBar(context,
-                                    message: e
-                                        .toString()
-                                        .replaceAll('Exception: ', ''));
-                              } catch (e) {
-                                showSnackBar(context,
-                                    message: e
-                                        .toString()
-                                        .replaceAll('Exception: ', ''));
-                              } finally {
-                                unFocus(context);
-                                setState(() {
-                                  isLoading = false;
-                                });
+                                    message:
+                                        "your account hasn't been activated yet!");
                               }
-                            } else {
-                              showSnackBar(context, message: 'Login Failed!');
-                            }
-                          },
-                        ),
-                        const SizedBox(height: 20),
-                        Center(
-                          child: GestureDetector(
-                            onTap: () {
-                              Feedback.forTap(context);
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => ForgetPasswordPage(),
-                                  ));
+                            } on FirebaseAuthException catch (e) {
+                              showSnackBar(context,
+                                  message: e
+                                      .toString()
+                                      .replaceAll('Exception: ', ''));
+                            } catch (e) {
+                              showSnackBar(context,
+                                  message: e
+                                      .toString()
+                                      .replaceAll('Exception: ', ''));
+                            } finally {
                               unFocus(context);
-                            },
-                            child: const Text(
-                              'Forget Password ?',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: kPrimaryColor),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 5),
-                        const Divider(
-                          indent: 25,
-                          endIndent: 25,
-                          thickness: 1,
-                          color: Colors.grey,
-                        ),
-                        const Center(
-                          child: Text(
-                            'Or Register and Login with',
-                            style:
-                                TextStyle(fontSize: 20, fontFamily: 'Pacifico'),
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            IconAuth(
-                              image: 'assets/icons/google.png',
-                              onPressed: () async {
-                                // AuthServices.logout();
-                                try {
-                                  userCredential =
-                                      await AuthServices.signInWithGoogle(
-                                          userRole: userRole1);
-                                  chatId = userCredential!.user!.email;
-                                  // ignore: use_build_context_synchronously
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            const UserHomePage(),
-                                      ));
-                                  // ignore: use_build_context_synchronously
-                                  showSnackBar(
-                                    context,
-                                    message: 'Google Login Succeeded!',
-                                  );
-                                } on Exception {
-                                  showSnackBar(
-                                    context,
-                                    message: 'Google Login Failed!',
-                                  );
-                                }
-                              },
-                            ),
-                            const SizedBox(width: 15),
-                            IconAuth(
-                              image: 'assets/icons/facebook.png',
-                              onPressed: () async {
-                                try {
-                                  userCredential =
-                                      await AuthServices.signInWithFacebook(
-                                          userRole: userRole1);
-                                  chatId = userCredential!.user!.email;
-                                  // ignore: use_build_context_synchronously
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            const UserHomePage(),
-                                      ));
-                                  // ignore: use_build_context_synchronously
-                                  showSnackBar(
-                                    context,
-                                    message: 'Facebook Login Succeeded!',
-                                  );
-                                } on Exception {
-                                  showSnackBar(
-                                    context,
-                                    message: 'Facebook Login Failed!',
-                                  );
-                                }
-                              },
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 50)
-                      ],
-                    )
-                  : ListView(
-                      physics: const BouncingScrollPhysics(),
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(top: 20),
-                          child: Image.asset(
-                            kDefaultImage,
-                            height: 200,
-                            cacheHeight: 200,
-                          ),
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.only(top: 10, left: 10),
-                          child: Text('Doctor Login :',
-                              style: TextStyle(
-                                fontSize: 25,
-                                fontFamily: 'Pacifico',
-                                color: kPrimaryColor,
-                              )),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 7, bottom: 12),
-                          child: CustomTextField2(
-                            hintLabel: 'Email',
-                            icon: Icons.email,
-                            controller: controllerDoctorEmail,
-                            onChanged: (data) {
-                              chatId = email = data.trim();
-                            },
-                          ),
-                        ),
-                        CustomTextField2(
-                          icon: Icons.password,
-                          hintLabel: 'Password',
-                          obscureText: true,
-                          showVisibilityToggle: true,
-                          controller: controllerDoctorPassowrd,
-                          onChanged: (data) {
-                            password = data;
+                              setState(() {
+                                isLoading = false;
+                              });
+                            }
+                          } else {
+                            showSnackBar(context, message: 'Login Failed!');
+                          }
+                        },
+                      ),
+                      const SizedBox(height: 20),
+                      Center(
+                        child: GestureDetector(
+                          onTap: () {
+                            Feedback.forTap(context);
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ForgetPasswordPage(),
+                                ));
+                            unFocus(context);
                           },
+                          child: const Text(
+                            'Forget Password ?',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: kPrimaryColor),
+                          ),
                         ),
-                        const SizedBox(height: 51),
-                        CustomButton(
-                          buttonText: 'Login',
-                          onPressed: () async {
-                            if (formKey.currentState!.validate()) {
+                      ),
+                      const SizedBox(height: 5),
+                      const Divider(
+                        indent: 25,
+                        endIndent: 25,
+                        thickness: 1,
+                        color: Colors.grey,
+                      ),
+                      const Center(
+                        child: Text(
+                          'Or Register and Login with',
+                          style:
+                              TextStyle(fontSize: 20, fontFamily: 'Pacifico'),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          IconAuth(
+                            image: 'assets/icons/google.png',
+                            onPressed: () async {
+                              // AuthServices.logout();
                               try {
-                                setState(() {
-                                  isLoading = true;
-                                });
-
-                                userCredential = await AuthServices
-                                    .signInWithEmailAndPassword(
-                                        email: email!, password: password!);
-
-                                userRole = await AuthServices.retrieveUserData(
-                                    userCredential: userCredential!,
-                                    userField: UserFields.userRole);
-
-                                user = FirebaseAuth.instance.currentUser;
-                                if (/* user!.emailVerified */ true) {
-                                  if (userRole == userRole2) {
-                                    // ignore: use_build_context_synchronously
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(builder: (context) {
-                                        return const DoctorHomePage();
-                                      }),
-                                    );
-                                    // ignore: use_build_context_synchronously
-                                    showSnackBar(context,
-                                        message: 'Login Succeeded!');
-                                  } else {
-                                    // ignore: use_build_context_synchronously
-                                    showSnackBar(context,
-                                        message:
-                                            'Something went wrong! Try again.');
-                                  }
-                                } // else {
-                                //   // ignore: use_build_context_synchronously
-                                //   showSnackBar(context,
-                                //       message:
-                                //           "your account hasn't been activated yet!");
-                                // }
-                              } on FirebaseAuthException catch (e) {
-                                showSnackBar(context,
-                                    message: e
-                                        .toString()
-                                        .replaceAll('Exception: ', ''));
-                              } catch (e) {
-                                showSnackBar(context,
-                                    message: e
-                                        .toString()
-                                        .replaceAll('Exception: ', ''));
-                              } finally {
-                                setState(() {
-                                  isLoading = false;
-                                });
+                                userCredential =
+                                    await AuthServices.signInWithGoogle(
+                                        userRole: userRole1);
+                                chatId = userCredential!.user!.email;
+                                // ignore: use_build_context_synchronously
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const UserHomePage(),
+                                    ));
+                                // ignore: use_build_context_synchronously
+                                showSnackBar(
+                                  context,
+                                  message: 'Google Login Succeeded!',
+                                );
+                              } on Exception {
+                                showSnackBar(
+                                  context,
+                                  message: 'Google Login Failed!',
+                                );
                               }
-                            } else {
-                              showSnackBar(context, message: 'Login Failed!');
-                            }
+                            },
+                          ),
+                          const SizedBox(width: 15),
+                          IconAuth(
+                            image: 'assets/icons/facebook.png',
+                            onPressed: () async {
+                              try {
+                                userCredential =
+                                    await AuthServices.signInWithFacebook(
+                                        userRole: userRole1);
+                                chatId = userCredential!.user!.email;
+                                // ignore: use_build_context_synchronously
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const UserHomePage(),
+                                    ));
+                                // ignore: use_build_context_synchronously
+                                showSnackBar(
+                                  context,
+                                  message: 'Facebook Login Succeeded!',
+                                );
+                              } on Exception {
+                                showSnackBar(
+                                  context,
+                                  message: 'Facebook Login Failed!',
+                                );
+                              }
+                            },
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 50)
+                    ],
+                  )
+                : ListView(
+                    physics: const BouncingScrollPhysics(),
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: 20),
+                        child: Image.asset(
+                          kDefaultImage,
+                          height: 200,
+                          cacheHeight: 200,
+                        ),
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.only(top: 10, left: 10),
+                        child: Text('Doctor Login :',
+                            style: TextStyle(
+                              fontSize: 25,
+                              fontFamily: 'Pacifico',
+                              color: kPrimaryColor,
+                            )),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 7, bottom: 12),
+                        child: CustomTextField2(
+                          hintLabel: 'Email',
+                          icon: Icons.email,
+                          controller: controllerDoctorEmail,
+                          onChanged: (data) {
+                            chatId = email = data.trim();
                           },
                         ),
-                        const SizedBox(height: 20),
-                        Center(
-                          child: GestureDetector(
-                            onTap: () {
-                              Feedback.forTap(context);
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => ForgetPasswordPage(),
-                                  ));
-                              unFocus(context);
-                            },
-                            child: const Text(
-                              'Forget Password ?',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: kPrimaryColor),
-                            ),
+                      ),
+                      CustomTextField2(
+                        icon: Icons.password,
+                        hintLabel: 'Password',
+                        obscureText: true,
+                        showVisibilityToggle: true,
+                        controller: controllerDoctorPassowrd,
+                        onChanged: (data) {
+                          password = data;
+                        },
+                      ),
+                      const SizedBox(height: 51),
+                      CustomButton(
+                        buttonText: 'Login',
+                        onPressed: () async {
+                          if (formKey.currentState!.validate()) {
+                            try {
+                              setState(() {
+                                isLoading = true;
+                              });
+
+                              userCredential =
+                                  await AuthServices.signInWithEmailAndPassword(
+                                      email: email!, password: password!);
+
+                              userRole = await AuthServices.retrieveUserData(
+                                  userCredential: userCredential!,
+                                  userField: UserFields.userRole);
+
+                              user = FirebaseAuth.instance.currentUser;
+                              if (/* user!.emailVerified */ true) {
+                                if (userRole == userRole2) {
+                                  // ignore: use_build_context_synchronously
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) {
+                                      return const DoctorHomePage();
+                                    }),
+                                  );
+                                  // ignore: use_build_context_synchronously
+                                  showSnackBar(context,
+                                      message: 'Login Succeeded!');
+                                } else {
+                                  // ignore: use_build_context_synchronously
+                                  showSnackBar(context,
+                                      message:
+                                          'Something went wrong! Try again.');
+                                }
+                              } // else {
+                              //   // ignore: use_build_context_synchronously
+                              //   showSnackBar(context,
+                              //       message:
+                              //           "your account hasn't been activated yet!");
+                              // }
+                            } on FirebaseAuthException catch (e) {
+                              showSnackBar(context,
+                                  message: e
+                                      .toString()
+                                      .replaceAll('Exception: ', ''));
+                            } catch (e) {
+                              showSnackBar(context,
+                                  message: e
+                                      .toString()
+                                      .replaceAll('Exception: ', ''));
+                            } finally {
+                              setState(() {
+                                isLoading = false;
+                              });
+                            }
+                          } else {
+                            showSnackBar(context, message: 'Login Failed!');
+                          }
+                        },
+                      ),
+                      const SizedBox(height: 20),
+                      Center(
+                        child: GestureDetector(
+                          onTap: () {
+                            Feedback.forTap(context);
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ForgetPasswordPage(),
+                                ));
+                            unFocus(context);
+                          },
+                          child: const Text(
+                            'Forget Password ?',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: kPrimaryColor),
                           ),
                         ),
-                        const SizedBox(height: 50)
-                      ],
-                    )),
+                      ),
+                      const SizedBox(height: 50)
+                    ],
+                  ),
+          ),
         ),
       ),
     );
