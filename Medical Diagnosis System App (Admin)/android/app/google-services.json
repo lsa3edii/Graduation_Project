@@ -1,0 +1,90 @@
+{
+  "project_info": {
+    "project_number": "407375604191",
+    "project_id": "medical-diagnosis-system-5ac77",
+    "storage_bucket": "medical-diagnosis-system-5ac77.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:407375604191:android:e0c11cff6a0ff2e1c0fc6a",
+        "android_client_info": {
+          "package_name": "com.example.medical_diagnosis_system"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "407375604191-ua62ulgsn3lgkcjilj732endg6ieqkmk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.medical_diagnosis_system",
+            "certificate_hash": "c005f86e58c480a3ba5981bdc22876d73c75f848"
+          }
+        },
+        {
+          "client_id": "407375604191-qlocnlkr6r244c3ru82k8in8r8kmbf6d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBHtCgBxVGgFT8t5Wdr1KCyTgEyHNpu8VA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "407375604191-qlocnlkr6r244c3ru82k8in8r8kmbf6d.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "407375604191-a5tplonl8gphvcaoe5n3bjh9o3inomlb.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.medicalDiagnosisSystem"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:407375604191:android:a0aec65305ed5426c0fc6a",
+        "android_client_info": {
+          "package_name": "com.example.medical_diagnosis_system_admin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "407375604191-qlocnlkr6r244c3ru82k8in8r8kmbf6d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBHtCgBxVGgFT8t5Wdr1KCyTgEyHNpu8VA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "407375604191-qlocnlkr6r244c3ru82k8in8r8kmbf6d.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "407375604191-a5tplonl8gphvcaoe5n3bjh9o3inomlb.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.medicalDiagnosisSystem"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

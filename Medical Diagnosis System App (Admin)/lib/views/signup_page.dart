@@ -1,0 +1,276 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import '../helper/helper_functions.dart';
+import '../services/auth_services.dart';
+import '../widgets/custom_button.dart';
+import '../widgets/custom_text_field.dart';
+import '../constants.dart';
+
+// Global Varible to fix some problems.
+String? mainEmail;
+String? mainPassword;
+
+String? username;
+String? email;
+String? password;
+String? chatId;
+String? confirmPassword;
+
+User? user = FirebaseAuth.instance.currentUser;
+
+UserCredential? userCredential;
+CollectionReference users = FirebaseFirestore.instance.collection(kUsers);
+CollectionReference chats =
+    FirebaseFirestore.instance.collection(kChatCollection);
+
+String? userRole;
+// int? page;
+
+class SignupPage extends StatefulWidget {
+  final String? userType;
+  final String? buttonText;
+
+  final TextEditingController? controllerUsernameSignUP;
+  final TextEditingController? controllerEmailSignUP;
+  final TextEditingController? controllerPasswordSignUP;
+  final TextEditingController? controllerConfirmPasswordSignUP;
+
+  const SignupPage({
+    super.key,
+    this.userType,
+    this.buttonText,
+    this.controllerUsernameSignUP,
+    this.controllerEmailSignUP,
+    this.controllerPasswordSignUP,
+    this.controllerConfirmPasswordSignUP,
+  });
+
+  @override
+  State<SignupPage> createState() => _SignupPageState();
+}
+
+class _SignupPageState extends State<SignupPage> {
+  bool isLoading = false;
+  GlobalKey<FormState> formKey = GlobalKey();
+
+  @override
+  Widget build(BuildContext context) {
+    return ModalProgressHUD(
+      inAsyncCall: isLoading,
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          backgroundColor: kPrimaryColor,
+          title: const Text(
+            'Medical Diagnosis System',
+            style: TextStyle(fontSize: 27, fontFamily: 'Pacifico'),
+          ),
+        ),
+        body: Form(
+          key: formKey,
+          child: ListView(
+            physics: const BouncingScrollPhysics(),
+            children: [
+              widget.buttonText != null
+                  ? const Padding(padding: EdgeInsets.only(top: 75))
+                  : Padding(
+                      padding: const EdgeInsets.only(top: 20),
+                      child: Image.asset(
+                        kDefaultImage,
+                        height: 200,
+                        cacheHeight: 200,
+                      ),
+                    ),
+              Padding(
+                padding: const EdgeInsets.only(top: 10, left: 10),
+                child: Text(widget.userType ?? 'Admin Register :',
+                    style: const TextStyle(
+                      fontSize: 25,
+                      fontFamily: 'Pacifico',
+                      color: kPrimaryColor,
+                    )),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 7, bottom: 12),
+                child: CustomTextField(
+                  hintLabel: 'Username',
+                  controller: widget.controllerUsernameSignUP ??
+                      controllerUsernameAdminSignUP,
+                  maxLength: 12,
+                  icon: Icons.person,
+                  onChanged: (data) {
+                    username = data.trim();
+                    if (username!.isEmpty) {
+                      username = null;
+                    }
+                  },
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 12),
+                child: CustomTextField(
+                  hintLabel: 'Email',
+                  controller: widget.controllerEmailSignUP ??
+                      controllerEmailAdminSignUP,
+                  icon: Icons.email,
+                  onChanged: (data) {
+                    email = data.trim();
+                  },
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 12),
+                child: CustomTextField(
+                  icon: Icons.password,
+                  hintLabel: 'Password',
+                  controller: widget.controllerPasswordSignUP ??
+                      controllerPasswordAdminSignUP,
+                  obscureText: true,
+                  showVisibilityToggle: true,
+                  onChanged: (data) {
+                    password = data;
+                  },
+                ),
+              ),
+              CustomTextFieldForCheckPassword(
+                icon: Icons.password,
+                hintLabel: 'Confirm Password',
+                controller: widget.controllerConfirmPasswordSignUP ??
+                    controllerConfirmPasswordAdminSignUP,
+                obscureText: true,
+                onChanged: (data) {
+                  confirmPassword = data;
+                },
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 10, bottom: 25),
+                child: widget.buttonText != null
+                    ? null
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text("already have an account?  "),
+                          GestureDetector(
+                            onTap: () {
+                              Feedback.forTap(context);
+                              Navigator.pop(context);
+                            },
+                            child: const Text(
+                              'Login',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: kPrimaryColor),
+                            ),
+                          ),
+                        ],
+                      ),
+              ),
+              CustomButton(
+                buttonText: widget.buttonText ?? 'Sign Up',
+                onPressed: () async {
+                  if (formKey.currentState!.validate()) {
+                    try {
+                      setState(() {
+                        isLoading = true;
+                      });
+
+                      if (widget.buttonText == null) {
+                        await AuthServices.registerWithEmailAndPassword(
+                          email: email!,
+                          password: password!,
+                          username: username!,
+                          userRole: userRole3,
+                        );
+                      } else if (widget.buttonText == 'Add User') {
+                        if (AuthServices.isUserAuthenticatedWithGoogle()) {
+                          await AuthServices.registerWithEmailAndPassword(
+                            email: email!,
+                            password: password!,
+                            username: username!,
+                            userRole: userRole1,
+                          );
+                          await AuthServices.signInWithGoogle(
+                              userRole: userRole3);
+                        } else {
+                          await AuthServices.registerWithEmailAndPassword(
+                            email: email!,
+                            password: password!,
+                            username: username!,
+                            userRole: userRole1,
+                          );
+                          await AuthServices.signInWithEmailAndPassword(
+                              email: mainEmail!, password: mainPassword!);
+                        }
+                      } else if (widget.buttonText == 'Add Doctor') {
+                        if (AuthServices.isUserAuthenticatedWithGoogle()) {
+                          await AuthServices.registerWithEmailAndPassword(
+                            email: email!,
+                            password: password!,
+                            username: username!,
+                            userRole: userRole2,
+                          );
+                          await AuthServices.signInWithGoogle(
+                              userRole: userRole3);
+                        } else {
+                          await AuthServices.registerWithEmailAndPassword(
+                            email: email!,
+                            password: password!,
+                            username: username!,
+                            userRole: userRole2,
+                          );
+                          await AuthServices.signInWithEmailAndPassword(
+                              email: mainEmail!, password: mainPassword!);
+                        }
+                      }
+                      // AuthServices.logout(); // to solve a problem
+
+                      clearSignUpDataAdmin();
+                      clearSignUpDataUser();
+                      clearSignUpDataDoctor();
+
+                      // ignore: use_build_context_synchronously
+                      unFocus(context);
+
+                      if (widget.buttonText == null) {
+                        // ignore: use_build_context_synchronously
+                        showSnackBar(context,
+                            message:
+                                'We will send you an email to verify your account.');
+                      } else {
+                        // ignore: use_build_context_synchronously
+                        showSnackBar(context,
+                            message:
+                                'We will send an email to this account to verify it.');
+                      }
+
+                      if (widget.buttonText == null) {
+                        await Future.delayed(const Duration(seconds: 2));
+                        // ignore: use_build_context_synchronously
+                        Navigator.pop(context);
+                      }
+                    } on FirebaseAuthException catch (e) {
+                      showSnackBar(context,
+                          message: e.toString().replaceAll('Exception: ', ''));
+                    } catch (e) {
+                      showSnackBar(context,
+                          message: e.toString().replaceAll('Exception: ', ''));
+                    } finally {
+                      setState(() {
+                        isLoading = false;
+                      });
+                    }
+                  } else {
+                    showSnackBar(context, message: 'Error!');
+                  }
+                },
+              ),
+              const SizedBox(height: 75)
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

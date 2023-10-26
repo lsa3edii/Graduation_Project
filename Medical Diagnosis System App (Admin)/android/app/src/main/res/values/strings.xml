@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Medical Diagnosis System</string>
+    <string name="facebook_app_id">638957278283455</string>
+    <string name="fb_login_protocol_scheme">fb0771dc3fce4c9a1df08582e36759ba41</string>
+    <string name="facebook_client_token">4816d5924fdd0f2088ed106dbf3e1fd1</string>
+</resources>
