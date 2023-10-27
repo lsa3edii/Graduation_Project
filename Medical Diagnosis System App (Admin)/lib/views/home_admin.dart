@@ -160,7 +160,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
           body: LiquidPullToRefresh(
             color: kPrimaryColor,
             animSpeedFactor: 10,
-            showChildOpacityTransition: true,
+            showChildOpacityTransition: false,
             onRefresh: () async {
               clearAdminData();
               showSnackBar(context, message: 'Refresh..');

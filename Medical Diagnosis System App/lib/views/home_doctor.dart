@@ -136,7 +136,7 @@ class _DoctorHomePageState extends State<DoctorHomePage> {
           body: LiquidPullToRefresh(
             color: kPrimaryColor,
             animSpeedFactor: 10,
-            showChildOpacityTransition: true,
+            showChildOpacityTransition: false,
             onRefresh: () async {
               clearDoctorData();
               showSnackBar(context, message: 'Refresh..');

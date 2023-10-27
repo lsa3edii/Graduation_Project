@@ -174,7 +174,7 @@ class _UserHomePageState extends State<UserHomePage> {
           body: LiquidPullToRefresh(
             color: kPrimaryColor,
             animSpeedFactor: 10,
-            showChildOpacityTransition: true,
+            showChildOpacityTransition: false,
             onRefresh: () async {
               clearUserData();
               showSnackBar(context, message: 'Refresh..');
