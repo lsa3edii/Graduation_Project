@@ -548,7 +548,9 @@ class _AdminHomePageState extends State<AdminHomePage> {
                                       showDeletionDialog(
                                         context: context,
                                         onPressed: () async {
-                                          await AuthServices.deleteAccount();
+                                          await AuthServices.deleteAccount(
+                                            flag: 1,
+                                          );
                                           await AuthServices.logout();
 
                                           clearAdminData();

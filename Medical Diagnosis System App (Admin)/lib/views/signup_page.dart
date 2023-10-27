@@ -177,12 +177,24 @@ class _SignupPageState extends State<SignupPage> {
                       });
 
                       if (widget.buttonText == null) {
-                        await AuthServices.registerWithEmailAndPassword(
-                          email: email!,
-                          password: password!,
-                          username: username!,
-                          userRole: userRole3,
-                        );
+                        if (!await AuthServices.isAdminOrDoctorExists(
+                            users: users, userRole: userRole3)) {
+                          await AuthServices.registerWithEmailAndPassword(
+                            email: email!,
+                            password: password!,
+                            username: username!,
+                            userRole: userRole3,
+                          );
+                          await AuthServices.checkFirstRegisteredAdmin(
+                            adminEmail: email!,
+                          );
+                        } else {
+                          // ignore: use_build_context_synchronously
+                          showSnackBar(context,
+                              message:
+                                  'There is already an admin in the system, and only one admin is allowed.');
+                          return;
+                        }
                       } else if (widget.buttonText == 'Add User') {
                         if (AuthServices.isUserAuthenticatedWithGoogle()) {
                           await AuthServices.registerWithEmailAndPassword(
@@ -204,24 +216,33 @@ class _SignupPageState extends State<SignupPage> {
                               email: mainEmail!, password: mainPassword!);
                         }
                       } else if (widget.buttonText == 'Add Doctor') {
-                        if (AuthServices.isUserAuthenticatedWithGoogle()) {
-                          await AuthServices.registerWithEmailAndPassword(
-                            email: email!,
-                            password: password!,
-                            username: username!,
-                            userRole: userRole2,
-                          );
-                          await AuthServices.signInWithGoogle(
-                              userRole: userRole3);
+                        if (!await AuthServices.isAdminOrDoctorExists(
+                            users: users, userRole: userRole2)) {
+                          if (AuthServices.isUserAuthenticatedWithGoogle()) {
+                            await AuthServices.registerWithEmailAndPassword(
+                              email: email!,
+                              password: password!,
+                              username: username!,
+                              userRole: userRole2,
+                            );
+                            await AuthServices.signInWithGoogle(
+                                userRole: userRole3);
+                          } else {
+                            await AuthServices.registerWithEmailAndPassword(
+                              email: email!,
+                              password: password!,
+                              username: username!,
+                              userRole: userRole2,
+                            );
+                            await AuthServices.signInWithEmailAndPassword(
+                                email: mainEmail!, password: mainPassword!);
+                          }
                         } else {
-                          await AuthServices.registerWithEmailAndPassword(
-                            email: email!,
-                            password: password!,
-                            username: username!,
-                            userRole: userRole2,
-                          );
-                          await AuthServices.signInWithEmailAndPassword(
-                              email: mainEmail!, password: mainPassword!);
+                          // ignore: use_build_context_synchronously
+                          showSnackBar(context,
+                              message:
+                                  'There is already an doctor in the system, and only one doctor is allowed.');
+                          return;
                         }
                       }
                       // AuthServices.logout(); // to solve a problem

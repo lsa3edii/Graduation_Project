@@ -186,11 +186,18 @@ class AuthServices {
     await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
   }
 
-  static Future<void> deleteAccount() async {
+  static Future<void> deleteAccount({int? flag}) async {
     User? user = FirebaseAuth.instance.currentUser;
+    DocumentReference? firstAdmin = FirebaseFirestore.instance
+        .collection('first_registered_admin')
+        .doc('first_admin');
+
     if (user != null) {
       await user.delete();
       await users.doc(user.uid).delete();
+      if (flag == 1) {
+        await firstAdmin.delete();
+      }
     }
   }
 
@@ -258,6 +265,90 @@ class AuthServices {
       //
     }
   }
+
+  static Future<bool> isAdminOrDoctorExists(
+      {required CollectionReference users, required String userRole}) async {
+    try {
+      QuerySnapshot querySnapshot =
+          await users.where('userRole', isEqualTo: userRole).get();
+      if (querySnapshot.docs.isNotEmpty) {
+        return true;
+      }
+      return false;
+    } on Exception {
+      return false;
+    }
+  }
+
+  static Future<bool> checkFirstRegisteredAdmin(
+      {required String adminEmail}) async {
+    try {
+      final CollectionReference firstEmailCollection =
+          FirebaseFirestore.instance.collection('first_registered_admin');
+
+      final DocumentSnapshot firstEmailDoc =
+          await firstEmailCollection.doc('first_admin').get();
+
+      if (firstEmailDoc.exists) {
+        return adminEmail == firstEmailDoc['email'];
+      }
+
+      await firstEmailCollection.doc('first_admin').set(
+        {
+          'email': adminEmail,
+        },
+      );
+
+      return true;
+    } catch (ex) {
+      throw Exception(ex);
+    }
+  }
+
+  // static Future<bool> checkRegistrationFlag() async {
+  //   try {
+  //     final CollectionReference flagsCollection =
+  //         FirebaseFirestore.instance.collection('registration_flags');
+
+  //     final DocumentSnapshot flagDoc =
+  //         await flagsCollection.doc('registration_flag').get();
+
+  //     if (flagDoc.exists) {
+  //       return flagDoc['registrationComplete'] == true;
+  //     } else {
+  //       return false;
+  //     }
+  //   } catch (ex) {
+  //     throw Exception(ex);
+  //   }
+  // }
+
+  // static Future<void> setRegistrationFlag() async {
+  //   try {
+  //     final CollectionReference flagsCollection =
+  //         FirebaseFirestore.instance.collection('registration_flags');
+
+  //     await flagsCollection.doc('registration_flag').set(
+  //       {
+  //         'registrationComplete': true,
+  //       },
+  //     );
+  //   } catch (ex) {
+  //     throw Exception(ex);
+  //   }
+  // }
+
+  // static Future<String?> getAdminEmail(
+  //     {required CollectionReference users}) async {
+  //   try {
+  //     QuerySnapshot querySnapshot =
+  //         await users.where('userRole', isEqualTo: 'admin').get();
+
+  //     return querySnapshot.docs[0]['email'];
+  //   } on Exception {
+  //     return null;
+  //   }
+  // }
 
   // static Future<void> updatePassword({
   //   required UserCredential userCredential,

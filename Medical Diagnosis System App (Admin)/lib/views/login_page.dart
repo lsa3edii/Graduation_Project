@@ -203,17 +203,33 @@ class _LoginPageState extends State<LoginPage> {
                       try {
                         userCredential = await AuthServices.signInWithGoogle(
                             userRole: userRole3);
-                        // ignore: use_build_context_synchronously
-                        Navigator.push(
+
+                        bool isEmailMatch =
+                            await AuthServices.checkFirstRegisteredAdmin(
+                                adminEmail: userCredential!.user!.email!);
+
+                        if (isEmailMatch) {
+                          // ignore: use_build_context_synchronously
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const AdminHomePage(),
+                              ));
+                          // ignore: use_build_context_synchronously
+                          showSnackBar(
                             context,
-                            MaterialPageRoute(
-                              builder: (context) => const AdminHomePage(),
-                            ));
-                        // ignore: use_build_context_synchronously
-                        showSnackBar(
-                          context,
-                          message: 'Google Login Succeeded!',
-                        );
+                            message: 'Google Login Succeeded!',
+                          );
+                        } else {
+                          // ignore: use_build_context_synchronously
+                          showSnackBar(
+                            context,
+                            message:
+                                'Google login is not available for this account.',
+                          );
+                          await AuthServices.deleteAccount();
+                          await AuthServices.logout();
+                        }
                       } on Exception {
                         showSnackBar(
                           context,
