@@ -258,6 +258,44 @@ class AuthServices {
     }
   }
 
+  static Future<bool> isAdmin({required String userEmail}) async {
+    try {
+      final CollectionReference firstEmailCollection =
+          FirebaseFirestore.instance.collection('first_registered_admin');
+
+      final DocumentSnapshot firstEmailDoc =
+          await firstEmailCollection.doc('first_admin').get();
+
+      if (firstEmailDoc.exists) {
+        return userEmail == firstEmailDoc['email'];
+      }
+
+      // await firstEmailCollection.doc('first_admin').set(
+      //   {
+      //     'email': adminEmail,
+      //   },
+      // );
+
+      return false;
+    } catch (ex) {
+      throw Exception(ex);
+    }
+  }
+
+  // static Future<bool> isAdminOrDoctorExists(
+  //     {required CollectionReference users, required String userRole}) async {
+  //   try {
+  //     QuerySnapshot querySnapshot =
+  //         await users.where('userRole', isEqualTo: userRole).get();
+  //     if (querySnapshot.docs.isNotEmpty) {
+  //       return true;
+  //     }
+  //     return false;
+  //   } on Exception {
+  //     return false;
+  //   }
+  // }
+
   // static Future<void> updatePassword({
   //   required UserCredential userCredential,
   //   required String email,

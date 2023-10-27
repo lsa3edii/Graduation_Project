@@ -17,3 +17,4 @@ const String kCreatedAt = 'createdAt';
 
 const String userRole1 = 'patient';
 const String userRole2 = 'doctor';
+const String userRole3 = 'admin';

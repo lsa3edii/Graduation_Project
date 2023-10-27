@@ -261,18 +261,36 @@ class _LoginPageState extends State<LoginPage> {
                                     await AuthServices.signInWithGoogle(
                                         userRole: userRole1);
                                 chatId = userCredential!.user!.email;
-                                // ignore: use_build_context_synchronously
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          const UserHomePage(),
-                                    ));
-                                // ignore: use_build_context_synchronously
-                                showSnackBar(
-                                  context,
-                                  message: 'Google Login Succeeded!',
+
+                                bool isEmailMatched =
+                                    await AuthServices.isAdmin(
+                                  userEmail: userCredential!.user!.email!,
                                 );
+
+                                if (!isEmailMatched) {
+                                  // ignore: use_build_context_synchronously
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            const UserHomePage(),
+                                      ));
+                                  // ignore: use_build_context_synchronously
+                                  showSnackBar(
+                                    context,
+                                    message: 'Google Login Succeeded!',
+                                  );
+                                } else {
+                                  // ignore: use_build_context_synchronously
+                                  showSnackBar(
+                                    context,
+                                    message:
+                                        'Google login is not available for this account.',
+                                  );
+                                  await AuthServices.signInWithGoogle(
+                                      userRole: userRole3);
+                                  await AuthServices.logout();
+                                }
                               } on Exception {
                                 showSnackBar(
                                   context,
