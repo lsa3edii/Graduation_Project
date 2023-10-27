@@ -204,11 +204,11 @@ class _LoginPageState extends State<LoginPage> {
                         userCredential = await AuthServices.signInWithGoogle(
                             userRole: userRole3);
 
-                        bool isEmailMatch =
+                        bool isEmailMatched =
                             await AuthServices.checkFirstRegisteredAdmin(
                                 adminEmail: userCredential!.user!.email!);
 
-                        if (isEmailMatch) {
+                        if (isEmailMatched) {
                           // ignore: use_build_context_synchronously
                           Navigator.push(
                               context,
