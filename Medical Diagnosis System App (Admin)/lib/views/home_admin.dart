@@ -157,22 +157,320 @@ class _AdminHomePageState extends State<AdminHomePage> {
               });
             },
           ),
-          body: LiquidPullToRefresh(
-            color: kPrimaryColor,
-            animSpeedFactor: 10,
-            showChildOpacityTransition: false,
-            onRefresh: () async {
-              clearAdminData();
-              showSnackBar(context, message: 'Refresh..');
-              await Future.delayed(const Duration(seconds: 1));
-            },
-            child: _page == 0
-                ? !AuthServices.isUserAuthenticatedWithGoogle()
-                    ? ModalProgressHUD(
-                        inAsyncCall: isLoading,
-                        child: Form(
-                          key: formKey,
-                          child: InteractiveViewer(
+          body: Stack(
+            children: [
+              LiquidPullToRefresh(
+                color: kPrimaryColor,
+                animSpeedFactor: 10,
+                showChildOpacityTransition: false,
+                onRefresh: () async {
+                  clearAdminData();
+                  showSnackBar(context, message: 'Refresh..');
+                  await Future.delayed(const Duration(seconds: 1));
+                },
+                child: _page == 0
+                    ? !AuthServices.isUserAuthenticatedWithGoogle()
+                        ? ModalProgressHUD(
+                            inAsyncCall: isLoading,
+                            child: Form(
+                              key: formKey,
+                              child: InteractiveViewer(
+                                maxScale: 2,
+                                child: Column(
+                                  children: [
+                                    Stack(
+                                      clipBehavior: Clip.none,
+                                      children: [
+                                        const CustomContainer(),
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              top: 40, bottom: 5),
+                                          child: FutureBuilder<String?>(
+                                              future:
+                                                  AuthServices.retrieveImage(
+                                                      email: user?.email),
+                                              builder: (context, snapshot) {
+                                                int flag = 0;
+                                                String? image;
+
+                                                if (snapshot.hasData) {
+                                                  image = snapshot.data;
+                                                  flag = 1;
+                                                } else {
+                                                  flag = 0;
+                                                }
+                                                return Center(
+                                                  child: CustomButton3(
+                                                    widget: CustomCircleAvatar(
+                                                      borderColor: Colors.white,
+                                                      image: image ??
+                                                          kDefaultImage,
+                                                      img: img,
+                                                      r1: 72,
+                                                      r2: 70,
+                                                      flag: flag,
+                                                      flag3: 1,
+                                                    ),
+                                                    onPressed: () {
+                                                      showSheet(
+                                                        context: context,
+                                                        choices: [
+                                                          'See Profile Picture',
+                                                          'Change Profile Picture',
+                                                        ],
+                                                        onChoiceSelected:
+                                                            (i) async {
+                                                          if (i == 0) {
+                                                            // to pop bottom sheet
+                                                            Navigator.pop(
+                                                                context);
+                                                            Navigator.push(
+                                                              context,
+                                                              MaterialPageRoute(
+                                                                builder: (context) =>
+                                                                    DisplyImage(
+                                                                        image: image ??
+                                                                            kDefaultImage,
+                                                                        img:
+                                                                            img,
+                                                                        flag:
+                                                                            flag),
+                                                              ),
+                                                            );
+                                                          } else {
+                                                            Navigator.pop(
+                                                                context);
+
+                                                            img =
+                                                                await pickImage(
+                                                              imageSource:
+                                                                  ImageSource
+                                                                      .gallery,
+                                                              pickedFile:
+                                                                  pickedFile,
+                                                            );
+
+                                                            AuthServices
+                                                                .uploadImage(
+                                                              email:
+                                                                  user!.email!,
+                                                              img: img,
+                                                            );
+
+                                                            setState(() {});
+                                                          }
+                                                        },
+                                                      );
+                                                    },
+                                                  ),
+                                                );
+                                              }),
+                                        )
+                                      ],
+                                    ),
+                                    Expanded(
+                                      child: Scrollbar(
+                                        child: ListView(
+                                          physics:
+                                              const BouncingScrollPhysics(),
+                                          children: [
+                                            const Center(
+                                              child: Text(
+                                                'Username',
+                                                style: TextStyle(
+                                                    fontSize: 20,
+                                                    fontFamily: 'Pacifico'),
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              height: 65,
+                                              child: CustomTextField(
+                                                icon: Icons.person,
+                                                controller:
+                                                    controllerUsernameAdminHome,
+                                                maxLength: 12,
+                                                hintLabel: 'Username',
+                                                onChanged: (data) {
+                                                  localUsername =
+                                                      username = data.trim();
+                                                },
+                                              ),
+                                            ),
+                                            const Center(
+                                              child: Text(
+                                                'Password',
+                                                style: TextStyle(
+                                                    fontSize: 20,
+                                                    fontFamily: 'Pacifico'),
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              height: 65,
+                                              child: CustomTextField(
+                                                icon: Icons.password,
+                                                hintLabel: 'Password',
+                                                controller:
+                                                    controllerPasswordAdminHome,
+                                                maxLength: 25,
+                                                obscureText: true,
+                                                showVisibilityToggle: true,
+                                                onChanged: (data) {
+                                                  password = data;
+                                                },
+                                              ),
+                                            ),
+                                            const SizedBox(height: 15),
+                                            CustomButton2(
+                                              buttonText: 'Update',
+                                              fontFamily: '',
+                                              fontWeight: FontWeight.bold,
+                                              textColor: Colors.white,
+                                              onPressed: () async {
+                                                if (formKey.currentState!
+                                                    .validate()) {
+                                                  try {
+                                                    setState(() {
+                                                      isLoading = true;
+                                                    });
+
+                                                    AuthServices
+                                                        .createUserCollection(
+                                                      userCredential:
+                                                          userCredential!,
+                                                      email: email!,
+                                                      password: password,
+                                                      userRole: userRole3,
+                                                      username: username,
+                                                    );
+
+                                                    await userCredential!.user!
+                                                        .updatePassword(
+                                                            password!);
+
+                                                    // ignore: use_build_context_synchronously
+                                                    unFocus(context);
+                                                    clearAdminData();
+
+                                                    // ignore: use_build_context_synchronously
+                                                    showSnackBar(context,
+                                                        message:
+                                                            'Successfully updated!');
+                                                  } catch (e) {
+                                                    showSnackBar(context,
+                                                        message: e.toString());
+                                                  }
+                                                  setState(() {
+                                                    isLoading = false;
+                                                  });
+                                                }
+                                              },
+                                            ),
+                                            const SizedBox(height: 10),
+                                            CustomButton2(
+                                              buttonText: 'Delete Account',
+                                              buttonColor: Colors.red[700],
+                                              fontFamily: '',
+                                              fontWeight: FontWeight.bold,
+                                              textColor: Colors.white,
+                                              onPressed: () {
+                                                showDeletionDialog(
+                                                  context: context,
+                                                  onPressed: () async {
+                                                    await AuthServices
+                                                        .deleteAccount();
+                                                    await AuthServices.logout();
+
+                                                    clearAdminData();
+                                                    // ignore: use_build_context_synchronously
+                                                    Navigator.pop(context);
+                                                    // ignore: use_build_context_synchronously
+                                                    Navigator.pop(context);
+                                                    // ignore: use_build_context_synchronously
+                                                    unFocus(context);
+                                                    // ignore: use_build_context_synchronously
+                                                    showSnackBar(context,
+                                                        message:
+                                                            'Account deleted.. logout!');
+                                                  },
+                                                );
+                                              },
+                                            ),
+                                            const SizedBox(height: 35),
+                                            const Divider(
+                                              indent: 25,
+                                              endIndent: 25,
+                                              thickness: 1,
+                                              color: Colors.grey,
+                                            ),
+                                            const SizedBox(height: 5),
+                                            const Center(
+                                              child: Text(
+                                                'Contact The Developer :',
+                                                style: TextStyle(
+                                                    fontSize: 27,
+                                                    color: kPrimaryColor,
+                                                    fontFamily: 'Pacifico'),
+                                              ),
+                                            ),
+                                            Center(
+                                              child: Row(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  IconAuth(
+                                                    image:
+                                                        'assets/icons/facebook.png',
+                                                    onPressed: () async {
+                                                      await launchUrl(
+                                                          Uri.parse(
+                                                              'https://www.facebook.com/MuhammedAbdulrahim0'),
+                                                          mode: LaunchMode
+                                                              .externalApplication);
+                                                    },
+                                                  ),
+                                                  IconAuth(
+                                                    image:
+                                                        'assets/icons/linkedin.png',
+                                                    onPressed: () async {
+                                                      await launchUrl(
+                                                          Uri.parse(
+                                                              'https://www.linkedin.com/in/muhammedabdulrahim'),
+                                                          mode: LaunchMode
+                                                              .externalApplication);
+                                                    },
+                                                  ),
+                                                  IconAuth(
+                                                    image:
+                                                        'assets/icons/whatsapp.png',
+                                                    onPressed: () async {
+                                                      await launchUrl(
+                                                          Uri.parse(
+                                                              'https://wa.me/+2001098867501'),
+                                                          mode: LaunchMode
+                                                              .externalApplication);
+                                                    },
+                                                  ),
+                                                  IconAuth(
+                                                    image:
+                                                        'assets/icons/github.png',
+                                                    onPressed: () async {
+                                                      await launchUrl(Uri.parse(
+                                                          'https://github.com/lsa3edii'));
+                                                    },
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            const SizedBox(height: 50),
+                                          ],
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                          )
+                        : InteractiveViewer(
                             maxScale: 2,
                             child: Column(
                               children: [
@@ -183,79 +481,35 @@ class _AdminHomePageState extends State<AdminHomePage> {
                                     Padding(
                                       padding: const EdgeInsets.only(
                                           top: 40, bottom: 5),
-                                      child: FutureBuilder<String?>(
-                                          future: AuthServices.retrieveImage(
-                                              email: user?.email),
-                                          builder: (context, snapshot) {
-                                            int flag = 0;
-                                            String? image;
-
-                                            if (snapshot.hasData) {
-                                              image = snapshot.data;
-                                              flag = 1;
-                                            } else {
-                                              flag = 0;
-                                            }
-                                            return Center(
-                                              child: CustomButton3(
-                                                widget: CustomCircleAvatar(
-                                                  borderColor: Colors.white,
-                                                  image: image ?? kDefaultImage,
+                                      child: Center(
+                                        child: CustomButton3(
+                                          widget: CustomCircleAvatar(
+                                            borderColor: Colors.white,
+                                            image: user!.photoURL!
+                                                .replaceAll("s96-c", "s400-c"),
+                                            img: img,
+                                            r1: 72,
+                                            r2: 70,
+                                            flag: 1,
+                                          ),
+                                          onPressed: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    DisplyImage(
+                                                  image: user!.photoURL!
+                                                      .replaceAll(
+                                                          "s96-c", "s400-c"),
                                                   img: img,
-                                                  r1: 72,
-                                                  r2: 70,
-                                                  flag: flag,
-                                                  flag3: 1,
+                                                  flag: 1,
                                                 ),
-                                                onPressed: () {
-                                                  showSheet(
-                                                    context: context,
-                                                    choices: [
-                                                      'See Profile Picture',
-                                                      'Change Profile Picture',
-                                                    ],
-                                                    onChoiceSelected:
-                                                        (i) async {
-                                                      if (i == 0) {
-                                                        // to pop bottom sheet
-                                                        Navigator.pop(context);
-                                                        Navigator.push(
-                                                          context,
-                                                          MaterialPageRoute(
-                                                            builder: (context) =>
-                                                                DisplyImage(
-                                                                    image: image ??
-                                                                        kDefaultImage,
-                                                                    img: img,
-                                                                    flag: flag),
-                                                          ),
-                                                        );
-                                                      } else {
-                                                        Navigator.pop(context);
-
-                                                        img = await pickImage(
-                                                          imageSource:
-                                                              ImageSource
-                                                                  .gallery,
-                                                          pickedFile:
-                                                              pickedFile,
-                                                        );
-
-                                                        AuthServices
-                                                            .uploadImage(
-                                                          email: user!.email!,
-                                                          img: img,
-                                                        );
-
-                                                        setState(() {});
-                                                      }
-                                                    },
-                                                  );
-                                                },
                                               ),
                                             );
-                                          }),
-                                    )
+                                          },
+                                        ),
+                                      ),
+                                    ),
                                   ],
                                 ),
                                 Expanded(
@@ -277,6 +531,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
                                             icon: Icons.person,
                                             controller:
                                                 controllerUsernameAdminHome,
+                                            isEnabled: false,
                                             maxLength: 12,
                                             hintLabel: 'Username',
                                             onChanged: (data) {
@@ -300,6 +555,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
                                             hintLabel: 'Password',
                                             controller:
                                                 controllerPasswordAdminHome,
+                                            isEnabled: false,
                                             maxLength: 25,
                                             obscureText: true,
                                             showVisibilityToggle: true,
@@ -309,49 +565,13 @@ class _AdminHomePageState extends State<AdminHomePage> {
                                           ),
                                         ),
                                         const SizedBox(height: 15),
-                                        CustomButton2(
+                                        const CustomButton2(
                                           buttonText: 'Update',
+                                          isEnabled: false,
                                           fontFamily: '',
                                           fontWeight: FontWeight.bold,
                                           textColor: Colors.white,
-                                          onPressed: () async {
-                                            if (formKey.currentState!
-                                                .validate()) {
-                                              try {
-                                                setState(() {
-                                                  isLoading = true;
-                                                });
-
-                                                AuthServices
-                                                    .createUserCollection(
-                                                  userCredential:
-                                                      userCredential!,
-                                                  email: email!,
-                                                  password: password,
-                                                  userRole: userRole3,
-                                                  username: username,
-                                                );
-
-                                                await userCredential!.user!
-                                                    .updatePassword(password!);
-
-                                                // ignore: use_build_context_synchronously
-                                                unFocus(context);
-                                                clearAdminData();
-
-                                                // ignore: use_build_context_synchronously
-                                                showSnackBar(context,
-                                                    message:
-                                                        'Successfully updated!');
-                                              } catch (e) {
-                                                showSnackBar(context,
-                                                    message: e.toString());
-                                              }
-                                              setState(() {
-                                                isLoading = false;
-                                              });
-                                            }
-                                          },
+                                          onPressed: null,
                                         ),
                                         const SizedBox(height: 10),
                                         CustomButton2(
@@ -365,7 +585,9 @@ class _AdminHomePageState extends State<AdminHomePage> {
                                               context: context,
                                               onPressed: () async {
                                                 await AuthServices
-                                                    .deleteAccount();
+                                                    .deleteAccount(
+                                                  flag: 1,
+                                                );
                                                 await AuthServices.logout();
 
                                                 clearAdminData();
@@ -455,305 +677,126 @@ class _AdminHomePageState extends State<AdminHomePage> {
                                 )
                               ],
                             ),
-                          ),
-                        ),
-                      )
-                    : InteractiveViewer(
-                        maxScale: 2,
-                        child: Column(
-                          children: [
-                            Stack(
-                              clipBehavior: Clip.none,
-                              children: [
-                                const CustomContainer(),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.only(top: 40, bottom: 5),
-                                  child: Center(
-                                    child: CustomButton3(
-                                      widget: CustomCircleAvatar(
-                                        borderColor: Colors.white,
-                                        image: user!.photoURL!
-                                            .replaceAll("s96-c", "s400-c"),
-                                        img: img,
-                                        r1: 72,
-                                        r2: 70,
-                                        flag: 1,
-                                      ),
-                                      onPressed: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => DisplyImage(
-                                              image: user!.photoURL!.replaceAll(
-                                                  "s96-c", "s400-c"),
-                                              img: img,
-                                              flag: 1,
-                                            ),
-                                          ),
-                                        );
-                                      },
+                          )
+                    : _page == 1
+                        ? FutureBuilder<String?>(
+                            future: AuthServices.retrieveUserData(
+                              uid: user?.uid,
+                              userCredential: userCredential,
+                              userField: UserFields.username,
+                            ),
+                            builder: (context, snapshot) {
+                              if (AuthServices
+                                  .isUserAuthenticatedWithGoogle()) {
+                                AuthServices.uploadImage2(
+                                  email: user!.email!,
+                                  photoURL: user!.photoURL!,
+                                );
+                              }
+                              if (snapshot.hasData) {
+                                // localUsername to load username faster in UI
+                                localUsername = username = snapshot.data;
+                              } else {
+                                username = null;
+                              }
+                              return Column(
+                                children: [
+                                  CustomContainer(
+                                      username: localUsername, flag: 1),
+                                  const SizedBox(height: 5),
+                                  Expanded(
+                                    child: ListView(
+                                      physics: const BouncingScrollPhysics(),
+                                      children: [
+                                        const SizedBox(height: 150),
+                                        CustomButton2(
+                                          buttonText: 'Add User',
+                                          textColor: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          fontFamily: '',
+                                          onPressed: () {
+                                            Navigator.push(context,
+                                                MaterialPageRoute(
+                                              builder: (context) {
+                                                return SignupPage(
+                                                  userType: 'Add User',
+                                                  buttonText: 'Add User',
+                                                  controllerUsernameSignUP:
+                                                      controllerUsernameUserSignUP,
+                                                  controllerEmailSignUP:
+                                                      controllerEmailUserSignUP,
+                                                  controllerPasswordSignUP:
+                                                      controllerPasswordUserSignUP,
+                                                  controllerConfirmPasswordSignUP:
+                                                      controllerConfirmPasswordUserSignUP,
+                                                );
+                                              },
+                                            ));
+                                          },
+                                        ),
+                                        const SizedBox(height: 15),
+                                        CustomButton2(
+                                          buttonText: 'Add Doctor',
+                                          textColor: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          fontFamily: '',
+                                          onPressed: () {
+                                            Navigator.push(context,
+                                                MaterialPageRoute(
+                                              builder: (context) {
+                                                return SignupPage(
+                                                  userType: 'Add Doctor',
+                                                  buttonText: 'Add Doctor',
+                                                  controllerUsernameSignUP:
+                                                      controllerUsernameDoctorSignUP,
+                                                  controllerEmailSignUP:
+                                                      controllerEmailDoctorSignUP,
+                                                  controllerPasswordSignUP:
+                                                      controllerPasswordDoctorSignUP,
+                                                  controllerConfirmPasswordSignUP:
+                                                      controllerConfirmPasswordDoctorSignUP,
+                                                );
+                                              },
+                                            ));
+                                          },
+                                        ),
+                                      ],
                                     ),
                                   ),
-                                ),
-                              ],
-                            ),
-                            Expanded(
-                              child: Scrollbar(
-                                child: ListView(
-                                  physics: const BouncingScrollPhysics(),
-                                  children: [
-                                    const Center(
-                                      child: Text(
-                                        'Username',
-                                        style: TextStyle(
-                                            fontSize: 20,
-                                            fontFamily: 'Pacifico'),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 65,
-                                      child: CustomTextField(
-                                        icon: Icons.person,
-                                        controller: controllerUsernameAdminHome,
-                                        isEnabled: false,
-                                        maxLength: 12,
-                                        hintLabel: 'Username',
-                                        onChanged: (data) {
-                                          localUsername =
-                                              username = data.trim();
-                                        },
-                                      ),
-                                    ),
-                                    const Center(
-                                      child: Text(
-                                        'Password',
-                                        style: TextStyle(
-                                            fontSize: 20,
-                                            fontFamily: 'Pacifico'),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 65,
-                                      child: CustomTextField(
-                                        icon: Icons.password,
-                                        hintLabel: 'Password',
-                                        controller: controllerPasswordAdminHome,
-                                        isEnabled: false,
-                                        maxLength: 25,
-                                        obscureText: true,
-                                        showVisibilityToggle: true,
-                                        onChanged: (data) {
-                                          password = data;
-                                        },
-                                      ),
-                                    ),
-                                    const SizedBox(height: 15),
-                                    const CustomButton2(
-                                      buttonText: 'Update',
-                                      isEnabled: false,
-                                      fontFamily: '',
-                                      fontWeight: FontWeight.bold,
-                                      textColor: Colors.white,
-                                      onPressed: null,
-                                    ),
-                                    const SizedBox(height: 10),
-                                    CustomButton2(
-                                      buttonText: 'Delete Account',
-                                      buttonColor: Colors.red[700],
-                                      fontFamily: '',
-                                      fontWeight: FontWeight.bold,
-                                      textColor: Colors.white,
-                                      onPressed: () {
-                                        showDeletionDialog(
-                                          context: context,
-                                          onPressed: () async {
-                                            await AuthServices.deleteAccount(
-                                              flag: 1,
-                                            );
-                                            await AuthServices.logout();
-
-                                            clearAdminData();
-                                            // ignore: use_build_context_synchronously
-                                            Navigator.pop(context);
-                                            // ignore: use_build_context_synchronously
-                                            Navigator.pop(context);
-                                            // ignore: use_build_context_synchronously
-                                            unFocus(context);
-                                            // ignore: use_build_context_synchronously
-                                            showSnackBar(context,
-                                                message:
-                                                    'Account deleted.. logout!');
-                                          },
-                                        );
-                                      },
-                                    ),
-                                    const SizedBox(height: 35),
-                                    const Divider(
-                                      indent: 25,
-                                      endIndent: 25,
-                                      thickness: 1,
-                                      color: Colors.grey,
-                                    ),
-                                    const SizedBox(height: 5),
-                                    const Center(
-                                      child: Text(
-                                        'Contact The Developer :',
-                                        style: TextStyle(
-                                            fontSize: 27,
-                                            color: kPrimaryColor,
-                                            fontFamily: 'Pacifico'),
-                                      ),
-                                    ),
-                                    Center(
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          IconAuth(
-                                            image: 'assets/icons/facebook.png',
-                                            onPressed: () async {
-                                              await launchUrl(
-                                                  Uri.parse(
-                                                      'https://www.facebook.com/MuhammedAbdulrahim0'),
-                                                  mode: LaunchMode
-                                                      .externalApplication);
-                                            },
-                                          ),
-                                          IconAuth(
-                                            image: 'assets/icons/linkedin.png',
-                                            onPressed: () async {
-                                              await launchUrl(
-                                                  Uri.parse(
-                                                      'https://www.linkedin.com/in/muhammedabdulrahim'),
-                                                  mode: LaunchMode
-                                                      .externalApplication);
-                                            },
-                                          ),
-                                          IconAuth(
-                                            image: 'assets/icons/whatsapp.png',
-                                            onPressed: () async {
-                                              await launchUrl(
-                                                  Uri.parse(
-                                                      'https://wa.me/+2001098867501'),
-                                                  mode: LaunchMode
-                                                      .externalApplication);
-                                            },
-                                          ),
-                                          IconAuth(
-                                            image: 'assets/icons/github.png',
-                                            onPressed: () async {
-                                              await launchUrl(Uri.parse(
-                                                  'https://github.com/lsa3edii'));
-                                            },
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    const SizedBox(height: 50),
-                                  ],
-                                ),
+                                ],
+                              );
+                            })
+                        : _page == 2
+                            ? const Center(
+                                child: Text('Manage Users',
+                                    style: TextStyle(
+                                        fontSize: 25, fontFamily: 'Pacifico')),
+                              )
+                            : const Center(
+                                child: Text('Chat',
+                                    style: TextStyle(
+                                        fontSize: 25, fontFamily: 'Pacifico')),
                               ),
-                            )
-                          ],
-                        ),
-                      )
-                : _page == 1
-                    ? FutureBuilder<String?>(
-                        future: AuthServices.retrieveUserData(
-                          uid: user?.uid,
-                          userCredential: userCredential,
-                          userField: UserFields.username,
-                        ),
-                        builder: (context, snapshot) {
-                          if (AuthServices.isUserAuthenticatedWithGoogle()) {
-                            AuthServices.uploadImage2(
-                              email: user!.email!,
-                              photoURL: user!.photoURL!,
-                            );
-                          }
-                          if (snapshot.hasData) {
-                            // localUsername to load username faster in UI
-                            localUsername = username = snapshot.data;
-                          } else {
-                            username = null;
-                          }
-                          return Column(
-                            children: [
-                              CustomContainer(username: localUsername, flag: 1),
-                              const SizedBox(height: 5),
-                              Expanded(
-                                child: ListView(
-                                  physics: const BouncingScrollPhysics(),
-                                  children: [
-                                    const SizedBox(height: 150),
-                                    CustomButton2(
-                                      buttonText: 'Add User',
-                                      textColor: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: '',
-                                      onPressed: () {
-                                        Navigator.push(context,
-                                            MaterialPageRoute(
-                                          builder: (context) {
-                                            return SignupPage(
-                                              userType: 'Add User',
-                                              buttonText: 'Add User',
-                                              controllerUsernameSignUP:
-                                                  controllerUsernameUserSignUP,
-                                              controllerEmailSignUP:
-                                                  controllerEmailUserSignUP,
-                                              controllerPasswordSignUP:
-                                                  controllerPasswordUserSignUP,
-                                              controllerConfirmPasswordSignUP:
-                                                  controllerConfirmPasswordUserSignUP,
-                                            );
-                                          },
-                                        ));
-                                      },
-                                    ),
-                                    const SizedBox(height: 15),
-                                    CustomButton2(
-                                      buttonText: 'Add Doctor',
-                                      textColor: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: '',
-                                      onPressed: () {
-                                        Navigator.push(context,
-                                            MaterialPageRoute(
-                                          builder: (context) {
-                                            return SignupPage(
-                                              userType: 'Add Doctor',
-                                              buttonText: 'Add Doctor',
-                                              controllerUsernameSignUP:
-                                                  controllerUsernameDoctorSignUP,
-                                              controllerEmailSignUP:
-                                                  controllerEmailDoctorSignUP,
-                                              controllerPasswordSignUP:
-                                                  controllerPasswordDoctorSignUP,
-                                              controllerConfirmPasswordSignUP:
-                                                  controllerConfirmPasswordDoctorSignUP,
-                                            );
-                                          },
-                                        ));
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          );
-                        })
-                    : _page == 2
-                        ? const Center(
-                            child: Text('Manage Users',
-                                style: TextStyle(
-                                    fontSize: 25, fontFamily: 'Pacifico')),
-                          )
-                        : const Center(
-                            child: Text('Chat',
-                                style: TextStyle(
-                                    fontSize: 25, fontFamily: 'Pacifico')),
-                          ),
+              ),
+              _page == 0 || _page == 1
+                  ? Positioned(
+                      top: 3,
+                      right: 3,
+                      child: IconButton(
+                        onPressed: () {
+                          setState(() {
+                            isDarkMode = !isDarkMode;
+                          });
+                        },
+                        icon: isDarkMode
+                            ? const Icon(Icons.light_mode,
+                                size: 30, color: Colors.white)
+                            : const Icon(Icons.dark_mode,
+                                size: 30, color: Colors.white),
+                      ),
+                    )
+                  : const SizedBox()
+            ],
           ),
         ),
       ),

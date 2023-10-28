@@ -23,6 +23,8 @@ CollectionReference chats =
     FirebaseFirestore.instance.collection(kChatCollection);
 
 String? userRole;
+
+bool isDarkMode = false;
 // int? page;
 
 class SignupUserPage extends StatefulWidget {

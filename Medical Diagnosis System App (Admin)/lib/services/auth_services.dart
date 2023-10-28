@@ -6,7 +6,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:http/http.dart' as http;
-
 import '../constants.dart';
 import '../views/signup_page.dart';
 // import 'package:medical_diagnosis_system/models/users.dart';
@@ -211,7 +210,10 @@ class AuthServices {
         .doc(uid ?? userCredential!.user!.uid)
         .get();
 
-    return userSnapshot[userField];
+    if (userSnapshot.exists) {
+      return userSnapshot[userField];
+    }
+    return null;
   }
 
   static bool isUserAuthenticatedWithGoogle() {

@@ -199,8 +199,9 @@ class _LoginPageState extends State<LoginPage> {
                   IconAuth(
                     image: 'assets/icons/google.png',
                     onPressed: () async {
-                      // AuthServices.logout();
                       try {
+                        await AuthServices.logout();
+
                         userCredential = await AuthServices.signInWithGoogle(
                             userRole: userRole3);
 
@@ -227,10 +228,13 @@ class _LoginPageState extends State<LoginPage> {
                             message:
                                 'Google login is not available for this account.',
                           );
-                          await AuthServices.deleteAccount();
+                          // await AuthServices.deleteAccount();
+                          await AuthServices.signInWithGoogle(
+                              userRole: userRole1);
                           await AuthServices.logout();
                         }
                       } on Exception {
+                        // ignore: use_build_context_synchronously
                         showSnackBar(
                           context,
                           message: 'Google Login Failed!',

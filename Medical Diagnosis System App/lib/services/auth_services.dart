@@ -203,7 +203,10 @@ class AuthServices {
         .doc(uid ?? userCredential!.user!.uid)
         .get();
 
-    return userSnapshot[userField];
+    if (userSnapshot.exists) {
+      return userSnapshot[userField];
+    }
+    return null;
   }
 
   static bool isUserAuthenticatedWithGoogle() {
