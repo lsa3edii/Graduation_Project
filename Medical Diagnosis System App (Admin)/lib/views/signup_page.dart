@@ -31,8 +31,7 @@ bool isDarkMode = false;
 // int? page;
 
 class SignupPage extends StatefulWidget {
-  final String? userType;
-  final String? buttonText;
+  final String? operationType;
 
   final TextEditingController? controllerUsernameSignUP;
   final TextEditingController? controllerEmailSignUP;
@@ -41,8 +40,7 @@ class SignupPage extends StatefulWidget {
 
   const SignupPage({
     super.key,
-    this.userType,
-    this.buttonText,
+    this.operationType,
     this.controllerUsernameSignUP,
     this.controllerEmailSignUP,
     this.controllerPasswordSignUP,
@@ -75,7 +73,7 @@ class _SignupPageState extends State<SignupPage> {
           child: ListView(
             physics: const BouncingScrollPhysics(),
             children: [
-              widget.buttonText != null
+              widget.operationType != null
                   ? const Padding(padding: EdgeInsets.only(top: 75))
                   : Padding(
                       padding: const EdgeInsets.only(top: 20),
@@ -87,7 +85,10 @@ class _SignupPageState extends State<SignupPage> {
                     ),
               Padding(
                 padding: const EdgeInsets.only(top: 10, left: 10),
-                child: Text(widget.userType ?? 'Admin Register :',
+                child: Text(
+                    widget.operationType?.replaceAll(widget.operationType ?? '',
+                            '${widget.operationType} :') ??
+                        'Admin Registration :',
                     style: const TextStyle(
                       fontSize: 25,
                       fontFamily: 'Pacifico',
@@ -148,7 +149,7 @@ class _SignupPageState extends State<SignupPage> {
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 10, bottom: 25),
-                child: widget.buttonText != null
+                child: widget.operationType != null
                     ? null
                     : Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -170,7 +171,7 @@ class _SignupPageState extends State<SignupPage> {
                       ),
               ),
               CustomButton(
-                buttonText: widget.buttonText ?? 'Sign Up',
+                buttonText: widget.operationType ?? 'Sign Up',
                 onPressed: () async {
                   if (formKey.currentState!.validate()) {
                     try {
@@ -178,7 +179,7 @@ class _SignupPageState extends State<SignupPage> {
                         isLoading = true;
                       });
 
-                      if (widget.buttonText == null) {
+                      if (widget.operationType == null) {
                         if (!await AuthServices.isAdminOrDoctorExists(
                             users: users, userRole: userRole3)) {
                           await AuthServices.registerWithEmailAndPassword(
@@ -197,7 +198,7 @@ class _SignupPageState extends State<SignupPage> {
                                   'There is already an admin in the system, and only one admin is allowed.');
                           return;
                         }
-                      } else if (widget.buttonText == 'Add User') {
+                      } else if (widget.operationType == 'Add User') {
                         if (AuthServices.isUserAuthenticatedWithGoogle()) {
                           await AuthServices.registerWithEmailAndPassword(
                             email: email!,
@@ -217,7 +218,7 @@ class _SignupPageState extends State<SignupPage> {
                           await AuthServices.signInWithEmailAndPassword(
                               email: mainEmail!, password: mainPassword!);
                         }
-                      } else if (widget.buttonText == 'Add Doctor') {
+                      } else if (widget.operationType == 'Add Doctor') {
                         if (!await AuthServices.isAdminOrDoctorExists(
                             users: users, userRole: userRole2)) {
                           if (AuthServices.isUserAuthenticatedWithGoogle()) {
@@ -256,7 +257,7 @@ class _SignupPageState extends State<SignupPage> {
                       // ignore: use_build_context_synchronously
                       unFocus(context);
 
-                      if (widget.buttonText == null) {
+                      if (widget.operationType == null) {
                         // ignore: use_build_context_synchronously
                         showSnackBar(context,
                             message:
@@ -268,7 +269,7 @@ class _SignupPageState extends State<SignupPage> {
                                 'We will send an email to this account to verify it.');
                       }
 
-                      if (widget.buttonText == null) {
+                      if (widget.operationType == null) {
                         await Future.delayed(const Duration(seconds: 2));
                         // ignore: use_build_context_synchronously
                         Navigator.pop(context);

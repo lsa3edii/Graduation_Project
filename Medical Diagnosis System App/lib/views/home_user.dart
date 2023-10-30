@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
+import 'package:lottie/lottie.dart';
 import 'package:medical_diagnosis_system/Chat/widgets/chat_items.dart';
 import 'package:medical_diagnosis_system/services/auth_services.dart';
 import 'package:medical_diagnosis_system/views/ai_page.dart';
@@ -38,15 +39,13 @@ class _UserHomePageState extends State<UserHomePage> {
   bool isLoading = false;
   String? localUsername;
   GlobalKey<FormState> formKey = GlobalKey();
+  // GlobalKey<CurvedNavigationBarState> _bottomNavigationKey = GlobalKey();
 
-  List<Widget> images = [
-    Row(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  List<Widget> slides = [
+    Column(
       children: [
-        const SizedBox(width: 3),
-        const SizedBox(
-          width: 155,
+        const Padding(
+          padding: EdgeInsets.only(top: 10, right: 15, left: 15),
           child: Text(
             'Enter your brain MRI (magnetic resonance imaging) image and our AI system will help you to detect if you have disease or are healthy. Click on Get Started now !',
             style: TextStyle(
@@ -55,14 +54,17 @@ class _UserHomePageState extends State<UserHomePage> {
                 fontWeight: FontWeight.bold),
           ),
         ),
-        Image.asset('assets/images/neurology2.jpg', cacheHeight: 300),
+        Lottie.asset('assets/animations/Animation - brain0.json'),
       ],
     ),
+    Lottie.asset('assets/animations/Animation - brain1.json'),
+    Padding(
+      padding: const EdgeInsets.only(left: 20),
+      child: Lottie.asset('assets/animations/Animation - brain2.json'),
+    ),
+    Lottie.asset('assets/animations/Animation - brain3.json'),
     Image.asset('assets/images/neurology.jpg', cacheHeight: 300),
-    Image.asset('assets/images/neurology1.jpg', cacheHeight: 300),
   ];
-
-  // GlobalKey<CurvedNavigationBarState> _bottomNavigationKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
@@ -718,16 +720,16 @@ class _UserHomePageState extends State<UserHomePage> {
                                       physics: const BouncingScrollPhysics(),
                                       children: [
                                         ImageSlideshow(
-                                          height: 315,
+                                          height: 325,
                                           indicatorRadius: 5,
                                           indicatorColor: kPrimaryColor,
                                           isLoop: true,
-                                          children: images,
+                                          children: slides,
                                           onPageChanged: (value) {
                                             Feedback.forTap(context);
                                           },
                                         ),
-                                        const SizedBox(height: 57),
+                                        const SizedBox(height: 43),
                                         CustomButton2(
                                             buttonText: 'Get Started',
                                             onPressed: () {

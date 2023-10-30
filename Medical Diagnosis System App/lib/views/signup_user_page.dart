@@ -66,7 +66,7 @@ class _SignupUserPageState extends State<SignupUserPage> {
               ),
               const Padding(
                 padding: EdgeInsets.only(top: 10, left: 10),
-                child: Text('User Register :',
+                child: Text('User Registration :',
                     style: TextStyle(
                       fontSize: 25,
                       fontFamily: 'Pacifico',

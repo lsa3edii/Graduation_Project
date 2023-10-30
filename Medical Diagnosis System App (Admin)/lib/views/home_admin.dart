@@ -2,8 +2,10 @@ import 'dart:io';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
+import 'package:lottie/lottie.dart';
 import 'package:medical_diagnosis_system_admin/views/signup_page.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -33,8 +35,13 @@ class _AdminHomePageState extends State<AdminHomePage> {
   bool isLoading = false;
   String? localUsername;
   GlobalKey<FormState> formKey = GlobalKey();
-
   // GlobalKey<CurvedNavigationBarState> _bottomNavigationKey = GlobalKey();
+
+  List<Widget> slides = [
+    Lottie.asset('assets/animations/Animation - signup0.json'),
+    Lottie.asset('assets/animations/Animation - signup1.json'),
+    Image.asset('assets/images/addUser.jpg', cacheHeight: 300),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -708,7 +715,17 @@ class _AdminHomePageState extends State<AdminHomePage> {
                                     child: ListView(
                                       physics: const BouncingScrollPhysics(),
                                       children: [
-                                        const SizedBox(height: 150),
+                                        ImageSlideshow(
+                                          height: 315,
+                                          indicatorRadius: 5,
+                                          indicatorColor: kPrimaryColor,
+                                          isLoop: true,
+                                          children: slides,
+                                          onPageChanged: (value) {
+                                            Feedback.forTap(context);
+                                          },
+                                        ),
+                                        const SizedBox(height: 10),
                                         CustomButton2(
                                           buttonText: 'Add User',
                                           textColor: Colors.white,
@@ -719,8 +736,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
                                                 MaterialPageRoute(
                                               builder: (context) {
                                                 return SignupPage(
-                                                  userType: 'Add User',
-                                                  buttonText: 'Add User',
+                                                  operationType: 'Add User',
                                                   controllerUsernameSignUP:
                                                       controllerUsernameUserSignUP,
                                                   controllerEmailSignUP:
@@ -745,8 +761,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
                                                 MaterialPageRoute(
                                               builder: (context) {
                                                 return SignupPage(
-                                                  userType: 'Add Doctor',
-                                                  buttonText: 'Add Doctor',
+                                                  operationType: 'Add Doctor',
                                                   controllerUsernameSignUP:
                                                       controllerUsernameDoctorSignUP,
                                                   controllerEmailSignUP:
@@ -760,6 +775,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
                                             ));
                                           },
                                         ),
+                                        const SizedBox(height: 50),
                                       ],
                                     ),
                                   ),
