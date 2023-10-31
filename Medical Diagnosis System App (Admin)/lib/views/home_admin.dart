@@ -6,6 +6,7 @@ import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:lottie/lottie.dart';
+import 'package:medical_diagnosis_system_admin/Chat/views/chat_page.dart';
 import 'package:medical_diagnosis_system_admin/views/signup_page.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -33,6 +34,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
   dynamic pickedFile;
   int _page = 1;
   bool isLoading = false;
+  String? appBarText;
   String? localUsername;
   GlobalKey<FormState> formKey = GlobalKey();
   // GlobalKey<CurvedNavigationBarState> _bottomNavigationKey = GlobalKey();
@@ -46,6 +48,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
   @override
   Widget build(BuildContext context) {
     user = FirebaseAuth.instance.currentUser;
+    chatId = user?.email;
 
     return WillPopScope(
       onWillPop: () async {
@@ -57,31 +60,37 @@ class _AdminHomePageState extends State<AdminHomePage> {
             Feedback.forTap(context);
             setState(() {
               _page = 0;
+              appBarText = null;
             });
           } else if (details.primaryVelocity! < 0 && _page == 0) {
             Feedback.forTap(context);
             setState(() {
               _page = 1;
+              appBarText = null;
             });
           } else if (details.primaryVelocity! < 0 && _page == 1) {
             Feedback.forTap(context);
             setState(() {
               _page = 2;
+              appBarText = null;
             });
           } else if (details.primaryVelocity! > 0 && _page == 2) {
             Feedback.forTap(context);
             setState(() {
               _page = 1;
+              appBarText = null;
             });
           } else if (details.primaryVelocity! > 0 && _page == 3) {
             Feedback.forTap(context);
             setState(() {
               _page = 2;
+              appBarText = null;
             });
           } else if (details.primaryVelocity! < 0 && _page == 2) {
             Feedback.forTap(context);
             setState(() {
               _page = 3;
+              appBarText = 'DOCTOR';
             });
           }
         },
@@ -138,10 +147,30 @@ class _AdminHomePageState extends State<AdminHomePage> {
             automaticallyImplyLeading: false,
             backgroundColor: kPrimaryColor,
             centerTitle: true,
-            title: const Text(
-              'Medical Diagnosis System',
-              style: TextStyle(fontSize: 27, fontFamily: 'Pacifico'),
-            ),
+            title: appBarText == null
+                ? const Text(
+                    'Medical Diagnosis System',
+                    style: TextStyle(fontSize: 27, fontFamily: 'Pacifico'),
+                  )
+                : Row(
+                    children: [
+                      const CustomCircleAvatar(
+                        image: kDoctorImage,
+                        r1: 25,
+                        r2: 23,
+                        borderColor: kSecondaryColor,
+                      ),
+                      const SizedBox(width: 15),
+                      Text(
+                        appBarText!,
+                        style: const TextStyle(
+                          fontSize: 27,
+                          fontFamily: 'Pacifico',
+                          color: kSecondaryColor,
+                        ),
+                      ),
+                    ],
+                  ),
           ),
           bottomNavigationBar: CurvedNavigationBar(
             index: _page,
@@ -159,6 +188,13 @@ class _AdminHomePageState extends State<AdminHomePage> {
             onTap: (value) {
               Feedback.forTap(context);
               clearAdminData();
+
+              if (value == 3) {
+                appBarText = 'DOCTOR';
+              } else {
+                appBarText = null;
+              }
+
               setState(() {
                 _page = value;
               });
@@ -788,11 +824,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
                                     style: TextStyle(
                                         fontSize: 25, fontFamily: 'Pacifico')),
                               )
-                            : const Center(
-                                child: Text('Chat',
-                                    style: TextStyle(
-                                        fontSize: 25, fontFamily: 'Pacifico')),
-                              ),
+                            : ChatPage(chatId: chatId!),
               ),
               _page == 0 || _page == 1
                   ? Positioned(
