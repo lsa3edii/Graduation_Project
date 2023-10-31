@@ -95,8 +95,11 @@ dynamic showSheet({
   );
 }
 
-dynamic showDeletionDialog(
-    {required BuildContext context, required VoidCallback onPressed}) {
+dynamic showDeletionDialog({
+  required BuildContext context,
+  required VoidCallback onPressed,
+  int flag = 0,
+}) {
   return showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -110,7 +113,11 @@ dynamic showDeletionDialog(
             ),
           ],
         ),
-        content: const Text('Are you sure you want to delete your account?'),
+        content: Text(
+          flag == 0
+              ? 'Are you sure you want to delete your account?'
+              : 'Are you sure you want to delete this account',
+        ),
         actions: <Widget>[
           TextButton(
             onPressed: onPressed,

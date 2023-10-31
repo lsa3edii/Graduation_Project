@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../../constants.dart';
 import '../../widgets/custom_circle_avatar.dart';
 
@@ -42,53 +41,6 @@ class ChatItem1 extends StatelessWidget {
               buttonText,
               style: const TextStyle(
                   fontSize: 20, fontFamily: 'Pacifico', color: kSecondaryColor),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class ChatItem2 extends StatelessWidget {
-  final String buttonText;
-  final String? image;
-  final VoidCallback? onPressed;
-  final int flag;
-
-  const ChatItem2({
-    super.key,
-    required this.buttonText,
-    required this.onPressed,
-    this.image,
-    this.flag = 0,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 5),
-      height: 85,
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.blueGrey[100],
-        ),
-        onPressed: onPressed,
-        child: Row(
-          children: [
-            CustomCircleAvatar(
-              image: image ?? kDefaultImage,
-              r1: 35,
-              r2: 33,
-              borderColor: kPrimaryColor,
-              flag: flag,
-              flag2: 1,
-            ),
-            const SizedBox(width: 15),
-            Text(
-              buttonText,
-              style: const TextStyle(
-                  fontSize: 25, fontFamily: 'Pacifico', color: kPrimaryColor),
             ),
           ],
         ),

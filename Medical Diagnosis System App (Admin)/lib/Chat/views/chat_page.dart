@@ -62,6 +62,7 @@ class _ChatPageState extends State<ChatPage> {
           }
           // print(texts[0].text);
           return Scaffold(
+            backgroundColor: Colors.white,
             floatingActionButton: Padding(
               padding: const EdgeInsets.only(bottom: 70),
               child: SizedBox(
@@ -145,22 +146,20 @@ class _ChatPageState extends State<ChatPage> {
             ),
           );
         } else {
-          return const Scaffold(
-            body: Center(
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    'Loading... ',
-                    style: TextStyle(
-                        color: kPrimaryColor,
-                        fontSize: 25,
-                        fontFamily: 'Pacifico'),
-                  ),
-                  CircularProgressIndicator(
-                      color: kPrimaryColor, backgroundColor: Colors.grey)
-                ],
-              ),
+          return const Center(
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'Loading... ',
+                  style: TextStyle(
+                      color: kPrimaryColor,
+                      fontSize: 25,
+                      fontFamily: 'Pacifico'),
+                ),
+                CircularProgressIndicator(
+                    color: kPrimaryColor, backgroundColor: Colors.grey)
+              ],
             ),
           );
         }

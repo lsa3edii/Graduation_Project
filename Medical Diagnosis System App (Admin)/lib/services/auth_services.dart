@@ -6,8 +6,9 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:http/http.dart' as http;
-import '../constants.dart';
+import 'package:medical_diagnosis_system_admin/models/users.dart';
 import '../views/signup_page.dart';
+import '../constants.dart';
 // import 'package:medical_diagnosis_system/models/users.dart';
 
 class AuthServices {
@@ -185,13 +186,20 @@ class AuthServices {
     await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
   }
 
-  static Future<void> deleteAccount({int? flag}) async {
+  static Future<void> deleteAccount({int? flag, String? email}) async {
     User? user = FirebaseAuth.instance.currentUser;
+    String? userid;
     DocumentReference? firstAdmin = FirebaseFirestore.instance
         .collection('first_registered_admin')
         .doc('first_admin');
 
     if (user != null) {
+      if (flag == 0) {
+        userid = await retrieveUserData2(email: email!, field: UserFields.uid);
+        // await deleteUserAuth(uid: userid!);
+        await users.doc(userid).delete();
+        return;
+      }
       await user.delete();
       await users.doc(user.uid).delete();
       if (flag == 1) {
@@ -214,6 +222,21 @@ class AuthServices {
       return userSnapshot[userField];
     }
     return null;
+  }
+
+  static Future<String?> retrieveUserData2(
+      {required String email, required String field}) async {
+    try {
+      QuerySnapshot querySnapshot =
+          await users.where('email', isEqualTo: email).get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        return querySnapshot.docs[0].get(field);
+      }
+      return null;
+    } on Exception {
+      return null;
+    }
   }
 
   static bool isUserAuthenticatedWithGoogle() {
@@ -304,6 +327,29 @@ class AuthServices {
       return true;
     } catch (ex) {
       throw Exception(ex);
+    }
+  }
+
+  static Future<void> deleteUserAuth({required String uid}) async {
+    const apiKey = 'AIzaSyBbZY3zVLgBsidvGWMBwYa2olyewwC4nr8';
+    const url =
+        'https://identitytoolkit.googleapis.com/v1/accounts:delete?key=$apiKey';
+
+    // const userIdToken = '';
+
+    http.Response response = await http.post(
+      Uri.parse(url),
+      body: '{"localId":"$uid"}',
+      headers: {
+        'Content-Type': 'application/json',
+        // 'Authorization': 'Bearer $userIdToken}',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      // print('Success');
+    } else {
+      // print('Failed to delete user: ${response.body}');
     }
   }
 

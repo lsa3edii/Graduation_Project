@@ -12,6 +12,7 @@ class CustomCircleAvatar extends StatelessWidget {
   final int flag;
   final int flag2;
   final int flag3;
+  final int flag4;
 
   const CustomCircleAvatar({
     super.key,
@@ -23,6 +24,7 @@ class CustomCircleAvatar extends StatelessWidget {
     this.flag = 0,
     this.flag2 = 0,
     this.flag3 = 0,
+    this.flag4 = 0,
   });
 
   Future<bool> _imageLoaded() async {
@@ -72,7 +74,7 @@ class CustomCircleAvatar extends StatelessWidget {
                 backgroundImage: backgroundImage,
               ),
             ),
-            if (flag == 1 && flag2 == 0)
+            if (flag == 1 && flag2 == 0 && flag3 == 0)
               if (snapshot.hasError)
                 const Icon(Icons.error)
               else if (snapshot.connectionState == ConnectionState.waiting)
@@ -100,7 +102,19 @@ class CustomCircleAvatar extends StatelessWidget {
                     ),
                   ),
                 ),
-            if (!AuthServices.isUserAuthenticatedWithGoogle() && flag3 == 1)
+            if (flag3 == 1)
+              if (snapshot.hasError)
+                const Icon(Icons.error)
+              else if (snapshot.connectionState == ConnectionState.waiting)
+                Positioned(
+                  top: 100,
+                  right: 93,
+                  child: CircularProgressIndicator(
+                    color: kPrimaryColor,
+                    backgroundColor: Colors.blueGrey[200],
+                  ),
+                ),
+            if (!AuthServices.isUserAuthenticatedWithGoogle() && flag4 == 1)
               const Positioned(
                 bottom: 0,
                 right: 0,

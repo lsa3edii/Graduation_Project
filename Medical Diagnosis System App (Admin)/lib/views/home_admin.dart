@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +8,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:lottie/lottie.dart';
 import 'package:medical_diagnosis_system_admin/Chat/views/chat_page.dart';
+import 'package:medical_diagnosis_system_admin/views/manage_users.dart';
 import 'package:medical_diagnosis_system_admin/views/signup_page.dart';
+import 'package:medical_diagnosis_system_admin/widgets/user_items.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../helper/helper_functions.dart';
@@ -35,6 +38,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
   int _page = 1;
   bool isLoading = false;
   String? appBarText;
+  String? userId;
   String? localUsername;
   GlobalKey<FormState> formKey = GlobalKey();
   // GlobalKey<CurvedNavigationBarState> _bottomNavigationKey = GlobalKey();
@@ -252,7 +256,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
                                                       r1: 72,
                                                       r2: 70,
                                                       flag: flag,
-                                                      flag3: 1,
+                                                      flag4: 1,
                                                     ),
                                                     onPressed: () {
                                                       showSheet(
@@ -817,12 +821,159 @@ class _AdminHomePageState extends State<AdminHomePage> {
                                   ),
                                 ],
                               );
-                            })
+                            },
+                          )
                         : _page == 2
-                            ? const Center(
-                                child: Text('Manage Users',
-                                    style: TextStyle(
-                                        fontSize: 25, fontFamily: 'Pacifico')),
+                            ? StreamBuilder<QuerySnapshot>(
+                                stream: users.snapshots(),
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    List<UserModel> usersList = [];
+
+                                    for (int i = 0;
+                                        i < snapshot.data!.docs.length;
+                                        i++) {
+                                      usersList.add(
+                                        UserModel.fromJson(
+                                            snapshot.data!.docs[i]),
+                                      );
+                                      // print(usersList[i].email);
+                                    }
+                                    if (usersList.isEmpty) {
+                                      return const Center(
+                                        child: Text(
+                                          'Users List is Empty...',
+                                          style: TextStyle(
+                                            color: kPrimaryColor,
+                                            fontSize: 25,
+                                            fontFamily: 'Pacifico',
+                                          ),
+                                        ),
+                                      );
+                                    } else {
+                                      return Column(
+                                        children: [
+                                          const SizedBox(height: 10),
+                                          const Text(
+                                            'Manage Users',
+                                            style: TextStyle(
+                                              color: kPrimaryColor,
+                                              fontSize: 27,
+                                              fontWeight: FontWeight.bold,
+                                              decoration:
+                                                  TextDecoration.underline,
+                                              decorationThickness: 2,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 10),
+                                          Expanded(
+                                            child: Scrollbar(
+                                              child: ListView.builder(
+                                                physics:
+                                                    const BouncingScrollPhysics(),
+                                                itemCount: usersList.length,
+                                                itemBuilder: (context, i) {
+                                                  userId = usersList[i].email;
+                                                  return userId == ''
+                                                      ? null
+                                                      : FutureBuilder<String?>(
+                                                          future: AuthServices
+                                                              .retrieveImage(
+                                                                  email:
+                                                                      userId),
+                                                          builder: (context,
+                                                              snapshot) {
+                                                            String? image;
+                                                            int flag = 0;
+                                                            if (snapshot
+                                                                .hasData) {
+                                                              image =
+                                                                  snapshot.data;
+                                                              flag = 1;
+                                                            } else {
+                                                              flag = 0;
+                                                            }
+                                                            return UserItem(
+                                                              image: image,
+                                                              flag: flag,
+                                                              buttonText:
+                                                                  usersList[i]
+                                                                      .email
+                                                                      .split(
+                                                                          '@')[0],
+                                                              onPressed:
+                                                                  () async {
+                                                                Navigator.push(
+                                                                  context,
+                                                                  MaterialPageRoute(
+                                                                    builder:
+                                                                        (context) {
+                                                                      userId = usersList[
+                                                                              i]
+                                                                          .email;
+                                                                      return FutureBuilder<
+                                                                          String?>(
+                                                                        future: AuthServices.retrieveUserData2(
+                                                                            email:
+                                                                                userId!,
+                                                                            field:
+                                                                                UserFields.username),
+                                                                        builder:
+                                                                            (context,
+                                                                                snapshot) {
+                                                                          String
+                                                                              username =
+                                                                              'User';
+                                                                          if (snapshot
+                                                                              .hasData) {
+                                                                            username =
+                                                                                snapshot.data!;
+                                                                          }
+                                                                          return ManageUsers(
+                                                                            email:
+                                                                                userId!,
+                                                                            username:
+                                                                                username,
+                                                                            image:
+                                                                                image?.replaceAll("s96-c", "s400-c"),
+                                                                          );
+                                                                        },
+                                                                      );
+                                                                    },
+                                                                  ),
+                                                                );
+                                                              },
+                                                            );
+                                                          },
+                                                        );
+                                                },
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      );
+                                    }
+                                  } else {
+                                    return const Center(
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Text(
+                                            'Please Wait... ',
+                                            style: TextStyle(
+                                              color: kPrimaryColor,
+                                              fontSize: 25,
+                                              fontFamily: 'Pacifico',
+                                            ),
+                                          ),
+                                          CircularProgressIndicator(
+                                              color: kPrimaryColor,
+                                              backgroundColor: Colors.grey)
+                                        ],
+                                      ),
+                                    );
+                                  }
+                                },
                               )
                             : ChatPage(chatId: chatId!),
               ),
