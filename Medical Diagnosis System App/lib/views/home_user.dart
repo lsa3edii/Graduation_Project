@@ -19,11 +19,11 @@ import 'package:medical_diagnosis_system/widgets/custom_text_field.dart';
 import 'package:medical_diagnosis_system/widgets/icon_auth.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'disply_image.dart';
 import '../../constants.dart';
 import '../Chat/views/chat_page.dart';
 import '../helper/helper_functions.dart';
 import '../models/users.dart';
-import 'disply_image.dart';
 
 class UserHomePage extends StatefulWidget {
   const UserHomePage({super.key});
@@ -72,7 +72,7 @@ class _UserHomePageState extends State<UserHomePage> {
 
     return WillPopScope(
       onWillPop: () async {
-        return false;
+        return await handleOnWillPop(context: context);
       },
       child: GestureDetector(
         onHorizontalDragEnd: (details) async {

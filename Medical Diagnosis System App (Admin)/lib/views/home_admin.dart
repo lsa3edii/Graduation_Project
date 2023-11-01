@@ -13,6 +13,8 @@ import 'package:medical_diagnosis_system_admin/views/signup_page.dart';
 import 'package:medical_diagnosis_system_admin/widgets/user_items.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'disply_image.dart';
+import 'login_page.dart';
 import '../helper/helper_functions.dart';
 import '../models/users.dart';
 import '../services/auth_services.dart';
@@ -22,8 +24,6 @@ import '../widgets/custom_container.dart';
 import '../widgets/custom_text_field.dart';
 import '../widgets/icon_auth.dart';
 import '../../constants.dart';
-import 'disply_image.dart';
-import 'login_page.dart';
 
 class AdminHomePage extends StatefulWidget {
   const AdminHomePage({super.key});
@@ -56,7 +56,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
 
     return WillPopScope(
       onWillPop: () async {
-        return false;
+        return await handleOnWillPop(context: context);
       },
       child: GestureDetector(
         onHorizontalDragEnd: (details) async {

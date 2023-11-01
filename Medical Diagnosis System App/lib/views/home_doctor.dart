@@ -42,7 +42,7 @@ class _DoctorHomePageState extends State<DoctorHomePage> {
 
     return WillPopScope(
       onWillPop: () async {
-        return false;
+        return await handleOnWillPop(context: context);
       },
       child: GestureDetector(
         onHorizontalDragEnd: (details) {

@@ -1,5 +1,7 @@
 import 'dart:io';
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:medical_diagnosis_system/constants.dart';
 import '../widgets/custom_text_field.dart';
@@ -131,6 +133,22 @@ dynamic showDeletionDialog(
       );
     },
   );
+}
+
+int _backButtonPressCount = 0;
+Future<bool> handleOnWillPop({required BuildContext context}) async {
+  if (_backButtonPressCount == 1) {
+    _backButtonPressCount = 0;
+    SystemNavigator.pop();
+  } else {
+    showSnackBar(context, message: 'Press back again to exit.');
+    _backButtonPressCount++;
+
+    Timer(const Duration(seconds: 2), () {
+      _backButtonPressCount = 0;
+    });
+  }
+  return false;
 }
 
 class MyHttpOverrides extends HttpOverrides {
