@@ -261,12 +261,12 @@ class _SignupPageState extends State<SignupPage> {
                         // ignore: use_build_context_synchronously
                         showSnackBar(context,
                             message:
-                                'We will send you an email to verify your account.');
+                                'Success.. We will send you an email to verify your account.');
                       } else {
                         // ignore: use_build_context_synchronously
                         showSnackBar(context,
                             message:
-                                'We will send an email to this account to verify it.');
+                                'Success.. We will send an email to this account to verify it.');
                       }
 
                       if (widget.operationType == null) {

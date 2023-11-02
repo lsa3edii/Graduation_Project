@@ -182,6 +182,7 @@ class _UserHomePageState extends State<UserHomePage> {
                 onRefresh: () async {
                   clearUserData();
                   showSnackBar(context, message: 'Refresh..');
+                  setState(() {});
                   await Future.delayed(const Duration(seconds: 1));
                 },
                 child: _page == 0

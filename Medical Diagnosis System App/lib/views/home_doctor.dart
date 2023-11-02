@@ -142,6 +142,7 @@ class _DoctorHomePageState extends State<DoctorHomePage> {
                 onRefresh: () async {
                   clearDoctorData();
                   showSnackBar(context, message: 'Refresh..');
+                  setState(() {});
                   await Future.delayed(const Duration(seconds: 1));
                 },
                 child: _page == 0

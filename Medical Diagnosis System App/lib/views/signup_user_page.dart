@@ -165,7 +165,7 @@ class _SignupUserPageState extends State<SignupUserPage> {
                       // ignore: use_build_context_synchronously
                       showSnackBar(context,
                           message:
-                              'We will send you an email to verify your account.');
+                              'Success.. We will send you an email to verify your account.');
 
                       await Future.delayed(const Duration(seconds: 2));
 
