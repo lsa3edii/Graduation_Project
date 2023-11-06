@@ -26,6 +26,7 @@ final TextEditingController controllerPasswordDoctorHome =
 
 final TextEditingController controllerChat = TextEditingController();
 final TextEditingController controllerNLP = TextEditingController();
+final TextEditingController controllerSearch = TextEditingController();
 
 // ignore: must_be_immutable
 class CustomTextField extends StatefulWidget {
@@ -66,6 +67,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
       child: TextFormField(
         // autofocus: true,
         // onSubmitted: (data) {},
+        onTap: () => Feedback.forTap(context),
         validator: (data) {
           if (data!.isEmpty) {
             return 'Field is required';
@@ -146,6 +148,7 @@ class _CustomTextField2State extends State<CustomTextField2> {
       child: TextFormField(
         // autofocus: true,
         // onSubmitted: (data) {},
+        onTap: () => Feedback.forTap(context),
         validator: (data) {
           if (data!.isEmpty) {
             return 'Field is required';
@@ -215,6 +218,7 @@ class _CustomTextFieldForCheckPasswordState
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: TextFormField(
+        onTap: () => Feedback.forTap(context),
         validator: (data) {
           if (data!.isEmpty) {
             return 'Field is required';
@@ -283,6 +287,7 @@ class CustomTextFieldForChat extends StatelessWidget {
             child: SizedBox(
               height: 50,
               child: TextField(
+                onTap: () => Feedback.forTap(context),
                 controller: controllerChat,
                 onChanged: onChanged,
                 onSubmitted: onSubmitted,
@@ -343,6 +348,50 @@ class CustomTextFieldForChat extends StatelessWidget {
             splashRadius: 25,
           )
         ],
+      ),
+    );
+  }
+}
+
+class CustomTextFieldForSearch extends StatelessWidget {
+  final Function(String data)? onChanged;
+
+  const CustomTextFieldForSearch({
+    super.key,
+    required this.onChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: Container(
+        height: 50,
+        decoration: BoxDecoration(
+          color: Colors.blueGrey[100],
+          borderRadius: const BorderRadius.all(Radius.circular(30)),
+        ),
+        child: TextField(
+          onTap: () => Feedback.forTap(context),
+          controller: controllerSearch,
+          onChanged: onChanged,
+          decoration: InputDecoration(
+            hintText: 'Search',
+            label: const Text(
+              'Search',
+              style: TextStyle(color: kPrimaryColor),
+            ),
+            prefixIcon: const Icon(Icons.search, color: kPrimaryColor),
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(30),
+              borderSide: const BorderSide(color: kPrimaryColor),
+            ),
+            contentPadding:
+                const EdgeInsets.symmetric(vertical: 12, horizontal: 17),
+          ),
+          style: const TextStyle(fontSize: 17),
+        ),
       ),
     );
   }

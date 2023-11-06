@@ -47,7 +47,7 @@ class _UserHomePageState extends State<UserHomePage> {
         const Padding(
           padding: EdgeInsets.only(top: 10, right: 15, left: 15),
           child: Text(
-            'Enter your brain MRI (magnetic resonance imaging) image and our AI system will help you to detect if you have disease or are healthy. Click on Get Started now !',
+            'Enter your brain MRI (magnetic resonance imaging) image and our AI system will help you to detect if you have disease or are healthy. Click on get started now !',
             style: TextStyle(
                 fontSize: 19,
                 color: kPrimaryColor,

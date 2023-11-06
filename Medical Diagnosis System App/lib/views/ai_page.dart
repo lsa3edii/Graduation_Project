@@ -32,6 +32,8 @@ class _AIPageState extends State<AIPage> {
 
   @override
   Widget build(BuildContext context) {
+    controllerNLP.clear();
+
     return GestureDetector(
       onHorizontalDragEnd: (details) {
         if (details.primaryVelocity! > 0 && _page == 1) {

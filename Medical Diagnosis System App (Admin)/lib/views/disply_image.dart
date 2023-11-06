@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
-
 import '../constants.dart';
 
 class DisplyImage extends StatelessWidget {

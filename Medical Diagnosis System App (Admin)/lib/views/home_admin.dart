@@ -65,36 +65,42 @@ class _AdminHomePageState extends State<AdminHomePage> {
             setState(() {
               _page = 0;
               appBarText = null;
+              controllerSearch.clear();
             });
           } else if (details.primaryVelocity! < 0 && _page == 0) {
             Feedback.forTap(context);
             setState(() {
               _page = 1;
               appBarText = null;
+              controllerSearch.clear();
             });
           } else if (details.primaryVelocity! < 0 && _page == 1) {
             Feedback.forTap(context);
             setState(() {
               _page = 2;
               appBarText = null;
+              controllerSearch.clear();
             });
           } else if (details.primaryVelocity! > 0 && _page == 2) {
             Feedback.forTap(context);
             setState(() {
               _page = 1;
               appBarText = null;
+              controllerSearch.clear();
             });
           } else if (details.primaryVelocity! > 0 && _page == 3) {
             Feedback.forTap(context);
             setState(() {
               _page = 2;
               appBarText = null;
+              controllerSearch.clear();
             });
           } else if (details.primaryVelocity! < 0 && _page == 2) {
             Feedback.forTap(context);
             setState(() {
               _page = 3;
               appBarText = 'DOCTOR';
+              controllerSearch.clear();
             });
           }
         },
@@ -115,6 +121,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
                         clearSignUpDataAdmin();
                         clearSignUpDataUser();
                         clearSignUpDataDoctor();
+                        controllerSearch.clear();
 
                         // ignore: use_build_context_synchronously
                         unFocus(context);
@@ -201,6 +208,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
 
               setState(() {
                 _page = value;
+                if (_page != 2) controllerSearch.clear();
               });
             },
           ),
@@ -211,6 +219,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
                 animSpeedFactor: 10,
                 showChildOpacityTransition: false,
                 onRefresh: () async {
+                  controllerSearch.clear();
                   clearAdminData();
                   showSnackBar(context, message: 'Refresh..');
                   setState(() {});
@@ -791,7 +800,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
                                             ));
                                           },
                                         ),
-                                        const SizedBox(height: 15),
+                                        const SizedBox(height: 10),
                                         CustomButton2(
                                           buttonText: 'Add Doctor',
                                           textColor: Colors.white,
@@ -830,6 +839,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
                                 builder: (context, snapshot) {
                                   if (snapshot.hasData) {
                                     List<UserModel> usersList = [];
+                                    List<UserModel> filteredUsersList;
 
                                     for (int i = 0;
                                         i < snapshot.data!.docs.length;
@@ -840,6 +850,8 @@ class _AdminHomePageState extends State<AdminHomePage> {
                                       );
                                       // print(usersList[i].email);
                                     }
+                                    filteredUsersList = usersList;
+
                                     if (usersList.isEmpty) {
                                       return const Center(
                                         child: Text(
@@ -854,7 +866,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
                                     } else {
                                       return Column(
                                         children: [
-                                          const SizedBox(height: 10),
+                                          const SizedBox(height: 5),
                                           const Text(
                                             'Manage Users',
                                             style: TextStyle(
@@ -866,16 +878,34 @@ class _AdminHomePageState extends State<AdminHomePage> {
                                               decorationThickness: 2,
                                             ),
                                           ),
+                                          const SizedBox(height: 5),
+                                          CustomTextFieldForSearch(
+                                            onChanged: (data) {
+                                              setState(() {
+                                                filteredUsersList =
+                                                    usersList.where((user) {
+                                                  return user.email
+                                                      .contains(data);
+                                                }).toList();
+                                              });
+                                              print(filteredUsersList[0].email);
+                                              print(filteredUsersList.length);
+                                            },
+                                          ),
                                           const SizedBox(height: 10),
                                           Expanded(
                                             child: Scrollbar(
                                               child: ListView.builder(
                                                 physics:
                                                     const BouncingScrollPhysics(),
-                                                itemCount: usersList.length,
+                                                itemCount:
+                                                    filteredUsersList.length,
                                                 itemBuilder: (context, i) {
-                                                  userId = usersList[i].email;
-                                                  return userId == ''
+                                                  userId = filteredUsersList[i]
+                                                      .email;
+
+                                                  return userId ==
+                                                          '' // solve it later
                                                       ? null
                                                       : FutureBuilder<String?>(
                                                           future: AuthServices
@@ -886,6 +916,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
                                                               snapshot) {
                                                             String? image;
                                                             int flag = 0;
+
                                                             if (snapshot
                                                                 .hasData) {
                                                               image =
@@ -898,18 +929,24 @@ class _AdminHomePageState extends State<AdminHomePage> {
                                                               image: image,
                                                               flag: flag,
                                                               buttonText:
-                                                                  usersList[i]
+                                                                  filteredUsersList[
+                                                                          i]
                                                                       .email
                                                                       .split(
                                                                           '@')[0],
                                                               onPressed:
                                                                   () async {
+                                                                unFocus(
+                                                                    context);
+                                                                controllerSearch
+                                                                    .clear();
+
                                                                 Navigator.push(
                                                                   context,
                                                                   MaterialPageRoute(
                                                                     builder:
                                                                         (context) {
-                                                                      userId = usersList[
+                                                                      userId = filteredUsersList[
                                                                               i]
                                                                           .email;
                                                                       return FutureBuilder<
@@ -932,7 +969,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
                                                                           }
                                                                           return ManageUsers(
                                                                             email:
-                                                                                userId!,
+                                                                                filteredUsersList[i].email,
                                                                             username:
                                                                                 username,
                                                                             image:
