@@ -1,0 +1,3 @@
+gunicorn
+firebase_admin
+flask

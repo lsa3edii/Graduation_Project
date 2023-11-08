@@ -5,8 +5,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
-import 'package:http/http.dart' as http;
 import 'package:medical_diagnosis_system_admin/models/users.dart';
+import 'package:medical_diagnosis_system_admin/services/api.dart';
+import 'package:http/http.dart' as http;
 import '../views/signup_page.dart';
 import '../constants.dart';
 // import 'package:medical_diagnosis_system/models/users.dart';
@@ -196,7 +197,7 @@ class AuthServices {
     if (user != null) {
       if (flag == 0) {
         userid = await retrieveUserData2(email: email!, field: UserFields.uid);
-        // await deleteUserAuth(uid: userid!);
+        await API.deleteUserAuth(uid: userid!);
         await users.doc(userid).delete();
         return;
       }
@@ -330,28 +331,28 @@ class AuthServices {
     }
   }
 
-  static Future<void> deleteUserAuth({required String uid}) async {
-    const apiKey = 'AIzaSyBbZY3zVLgBsidvGWMBwYa2olyewwC4nr8';
-    const url =
-        'https://identitytoolkit.googleapis.com/v1/accounts:delete?key=$apiKey';
+  // static Future<void> deleteUserAuth({required String uid}) async {
+  //   const apiKey = 'AIzaSyBbZY3zVLgBsidvGWMBwYa2olyewwC4nr8';
+  //   const url =
+  //       'https://identitytoolkit.googleapis.com/v1/accounts:delete?key=$apiKey';
 
-    // const userIdToken = '';
+  //   // const userIdToken = '';
 
-    http.Response response = await http.post(
-      Uri.parse(url),
-      body: '{"localId":"$uid"}',
-      headers: {
-        'Content-Type': 'application/json',
-        // 'Authorization': 'Bearer $userIdToken}',
-      },
-    );
+  //   http.Response response = await http.post(
+  //     Uri.parse(url),
+  //     body: '{"localId":"$uid"}',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //       // 'Authorization': 'Bearer $userIdToken}',
+  //     },
+  //   );
 
-    if (response.statusCode == 200) {
-      // print('Success');
-    } else {
-      // print('Failed to delete user: ${response.body}');
-    }
-  }
+  //   if (response.statusCode == 200) {
+  //     // print('Success');
+  //   } else {
+  //     // print('Failed to delete user: ${response.body}');
+  //   }
+  // }
 
   // static Future<bool> checkRegistrationFlag() async {
   //   try {
