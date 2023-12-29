@@ -375,6 +375,7 @@ class CustomTextFieldForSearch extends StatelessWidget {
           onTap: () => Feedback.forTap(context),
           controller: controllerSearch,
           onChanged: onChanged,
+          enabled: true,
           decoration: InputDecoration(
             hintText: 'Search',
             label: const Text(
