@@ -62,6 +62,26 @@ class _AIPageState extends State<AIPage> {
         child: Scaffold(
           backgroundColor: Colors.white,
           appBar: AppBar(
+            actions: [
+              Padding(
+                padding: const EdgeInsets.only(right: 5),
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: 35,
+                      width: 50,
+                      child: IconButton(
+                          onPressed: () {},
+                          icon: const Icon(Icons.screenshot_outlined)),
+                    ),
+                    const Text(
+                      'Save Results',
+                      style: TextStyle(fontSize: 12, fontFamily: 'Pacifico'),
+                    )
+                  ],
+                ),
+              ),
+            ],
             backgroundColor: kPrimaryColor,
             centerTitle: true,
             leading: IconButton(

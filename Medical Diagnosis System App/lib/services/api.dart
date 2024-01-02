@@ -15,7 +15,7 @@ class API {
   //     "https://braincancerapi-production.up.railway.app/predict";
 
   static const String _baseURL1 =
-      "https://braincancerapi-production-af49.up.railway.app/predict";
+      "https://braincancerapi-production-6bdb.up.railway.app/predict";
 
   static const String _baseURL2 =
       "https://multi-cancer-nlp-api-production.up.railway.app/predict-text";

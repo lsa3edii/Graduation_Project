@@ -89,3 +89,28 @@ class CustomButton3 extends StatelessWidget {
     );
   }
 }
+
+class CustomButton4 extends StatelessWidget {
+  final Widget widget;
+  final VoidCallback? onPressed;
+
+  const CustomButton4(
+      {super.key, required this.widget, required this.onPressed});
+
+  @override
+  Widget build(BuildContext context) {
+    return CircleAvatar(
+      radius: 30,
+      backgroundColor: kSecondaryColor,
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          shape: const CircleBorder(),
+          fixedSize: const Size(55, 55),
+          backgroundColor: kPrimaryColor,
+        ),
+        onPressed: onPressed,
+        child: widget,
+      ),
+    );
+  }
+}

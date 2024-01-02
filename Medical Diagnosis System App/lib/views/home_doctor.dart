@@ -7,8 +7,10 @@ import 'package:image_picker/image_picker.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:medical_diagnosis_system/Chat/widgets/chat_items.dart';
 import 'package:medical_diagnosis_system/models/users.dart';
+import 'package:medical_diagnosis_system/views/ai_page.dart';
 import 'package:medical_diagnosis_system/views/disply_image.dart';
 import 'package:medical_diagnosis_system/views/signup_user_page.dart';
+import 'package:medical_diagnosis_system/views/splash_screen.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'login_page.dart';
@@ -118,24 +120,55 @@ class _DoctorHomePageState extends State<DoctorHomePage> {
               style: TextStyle(fontSize: 27, fontFamily: 'Pacifico'),
             ),
           ),
-          bottomNavigationBar: CurvedNavigationBar(
-            index: _page,
-            height: 55,
-            letIndexChange: (index) => true,
-            animationDuration: const Duration(milliseconds: 300),
-            color: kPrimaryColor,
-            backgroundColor: Colors.white,
-            items: const <Widget>[
-              Icon(Icons.settings, color: Colors.white),
-              Icon(Icons.forum, color: Colors.white),
+          bottomNavigationBar: Stack(
+            clipBehavior: Clip.none,
+            children: [
+              CurvedNavigationBar(
+                index: _page,
+                height: 55,
+                letIndexChange: (index) => true,
+                animationDuration: const Duration(milliseconds: 300),
+                color: kPrimaryColor,
+                backgroundColor: Colors.white,
+                items: const <Widget>[
+                  Icon(Icons.settings, color: Colors.white),
+                  Icon(Icons.forum, color: Colors.white),
+                ],
+                onTap: (value) {
+                  Feedback.forTap(context);
+                  setState(() {
+                    _page = value;
+                    if (_page == 0) controllerSearch.clear();
+                  });
+                },
+              ),
+              Positioned.fill(
+                top: -30,
+                child: Center(
+                  child: CustomButton4(
+                    widget: const Text(
+                      'AI',
+                      style: TextStyle(
+                        fontSize: 25,
+                        color: kSecondaryColor,
+                        fontWeight: FontWeight.w900,
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.push(context, MaterialPageRoute(
+                        builder: (context) {
+                          return const SplashScreen(
+                            page: AIPage(),
+                            animation: 'assets/animations/Animation - ai.json',
+                            flag: 1,
+                          );
+                        },
+                      ));
+                    },
+                  ),
+                ),
+              ),
             ],
-            onTap: (value) {
-              Feedback.forTap(context);
-              setState(() {
-                _page = value;
-                if (_page == 0) controllerSearch.clear();
-              });
-            },
           ),
           body: Stack(
             children: [
