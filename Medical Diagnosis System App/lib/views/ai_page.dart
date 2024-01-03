@@ -40,6 +40,7 @@ class _AIPageState extends State<AIPage> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
+        unFocus(context);
         controllerNLP.clear();
         return true;
       },
@@ -86,6 +87,7 @@ class _AIPageState extends State<AIPage> {
             centerTitle: true,
             leading: IconButton(
               onPressed: () {
+                unFocus(context);
                 controllerNLP.clear();
                 Navigator.pop(context);
               },
