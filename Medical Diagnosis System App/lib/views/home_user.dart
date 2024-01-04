@@ -439,6 +439,8 @@ class _UserHomePageState extends State<UserHomePage> {
                                                               'https://www.facebook.com/MuhammedAbdulrahim0'),
                                                           mode: LaunchMode
                                                               .externalApplication);
+                                                      // ignore: use_build_context_synchronously
+                                                      unFocus(context);
                                                     },
                                                   ),
                                                   IconAuth(
@@ -450,6 +452,8 @@ class _UserHomePageState extends State<UserHomePage> {
                                                               'https://www.linkedin.com/in/muhammedabdulrahim'),
                                                           mode: LaunchMode
                                                               .externalApplication);
+                                                      // ignore: use_build_context_synchronously
+                                                      unFocus(context);
                                                     },
                                                   ),
                                                   IconAuth(
@@ -461,6 +465,8 @@ class _UserHomePageState extends State<UserHomePage> {
                                                               'https://wa.me/+2001098867501'),
                                                           mode: LaunchMode
                                                               .externalApplication);
+                                                      // ignore: use_build_context_synchronously
+                                                      unFocus(context);
                                                     },
                                                   ),
                                                   IconAuth(
@@ -469,6 +475,8 @@ class _UserHomePageState extends State<UserHomePage> {
                                                     onPressed: () async {
                                                       await launchUrl(Uri.parse(
                                                           'https://github.com/lsa3edii'));
+                                                      // ignore: use_build_context_synchronously
+                                                      unFocus(context);
                                                     },
                                                   ),
                                                 ],

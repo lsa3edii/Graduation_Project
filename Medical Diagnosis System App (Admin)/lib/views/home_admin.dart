@@ -692,6 +692,8 @@ class _AdminHomePageState extends State<AdminHomePage> {
                                                           'https://www.facebook.com/MuhammedAbdulrahim0'),
                                                       mode: LaunchMode
                                                           .externalApplication);
+                                                  // ignore: use_build_context_synchronously
+                                                  unFocus(context);
                                                 },
                                               ),
                                               IconAuth(
@@ -703,6 +705,8 @@ class _AdminHomePageState extends State<AdminHomePage> {
                                                           'https://www.linkedin.com/in/muhammedabdulrahim'),
                                                       mode: LaunchMode
                                                           .externalApplication);
+                                                  // ignore: use_build_context_synchronously
+                                                  unFocus(context);
                                                 },
                                               ),
                                               IconAuth(
@@ -714,6 +718,8 @@ class _AdminHomePageState extends State<AdminHomePage> {
                                                           'https://wa.me/+2001098867501'),
                                                       mode: LaunchMode
                                                           .externalApplication);
+                                                  // ignore: use_build_context_synchronously
+                                                  unFocus(context);
                                                 },
                                               ),
                                               IconAuth(
@@ -722,6 +728,8 @@ class _AdminHomePageState extends State<AdminHomePage> {
                                                 onPressed: () async {
                                                   await launchUrl(Uri.parse(
                                                       'https://github.com/lsa3edii'));
+                                                  // ignore: use_build_context_synchronously
+                                                  unFocus(context);
                                                 },
                                               ),
                                             ],
