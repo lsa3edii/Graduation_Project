@@ -1,0 +1,24 @@
+Hello Dr. Ahmed Hisham, today we would like to introduce you to our graduation project. Our project is a medical diagnosis system for brain cancer that works using artificial intelligence algorithms such as deep learning techniques especially CNNs, in order for the model to classify magnetic resonance images (MRI), because traditional methods for classifying brain tumors take a long time to complete. Manual inspection and subject to human error. Therefore, we decided to create a mobile application with many features and linked it to the deep learning model that we had previously trained via an API in order to help doctors and patients identify whether patients have brain cancer or not.
+
+Allow us to present to you some of the features of our application. The application contains three different users (admin, patient, doctor). First, we offer many ways to facilitate the user’s registration in our application by authenticating with email and password or authenticating with Google using Firebase.
+An admin within the system can log in and add or delete users, whether patients or doctors, and there is also a page dedicated to managing users in the system.
+
+As for the doctor, he can enter the system through the admin, and enter the artificial intelligence page to send brain MRI images to the application via the camera or photo gallery to analyze it and return the results in a few seconds, such as (patient status, type of brain cancer, accuracy), and he can chat with patients or the admin, and follow up with patients via chat in order to give them the appropriate medications and treatment for them.
+
+As for the ordinary user (patient), he can register and log into the system, chat with the doctor, and such as the doctor he can enter the artificial intelligence page to send his brain MRI images to the application via the camera or photo gallery to analyze it and return the results to the patient in a few seconds.
+
+he three users can also reset their password, such as Facebook, by sending us to them an email wiht a link to reset their passwords, and then they can create a new password, and they can also modify their personal information and choose a profile picture for themselves through the camera or photo gallery.
+
+In short, these are some of features of our application
+1. register in many ways
+2. login and logout
+3. data validation that user entered
+4. email verification
+5. reset password
+6. choose profile picture
+7. update data 
+8. chatting with doctor
+9. search for a user
+10. manage users (add or delete)
+11. use AI to predict brain cancer MRI
+12. contact with developer
