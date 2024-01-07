@@ -1,79 +1,26 @@
 {
   "project_info": {
-    "project_number": "430987198672",
-    "project_id": "chat-app-219b0",
-    "storage_bucket": "chat-app-219b0.appspot.com"
+    "project_number": "407375604191",
+    "project_id": "medical-diagnosis-system-5ac77",
+    "storage_bucket": "medical-diagnosis-system-5ac77.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:430987198672:android:c7cdff92f7380e73515ed5",
-        "android_client_info": {
-          "package_name": "com.example.chat_app"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "430987198672-v54d7vmge13hojf3ajbncjqroo5gfdkl.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBK0eZ6PiXIMrK5zesTtI0gcq51xdxC--o"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "430987198672-v54d7vmge13hojf3ajbncjqroo5gfdkl.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "430987198672-imil8aptdommg0uv2uorevn7q9ja10kf.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.example.chatApp.RunnerTests"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:430987198672:android:6944f770692db2b3515ed5",
+        "mobilesdk_app_id": "1:407375604191:android:e0c11cff6a0ff2e1c0fc6a",
         "android_client_info": {
           "package_name": "com.example.medical_diagnosis_system"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "430987198672-v54d7vmge13hojf3ajbncjqroo5gfdkl.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyBK0eZ6PiXIMrK5zesTtI0gcq51xdxC--o"
+          "current_key": "AIzaSyBHtCgBxVGgFT8t5Wdr1KCyTgEyHNpu8VA"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "430987198672-v54d7vmge13hojf3ajbncjqroo5gfdkl.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "430987198672-imil8aptdommg0uv2uorevn7q9ja10kf.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.example.chatApp.RunnerTests"
-              }
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }
