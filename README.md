@@ -7,6 +7,12 @@ We have created a mobile app to use the deep learning model smoothly and easily.
 
 We have created a backend system to handle Firebase, Flutter UI, API, and deep learning model together, and API controller that facilitates seamless communication among different components of the system, ensuring efficient data flow and interaction.
 
+## Documentation & Presentation & Videos:
+- https://drive.google.com/drive/folders/1-nBuDhLhixJS_Xvh3dno9dHhzX-mTJ1d?usp=drive_link
+
+## Explanation of CNN Model:
+In this video, I personally explain our deep learning model: https://youtu.be/B4n_O51cDB0?si=b8SmDj6EP-moFNME
+
 ## Technologies & Tools:
 - Python Language
 - Jupyter Notebook
